@@ -1,0 +1,762 @@
+# MASTER IMPLEMENTATION PROMPT — MATH LAB
+## Transform Math Lab into a Student-Centered Mathematical Investigation Platform and Community
+
+You are acting as a senior full-stack engineer, mathematics educator, educational researcher, accessibility specialist, product designer, security reviewer, and open-source maintainer.
+
+Your task is to inspect, improve, and develop the existing Math Lab project into a coherent digital platform that supports the long-term mission of Math Lab: helping students investigate mathematics, develop rigorous reasoning, collaborate with other learners, and participate in a wider mathematical community.
+
+This is an implementation assignment, not merely a brainstorming exercise, landing-page redesign, or proposal.
+
+**Work directly with the existing repository. Inspect it, understand it, make meaningful improvements, run available checks, fix regressions, and document the results.**
+
+Do not rebuild everything from scratch simply because a new architecture seems attractive. Do not remove useful existing features without a compelling reason. Do not claim that work is complete unless the corresponding implementation and verification actually happened.
+
+---
+
+# PART I — UNDERSTAND THE INITIATIVE
+
+## 1. Official identity
+
+Project name: Math Lab
+
+Tagline:
+
+**Explore mathematics. Investigate questions. Learn together.**
+
+Official contact email: mathlab.official12@gmail.com
+
+Instagram: https://www.instagram.com/mathlabofficial_/
+
+Math Lab is a student-centered initiative built around a simple idea: mathematics is more than a subject to study. It is something to investigate, question, and discover together.
+
+Through collaborative mathematical investigations and locally organized learning communities, Math Lab aims to give students opportunities to engage more deeply with mathematics, develop their reasoning skills, and participate in a wider community of mathematical exploration.
+
+Math Lab is not simply a collection of mathematical calculators, formula sheets, or routine practice exercises. Digital tools can support its mission, but the initiative's central purpose is to create meaningful opportunities for mathematical investigation and collaboration.
+
+The software must reflect this distinction.
+
+## 2. Why Math Lab exists
+
+Mathematics education can become overly focused on memorizing formulas, following procedures, and arriving at correct answers. These skills have their place, but they are only part of mathematics.
+
+Mathematics is also about:
+
+- Recognizing patterns.
+- Asking productive questions.
+- Formulating and testing conjectures.
+- Constructing proofs.
+- Investigating unfamiliar problems.
+- Comparing alternative approaches.
+- Understanding why a result is true.
+- Identifying counterexamples.
+- Communicating mathematical arguments.
+- Learning from unsuccessful approaches.
+- Building on the ideas of other learners.
+
+Math Lab exists to help students experience this side of mathematics.
+
+The platform should encourage learners to move beyond passively receiving information and toward actively investigating mathematical ideas.
+
+It should also support participation beyond a single classroom, school, or community.
+
+The long-term goal is a community in which mathematical curiosity can develop into meaningful, sustained participation.
+
+## 3. Core programs
+
+### A. National Investigations
+
+National Investigations are a central part of Math Lab's developing program.
+
+They provide shared mathematical investigations that students can explore through participating Local Labs.
+
+An investigation should not be merely a worksheet with a collection of unrelated questions. It should have a coherent mathematical theme, a meaningful question, a progression of tasks, and opportunities for students to develop and defend their own reasoning.
+
+A well-designed investigation may include:
+
+- An introductory phenomenon, puzzle, pattern, or mathematical question.
+- Relevant definitions and prerequisites.
+- Exploratory examples.
+- Accessible starting questions.
+- More challenging extensions.
+- Opportunities to make conjectures.
+- Counterexample-seeking activities.
+- Proof or justification tasks.
+- Optional computational experiments.
+- Reflection questions.
+- Facilitator guidance.
+- Further questions for independent exploration.
+
+The exact structure should depend on the mathematics being investigated.
+
+National Investigations should give different communities a common mathematical starting point while allowing students to explore different approaches.
+
+### B. Local Labs
+
+Local Labs are community-based groups through which students participate in Math Lab activities.
+
+They may operate in schools, libraries, community centers, or other suitable learning environments.
+
+Local facilitators help organize activities, support discussion, and connect students with investigations and educational resources.
+
+The platform should eventually support Local Labs through features such as:
+
+- Information about the Local Lab model.
+- A guide to establishing a Local Lab.
+- Facilitator resources.
+- Investigation materials.
+- Suggested meeting structures.
+- Discussion prompts.
+- Participation guidance.
+- Optional progress and feedback tools.
+- Clear contact and onboarding pathways.
+
+Do not invent real Local Labs, facilitators, addresses, memberships, or activity statistics.
+
+If no verified Local Labs have been established, communicate the program as developing and provide a way for interested people to express interest without implying that a network already exists.
+
+### C. Mathematical Learning Resources
+
+Math Lab develops and coordinates resources to support its activities.
+
+These may include:
+
+- Investigation materials.
+- Problem sets.
+- Worked examples.
+- Mathematical explanations.
+- Solutions and proof outlines.
+- Facilitator guides.
+- Topic-specific curricula.
+- Interactive mathematical tools.
+- Challenge problems.
+- Glossaries and prerequisite guides.
+- Accessible alternative explanations.
+- Computational notebooks or demonstrations.
+
+Resources should support understanding, not merely provide answers.
+
+### D. Research into mathematics education
+
+Math Lab may investigate questions about how students learn mathematics and which educational approaches support understanding.
+
+Potential research topics include:
+
+- Mathematical misconceptions.
+- Alternative explanations.
+- Problem-solving strategies.
+- Mathematical confidence and participation.
+- The accessibility of educational resources.
+- The effects of different instructional approaches.
+- Adaptive mathematical learning tools.
+- How students formulate and revise conjectures.
+
+These are potential research directions, not claims of completed studies.
+
+Where research is undertaken, the platform and its documentation should encourage clearly defined research questions, appropriate methods, measurable outcomes, reproducibility, privacy, and suitable ethical safeguards.
+
+Do not present an educational feature as scientifically validated merely because it seems pedagogically plausible.
+
+---
+
+# PART II — MISSION-DRIVEN PRODUCT PRINCIPLES
+
+Every significant feature must support one or more of these principles.
+
+## 4. Curiosity before memorization
+
+Create opportunities for learners to explore, notice, predict, experiment, and ask questions.
+
+Do not remove direct explanations, formulas, or procedural instruction. Instead, place them within a broader learning experience that helps students understand where mathematical ideas come from and when they apply.
+
+## 5. Reasoning matters
+
+Correct answers are important, but so are the methods and arguments that support them.
+
+Where appropriate, let students record or compare approaches, explain their reasoning, examine counterexamples, and construct proofs.
+
+Do not reduce all learning to multiple-choice questions, scores, streaks, or completion percentages.
+
+## 6. Collaboration expands opportunity
+
+Design activities that can be discussed by students working together.
+
+Possible future features include shared investigations, group discussion prompts, collaborative solution spaces, facilitator-led sessions, and the comparison of different proofs.
+
+Collaboration must not require a public social network. Begin with the simplest safe, useful structures.
+
+Do not introduce unrestricted direct messaging, public student profiles, or unmoderated chat as default features.
+
+## 7. Local communities, shared exploration
+
+Connect common mathematical activities with locally organized participation.
+
+Design the information architecture so that a shared investigation can be used independently, in a classroom, or through a Local Lab.
+
+Do not make participation in a Local Lab a prerequisite for accessing general educational resources unless a specific resource has a legitimate reason to require it.
+
+## 8. Accessibility and inclusion
+
+Mathematical exploration should welcome learners with different backgrounds, experiences, and learning needs.
+
+Provide clear language, readable layouts, keyboard navigation, sufficient contrast, meaningful labels, and alternatives to interaction modes that may exclude some students.
+
+Where feasible, allow learners to approach a problem through text, diagrams, tables, examples, or interactive tools.
+
+Avoid assuming that every learner needs the same pace, explanation, or level of difficulty.
+
+Do not infer a learner's diagnosis or sensitive personal characteristics from their answers.
+
+## 9. Evidence over assumptions
+
+Separate mathematical facts, pedagogical design decisions, hypotheses, and experimentally supported findings.
+
+Use established mathematics and trustworthy sources when developing educational content.
+
+Where the platform makes claims about learning outcomes, require appropriate evidence.
+
+Do not invent citations, test results, validation studies, user testimonials, or efficacy claims.
+
+## 10. Build, evaluate, improve
+
+Develop the project incrementally.
+
+Gather appropriate feedback, investigate defects, test important assumptions, and improve the platform based on evidence.
+
+A feature is not successful simply because it exists. Evaluate whether it functions correctly and whether it serves the intended learning purpose.
+
+---
+
+# PART III — FIRST ACTION: AUDIT THE EXISTING REPOSITORY
+
+## 11. Inspect before modifying
+
+Before making substantial changes, inspect the repository's actual state.
+
+Identify:
+
+- The frontend framework and version.
+- The build system.
+- The language and type system.
+- The existing routes and page structure.
+- Existing design conventions and reusable components.
+- Existing mathematical utilities.
+- Existing interactive laboratories.
+- Existing authentication and authorization logic.
+- Data storage and persistence.
+- Backend services and integrations.
+- Environment variables and configuration.
+- Existing tests and test coverage.
+- Build, lint, formatting, and type-check commands.
+- Existing deployment configuration.
+- Broken links and nonfunctional controls.
+- Accessibility issues.
+- Security and privacy concerns.
+- Duplicate or abandoned implementations.
+- Existing documentation and project conventions.
+
+Inspect the package manifest, source tree, routing, components, utility modules, configuration files, and tests.
+
+Read the relevant implementation before replacing it.
+
+If the project contains an existing mathematical laboratory, preserve and improve it where practical rather than creating a second, disconnected version.
+
+If the live deployment is unavailable, use the repository as the source of truth and state that the live experience could not be verified.
+
+Do not claim that a page, integration, or workflow was tested merely because its source code was read.
+
+## 12. Produce an initial audit
+
+Create or update an implementation document such as `docs/IMPLEMENTATION_PLAN.md`.
+
+Include:
+
+1. Current architecture.
+2. Existing features and their status.
+3. Confirmed defects.
+4. Mathematical correctness risks.
+5. Accessibility problems.
+6. Security and privacy risks.
+7. Missing capabilities required by the mission.
+8. High-priority fixes.
+9. Medium- and long-term enhancements.
+10. Tests needed to verify the changes.
+11. Dependencies and external services that require configuration.
+
+Distinguish confirmed defects from suspected problems.
+
+Do not spend the entire task auditing. Use the audit to guide implementation, then start fixing the highest-impact issues.
+
+---
+
+# PART IV — PRODUCT STRUCTURE AND INFORMATION ARCHITECTURE
+
+## 13. Establish a coherent site structure
+
+Adapt the existing routing and navigation rather than introducing duplicate pages unnecessarily.
+
+The desired information architecture should accommodate the following areas.
+
+### Home
+
+Purpose: Communicate what Math Lab is, why it exists, and how someone can participate.
+
+Recommended content:
+
+- Math Lab's name and tagline.
+- A concise explanation of mathematical investigation.
+- A clear introduction to National Investigations.
+- An explanation of Local Labs.
+- A featured mathematical investigation, if one actually exists.
+- A route to explore mathematical resources.
+- A route to learn about or establish a Local Lab.
+- A route to contribute.
+- Contact information.
+
+The homepage should quickly answer:
+
+- What is Math Lab?
+- What makes it different from ordinary math practice?
+- What can I do here?
+- How can I participate?
+
+Avoid generic slogans that could describe any educational website.
+
+### About Math Lab
+
+Explain the mission, principles, developing programs, intended participants, and long-term direction.
+
+Use the official initiative description supplied in this prompt as the primary source of truth.
+
+Do not overstate the project's maturity, reach, institutional status, partnerships, or accomplishments.
+
+### National Investigations
+
+Provide a browsable collection of investigations.
+
+Potential capabilities:
+
+- Search and filtering.
+- Mathematical topic.
+- Recommended prerequisites.
+- Intended difficulty.
+- Investigation status.
+- Estimated duration, when meaningfully estimated.
+- Student-facing materials.
+- Facilitator-facing materials.
+- Solution or proof materials, where appropriate.
+- Related investigations.
+- Download or print support where practical.
+
+Use clear statuses such as Draft, In Review, Published, and Archived if those states match the actual workflow.
+
+Do not publish unfinished material as an official investigation without a clear indication of its status.
+
+### Local Labs
+
+Explain the model, participation process, facilitator responsibilities, and resources available.
+
+Provide a clear expression-of-interest pathway if the project is ready to receive applications.
+
+If it is not ready, provide honest information about the program's development rather than a fake registration flow.
+
+### Resources
+
+Create a discoverable library of mathematical learning materials.
+
+Support meaningful categorization by topic, level, format, and intended use where the existing architecture permits it.
+
+Do not fabricate a large resource library merely to make the site appear populated.
+
+### Interactive Mathematics
+
+Retain and improve the existing mathematical tools where present.
+
+Group them in a way that supports mathematical exploration rather than presenting them as an unrelated collection of widgets.
+
+Each laboratory should explain:
+
+- What mathematical idea it explores.
+- What the learner can investigate.
+- What the controls change.
+- How to interpret the output.
+- What limitations apply.
+- Which further questions the learner might explore.
+
+### Research and Evaluation
+
+Explain Math Lab's interest in mathematics education research.
+
+Distinguish future research intentions from ongoing projects and completed studies.
+
+Provide methods, protocols, results, and data only when they actually exist and are suitable for publication.
+
+### Get Involved
+
+Offer distinct pathways for:
+
+- Students.
+- Local facilitators.
+- Mathematical content contributors.
+- Software contributors.
+- Educational researchers.
+- Potential collaborators.
+
+Make the next step for each group understandable and achievable.
+
+### Contact
+
+Display the official contact email and Instagram account accurately.
+
+Use ordinary, descriptive links.
+
+Do not invent phone numbers, office addresses, or additional official accounts.
+
+---
+
+# PART V — NATIONAL INVESTIGATIONS ENGINE
+
+## 14. Build investigations around mathematical questions
+
+This is a core product capability, not an optional decorative page.
+
+Design an investigation model that can represent a complete mathematical activity.
+
+A potential data structure may include:
+
+- Unique identifier.
+- Title.
+- Short description.
+- Central mathematical question.
+- Topics and tags.
+- Prerequisites.
+- Intended audience or recommended background.
+- Learning objectives.
+- Estimated duration, if available.
+- Investigation status.
+- Author or contributor information.
+- Creation and revision dates.
+- Introductory material.
+- Questions and task sequences.
+- Hints.
+- Definitions.
+- Diagrams and interactive demonstrations.
+- Facilitator notes.
+- Solution materials.
+- Proofs or proof sketches.
+- Extension questions.
+- References.
+- Accessibility notes.
+- Version history.
+
+Adapt this structure to the existing technology. Do not introduce unnecessary database complexity.
+
+Use stable identifiers and validate content before publishing it.
+
+## 15. Design a flexible investigation workflow
+
+A reasonable authoring workflow may include:
+
+1. Create a draft.
+2. Define the mathematical question.
+3. Add prerequisites and objectives.
+4. Develop the investigation sequence.
+5. Review mathematical accuracy.
+6. Review clarity and accessibility.
+7. Test interactive components.
+8. Publish the approved version.
+9. Gather appropriate feedback.
+10. Revise and archive older versions when necessary.
+
+Do not imply that a formal review board or established editorial team exists unless the project has one.
+
+If multi-user roles are not yet implemented, begin with a simpler, well-structured content workflow.
+
+## 16. Encourage investigation, not answer copying
+
+Design task sequences that support progressive discovery.
+
+Where appropriate:
+
+- Begin with an accessible example.
+- Ask learners what they notice.
+- Invite predictions.
+- Let them test a conjecture.
+- Ask for a justification.
+- Introduce a counterexample.
+- Encourage comparison of methods.
+- Provide hints before revealing complete solutions.
+- End with a question that extends the idea.
+
+Not every problem requires all these steps. Avoid forcing a rigid template onto topics where it does not fit.
+
+Provide solutions when they support learning, but make their placement intentional.
+
+Never deliberately make mathematical content misleading or withhold essential information solely to increase engagement.
+
+## 17. Support multiple mathematical levels
+
+The platform should accommodate a range of mathematical backgrounds without assuming that all students are at the same stage.
+
+Possible pathways include:
+
+- Foundational arithmetic and number patterns.
+- Algebra and equations.
+- Geometry and spatial reasoning.
+- Functions and graphs.
+- Probability and statistics.
+- Number theory.
+- Combinatorics and discrete mathematics.
+- Linear algebra.
+- Calculus.
+- Mathematical logic.
+- Proof and mathematical reasoning.
+- Further advanced topics when appropriate.
+
+These are potential categories, not a requirement to publish every category immediately.
+
+For every investigation, state prerequisites honestly.
+
+Avoid equating advanced notation with mathematical depth. A well-designed elementary investigation can be just as intellectually valuable as an advanced one.
+
+---
+
+# PART VI — LOCAL LABS AND COMMUNITY SUPPORT
+
+## 18. Make the Local Lab model practical
+
+Provide an actionable guide for people interested in organizing a Local Lab.
+
+Potential sections:
+
+- What a Local Lab is.
+- Who can facilitate one.
+- What a session might look like.
+- How to select an investigation.
+- How to support different levels of preparation.
+- How to encourage respectful mathematical discussion.
+- How to work with students.
+- How to provide feedback.
+- What resources are available.
+- How to contact Math Lab.
+
+Present these as guidance rather than mandatory rules unless official policies have been established.
+
+## 19. Create a sample session framework
+
+Where appropriate, provide a sample session structure that facilitators can adapt.
+
+For example:
+
+1. Introduce the central question.
+2. Give learners time to explore independently.
+3. Invite small-group discussion.
+4. Compare approaches.
+5. Examine conjectures and counterexamples.
+6. Develop a proof or explanation.
+7. Reflect on what was learned.
+8. Record further questions.
+
+Make it clear that this is a suggested format, not a universal prescription.
+
+## 20. Plan safe community features
+
+If community features are added, design them around educational collaboration.
+
+Potential features include:
+
+- Shared investigation notes.
+- Facilitator feedback forms.
+- Moderated discussion spaces.
+- Group submissions.
+- Anonymous or pseudonymous feedback where appropriate.
+- Publicly shareable mathematical work with explicit consent.
+
+Because the intended audience includes minors, privacy and safety are essential.
+
+Do not introduce public profiles containing sensitive personal information, unrestricted private messaging, precise location disclosure, or unnecessary collection of student data.
+
+Before launching any feature that enables students to communicate, establish appropriate moderation, reporting, access control, data retention, and safeguarding procedures.
+
+If these systems cannot be implemented safely within the available scope, defer the feature.
+
+---
+
+# PART VII — MATHEMATICAL LABORATORIES AND SCIENTIFIC CORRECTNESS
+
+## 21. Preserve and audit existing interactive mathematics
+
+Inspect every existing mathematical laboratory and utility.
+
+For each tool, determine:
+
+- Whether the underlying mathematics is correct.
+- Whether edge cases are handled.
+- Whether invalid inputs are identified.
+- Whether the output is clearly explained.
+- Whether the interface accurately represents what was calculated.
+- Whether the feature works on supported screen sizes.
+- Whether keyboard and assistive-technology users can operate it.
+- Whether appropriate tests exist.
+
+Do not prioritize flashy visual effects over mathematical reliability.
+
+## 22. Calculus and numerical methods
+
+Audit differentiation, integration, limits, function evaluation, and plotting.
+
+Check:
+
+- Domain restrictions.
+- Non-finite values.
+- Singularities.
+- Discontinuities.
+- Numerical stability.
+- Floating-point error.
+- Step-size assumptions.
+- Convergence behavior.
+- Reversed integration bounds.
+- Invalid interval definitions.
+- Zero-width intervals.
+- Invalid iteration counts.
+- Overflow and underflow.
+- Clear distinction between exact and approximate results.
+
+**Critical rule:** Never silently convert an invalid mathematical evaluation into zero.
+
+For example, an invalid function evaluation during numerical integration must not simply be replaced by zero or skipped without an explicit, mathematically justified policy.
+
+A numerical method must not claim an exact result unless exactness is established.
+
+If a value is an approximation, label it as an approximation and explain the method used.
+
+If a reference value is itself numerically estimated, do not call it an exact integral.
+
+Do not claim a numerical error is the true error unless the reference value justifies that conclusion.
+
+Where a method has known limitations, explain them in accessible language.
+
+## 23. Mathematical expression parsing and evaluation
+
+Audit any implementation that evaluates user-entered mathematical expressions.
+
+A parser should support a deliberately defined grammar rather than rely on arbitrary JavaScript execution.
+
+Define and test:
+
+- Numeric literals.
+- Variables.
+- Constants.
+- Parentheses.
+- Addition and subtraction.
+- Multiplication and division.
+- Exponentiation.
+- Unary operators.
+- Supported mathematical functions.
+- Implicit multiplication, if supported.
+- Function argument rules.
+- Operator precedence.
+- Associativity.
+- Invalid syntax.
+- Domain errors.
+- Overflow and non-finite results.
+
+Pay particular attention to expressions such as:
+
+- `-x^2`
+- `(-x)^2`
+- `2x`
+- `2(x+1)`
+- `x^2^3`
+- `sqrt(-1)`
+- `ln(0)`
+- `1/(x-1)`
+
+Specify the intended semantics and implement them consistently. In conventional mathematical notation, exponentiation normally binds more tightly than a leading unary minus, so `-x^2` is interpreted as `-(x^2)`. Make the parser's behavior explicit.
+
+Do not use `eval`, `new Function`, or equivalent unrestricted execution as a substitute for a mathematical parser.
+
+Do not mistake a character allowlist for a complete security boundary.
+
+A parser should reject malformed or unsupported input predictably, enforce reasonable complexity limits, and return structured errors where useful.
+
+## 24. Probability and statistics
+
+Audit probability distributions, sampling, expected values, variance, combinatorics, and statistical calculations.
+
+Check:
+
+- Valid parameter ranges.
+- Normalization.
+- Probability bounds.
+- Sampling behavior.
+- Boundary conditions.
+- Numerical precision.
+- Large values and factorial overflow.
+- Correct interpretation of statistical outputs.
+- Appropriate distinction between population and sample statistics.
+
+Use independent reference calculations or established test cases wherever possible.
+
+Do not generate random results that appear deterministic unless the random seed or behavior is clearly specified.
+
+## 25. Geometry and linear algebra
+
+Test geometry and matrix operations for:
+
+- Degenerate cases.
+- Zero-length vectors.
+- Parallel and perpendicular relationships.
+- Singular matrices.
+- Matrix dimension mismatches.
+- Numerical tolerance.
+- Floating-point precision.
+- Invalid geometric constructions.
+- Correct treatment of coordinate systems.
+- Clear explanations of results.
+
+Avoid reporting approximate numerical equality as exact equality.
+
+## 26. Discrete mathematics and number theory
+
+Audit:
+
+- Greatest common divisors.
+- Least common multiples.
+- Prime testing.
+- Factorization.
+- Factorials.
+- Permutations and combinations.
+- Recurrences.
+- Graph algorithms, if present.
+- Logical expressions.
+- Set operations.
+- Counting algorithms.
+
+Validate input types, signs, integer constraints, empty cases, and performance limits.
+
+Prevent unnecessary work on excessively large inputs.
+
+## 27. Visualizations
+
+Charts, diagrams, and interactive graphs must communicate mathematical meaning accurately.
+
+Ensure:
+
+- Axes are labeled.
+- Scales are appropriate.
+- Units are provided when applicable.
+- Important discontinuities are not misleadingly connected.
+- Sampling resolution is sufficient for the intended purpose.
+- Invalid points are handled honestly.
+- Interactive controls update the actual displayed result.
+- Visual information has an accessible alternative where practical.
+
+A beautiful graph that misrepresents a function is a defect, not a success.
+
+---
+
+# PART VIII — LEARNING EXPERIENCE
+
+## 28. Design for active mathematical thinking
+
+Every learning feature should

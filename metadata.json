@@ -1,0 +1,8 @@
+{
+  "name": "Math Lab",
+  "description": "The official website for Math Lab, a student-centered initiative bringing collaborative mathematical investigations, National Investigations across five levels of depth, and community Local Labs into schools, libraries, and learning spaces.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
