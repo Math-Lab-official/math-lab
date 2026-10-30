@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { evaluateMathFunction, numericalDerivative, numericalIntegral } from '../../utils/mathUtils';
 import { ZoomIn, ZoomOut, RotateCcw, Sliders, Layers, Play, Pause, Compass } from 'lucide-react';
+import { InlineMath, BlockMath } from '../common/MathView';
 
 interface Preset {
   name: string;
@@ -655,9 +656,17 @@ export const GraphingLab: React.FC = () => {
 
           {showTangent && (
             <div className="bg-white border border-amber-300 rounded-2xl p-4 space-y-2 text-xs shadow-xs">
-              <span className="font-bold text-amber-900 block font-serif-editorial">Tangent Inspector</span>
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-amber-900 block font-serif-editorial">Tangent Line Inspector</span>
+                <InlineMath math={`x_0 = ${tangentX.toFixed(2)}`} />
+              </div>
+
+              <div className="bg-[#faf7f2] p-2 rounded-lg border border-[#e2d8c7] my-1">
+                <BlockMath math={`y - f(x_0) = f'(x_0)(x - x_0)`} />
+              </div>
+
               <div className="flex justify-between text-[#475467]">
-                <span>Point x₀</span>
+                <span>Point <InlineMath math="x_0" /></span>
                 <span className="font-mono text-amber-800 font-bold">{tangentX.toFixed(2)}</span>
               </div>
               <input
@@ -669,11 +678,19 @@ export const GraphingLab: React.FC = () => {
                 onChange={(e) => setTangentX(parseFloat(e.target.value))}
                 className="w-full accent-amber-600 cursor-pointer"
               />
-              <div className="bg-[#faf7f2] p-2.5 rounded-xl border border-[#ded5c5] font-mono text-[11px] text-[#182029] space-y-1">
-                <div>f({tangentX.toFixed(2)}) = {f1AtTangent.toFixed(4)}</div>
-                <div>Slope m = f'({tangentX.toFixed(2)}) = {f1DerivAtTangent.toFixed(4)}</div>
-                <div className="text-amber-800 font-semibold">
-                  y = {f1DerivAtTangent.toFixed(2)}x {(-f1DerivAtTangent * tangentX + f1AtTangent) >= 0 ? '+' : ''}{(-f1DerivAtTangent * tangentX + f1AtTangent).toFixed(2)}
+              <div className="bg-[#faf7f2] p-2.5 rounded-xl border border-[#ded5c5] text-xs text-[#182029] space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[#667085]">Value at point:</span>
+                  <InlineMath math={`f(${tangentX.toFixed(2)}) = ${f1AtTangent.toFixed(4)}`} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#667085]">Slope <InlineMath math="m = f'(x_0)" />:</span>
+                  <InlineMath math={`m = ${f1DerivAtTangent.toFixed(4)}`} />
+                </div>
+                <div className="pt-1.5 border-t border-[#e2d8c7] text-center font-semibold text-amber-900">
+                  <InlineMath
+                    math={`y = ${f1DerivAtTangent.toFixed(2)}x ${(-f1DerivAtTangent * tangentX + f1AtTangent) >= 0 ? '+' : ''}${(-f1DerivAtTangent * tangentX + f1AtTangent).toFixed(2)}`}
+                  />
                 </div>
               </div>
             </div>
@@ -682,9 +699,14 @@ export const GraphingLab: React.FC = () => {
           {showIntegral && (
             <div className="bg-white border border-[#2d5868]/40 rounded-2xl p-4 space-y-2 text-xs shadow-xs">
               <span className="font-bold text-[#2d5868] block font-serif-editorial">Definite Integral Bounds</span>
+              
+              <div className="bg-[#faf7f2] p-2 rounded-lg border border-[#ded5c5] my-1">
+                <BlockMath math={`\\int_{a}^{b} f(x)\\,dx \\approx \\sum_{i=1}^n f(x_i^*)\\,\\Delta x`} />
+              </div>
+
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[#667085] block mb-0.5">Lower limit a</label>
+                  <label className="text-[#667085] block mb-0.5">Lower limit <InlineMath math="a" /></label>
                   <input
                     type="number"
                     step="0.1"
@@ -694,7 +716,7 @@ export const GraphingLab: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-[#667085] block mb-0.5">Upper limit b</label>
+                  <label className="text-[#667085] block mb-0.5">Upper limit <InlineMath math="b" /></label>
                   <input
                     type="number"
                     step="0.1"
@@ -704,8 +726,10 @@ export const GraphingLab: React.FC = () => {
                   />
                 </div>
               </div>
-              <div className="bg-[#faf7f2] p-2.5 rounded-xl border border-[#ded5c5] font-mono text-xs text-[#182029] mt-2">
-                ∫_{integralA}^{integralB} f(x) dx ≈ <span className="font-bold text-[#2d5868]">{integralValue.toFixed(4)}</span>
+              <div className="bg-[#faf7f2] p-2.5 rounded-xl border border-[#ded5c5] text-center text-xs text-[#182029] mt-2">
+                <InlineMath
+                  math={`\\int_{${integralA}}^{${integralB}} f(x)\\,dx \\approx ${integralValue.toFixed(4)}`}
+                />
               </div>
             </div>
           )}

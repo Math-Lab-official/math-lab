@@ -14,6 +14,7 @@ import {
   Grid
 } from 'lucide-react';
 import { recordLatticeExperiment, saveNewConjecture } from '../../utils/studentProgress';
+import { InlineMath, BlockMath } from '../common/MathView';
 
 type PointColor = 'red' | 'blue' | 'green' | 'uncolored';
 
@@ -502,23 +503,31 @@ export const LatticeColoringWorkbench: React.FC = () => {
 
             {/* Combinatorial Metrics Grid */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                <div className="font-mono text-lg font-bold text-[#0077c8] dark:text-sky-400">
-                  C({rows}, 2) = {invariantAnalysis.combinationsR2}
+              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center flex flex-col justify-center">
+                <div className="text-base font-bold text-[#0077c8] dark:text-sky-400">
+                  <InlineMath math={`\\binom{${rows}}{2} = ${invariantAnalysis.combinationsR2}`} />
                 </div>
-                <div className="text-[10px] text-slate-500 font-medium mt-0.5">
+                <div className="text-[10px] text-slate-500 font-medium mt-1">
                   Row-Pairs per Column
                 </div>
               </div>
 
-              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                <div className="font-mono text-lg font-bold text-amber-600 dark:text-amber-400">
-                  {invariantAnalysis.maxSafePairs}
+              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center flex flex-col justify-center">
+                <div className="text-base font-bold text-amber-600 dark:text-amber-400">
+                  <InlineMath math={`k \\binom{r}{2} = ${invariantAnalysis.maxSafePairs}`} />
                 </div>
-                <div className="text-[10px] text-slate-500 font-medium mt-0.5">
-                  Max Safe Unique Pairs
+                <div className="text-[10px] text-slate-500 font-medium mt-1">
+                  Max Safe Pigeonhole Pairs
                 </div>
               </div>
+            </div>
+
+            {/* Invariant Bound Formula */}
+            <div className="p-2.5 bg-sky-50 dark:bg-sky-950/40 rounded-xl border border-sky-200 dark:border-sky-800 text-center">
+              <span className="text-[10px] uppercase font-bold text-[#0077c8] dark:text-sky-400 block mb-0.5">
+                Pigeonhole Invariant Condition
+              </span>
+              <BlockMath math={`\\sum_{j=1}^{${cols}} \\binom{k_j}{2} \\le ${colorCount} \\binom{${rows}}{2}`} className="text-xs text-[#0077c8] dark:text-sky-300 my-0 py-0.5" />
             </div>
 
             {/* Current Invariant Status */}

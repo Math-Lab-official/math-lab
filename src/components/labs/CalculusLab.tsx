@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { evaluateMathFunction, numericalIntegral } from '../../utils/mathUtils';
 import { BarChart3, TrendingUp, Sliders } from 'lucide-react';
+import { InlineMath, BlockMath } from '../common/MathView';
 
 export const CalculusLab: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'riemann' | 'taylor' | 'limits'>('riemann');
@@ -20,6 +21,30 @@ export const CalculusLab: React.FC = () => {
 
   // Limit state
   const [limitPreset, setLimitPreset] = useState<'sinc' | 'removable' | 'euler'>('sinc');
+
+  const getTaylorLatex = () => {
+    switch (taylorFunction) {
+      case 'sin':
+        return '\\sin(x) = \\sum_{k=0}^{\\infty} \\frac{(-1)^k}{(2k+1)!} x^{2k+1} \\approx x - \\frac{x^3}{3!} + \\frac{x^5}{5!} - \\dots';
+      case 'cos':
+        return '\\cos(x) = \\sum_{k=0}^{\\infty} \\frac{(-1)^k}{(2k)!} x^{2k} \\approx 1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} - \\dots';
+      case 'exp':
+        return 'e^x = \\sum_{k=0}^{\\infty} \\frac{x^k}{k!} \\approx 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} + \\dots';
+      case 'ln':
+        return '\\ln(1+x) = \\sum_{k=1}^{\\infty} \\frac{(-1)^{k-1}}{k} x^k \\approx x - \\frac{x^2}{2} + \\frac{x^3}{3} - \\dots';
+    }
+  };
+
+  const getLimitLatex = () => {
+    switch (limitPreset) {
+      case 'sinc':
+        return '\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1';
+      case 'removable':
+        return '\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1} = \\lim_{x \\to 1} (x + 1) = 2';
+      case 'euler':
+        return '\\lim_{x \\to \\infty} \\left(1 + \\frac{1}{x}\\right)^x = e \\approx 2.71828';
+    }
+  };
 
   const drawRiemann = useCallback(() => {
     const canvas = canvasRef.current;
@@ -460,22 +485,40 @@ export const CalculusLab: React.FC = () => {
             </div>
 
             {/* Metrics */}
-            <div className="bg-white border border-[#ded5c5] rounded-2xl p-5 space-y-3 shadow-xs">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[#667085]">
-                Convergence Analysis
+            <div className="bg-white dark:bg-slate-900 border border-[#ded5c5] dark:border-slate-800 rounded-2xl p-5 space-y-3 shadow-xs">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#667085] dark:text-slate-400">
+                Convergence & Partition Calculus
               </h3>
+
+              {/* KaTeX Integral Formula Header */}
+              <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-800 text-center">
+                <BlockMath math={`\\int_{${lowerA}}^{${upperB}} (${funcExpr})\\,dx \\approx \\sum_{i=1}^{${partitionsN}} f(x_i^*)\\,\\Delta x`} className="text-xs text-[#2d5868] dark:text-sky-300 py-1" />
+                <div className="text-[11px] text-slate-500 font-mono mt-1">
+                  <InlineMath math={`\\Delta x = \\frac{${upperB} - (${lowerA})}{${partitionsN}} = ${((upperB - lowerA) / partitionsN).toFixed(4)}`} />
+                </div>
+              </div>
+
               <div className="space-y-2 text-xs">
-                <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5] flex justify-between items-center">
-                  <span className="text-[#667085]">Riemann Sum:</span>
-                  <span className="font-mono text-[#2d5868] font-bold text-sm">{approxSum.toFixed(5)}</span>
+                <div className="bg-[#faf7f2] dark:bg-slate-800/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-700 flex justify-between items-center">
+                  <span className="text-[#667085] dark:text-slate-400 font-medium flex items-center gap-1.5">
+                    <span>Riemann Sum</span>
+                    <InlineMath math={`S_{${partitionsN}}:`} />
+                  </span>
+                  <span className="font-mono text-[#2d5868] dark:text-sky-400 font-bold text-sm">{approxSum.toFixed(5)}</span>
                 </div>
-                <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5] flex justify-between items-center">
-                  <span className="text-[#667085]">Exact Integral ∫:</span>
-                  <span className="font-mono text-[#166534] font-bold text-sm">{exactIntegral.toFixed(5)}</span>
+                <div className="bg-[#faf7f2] dark:bg-slate-800/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-700 flex justify-between items-center">
+                  <span className="text-[#667085] dark:text-slate-400 font-medium flex items-center gap-1.5">
+                    <span>Exact Integral</span>
+                    <InlineMath math="I:" />
+                  </span>
+                  <span className="font-mono text-[#166534] dark:text-emerald-400 font-bold text-sm">{exactIntegral.toFixed(5)}</span>
                 </div>
-                <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5] flex justify-between items-center">
-                  <span className="text-[#667085]">Error |Δ|:</span>
-                  <span className="font-mono text-[#b86822] font-semibold">{absoluteError.toFixed(5)} ({percentError.toFixed(2)}%)</span>
+                <div className="bg-[#faf7f2] dark:bg-slate-800/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-700 flex justify-between items-center">
+                  <span className="text-[#667085] dark:text-slate-400 font-medium flex items-center gap-1.5">
+                    <span>Approximation Error</span>
+                    <InlineMath math="|I - S_N|:" />
+                  </span>
+                  <span className="font-mono text-[#b86822] dark:text-amber-400 font-semibold">{absoluteError.toFixed(5)} ({percentError.toFixed(2)}%)</span>
                 </div>
               </div>
             </div>
@@ -544,6 +587,17 @@ export const CalculusLab: React.FC = () => {
                   className="w-full accent-[#b86822] cursor-pointer"
                 />
               </div>
+
+              {/* KaTeX Taylor Series Formula Card */}
+              <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-3.5 rounded-xl border border-[#ded5c5] dark:border-slate-800 space-y-2">
+                <span className="text-[10px] uppercase font-bold text-[#b86822] dark:text-amber-400 block">
+                  Active Taylor Series Expansion
+                </span>
+                <BlockMath math={getTaylorLatex()} className="text-xs text-[#2d5868] dark:text-sky-300 py-1" />
+                <div className="text-[11px] text-slate-500 leading-snug">
+                  Maclaurin series centered at <InlineMath math="a = 0" /> truncated at polynomial degree <InlineMath math={`N = ${taylorDegree}`} />.
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -577,6 +631,14 @@ export const CalculusLab: React.FC = () => {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Active Limit Mathematical Equation Banner */}
+          <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-4 rounded-xl border border-[#ded5c5] dark:border-slate-800 text-center">
+            <span className="text-[10px] uppercase font-bold text-[#2d5868] dark:text-sky-400 block mb-1">
+              Exact Analytic Limit Expression
+            </span>
+            <BlockMath math={getLimitLatex()} className="text-base text-[#2d5868] dark:text-sky-300 py-1" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

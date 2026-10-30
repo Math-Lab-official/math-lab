@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Compass, RotateCw, Triangle } from 'lucide-react';
+import { InlineMath, BlockMath } from '../common/MathView';
 
 interface SpecialAngle {
   radStr: string;
@@ -404,17 +405,12 @@ export const GeometryLab: React.FC = () => {
             </div>
 
             {/* Pythagorean Proof */}
-            <div className="bg-white border border-[#ded5c5] rounded-2xl p-5 space-y-2 shadow-xs">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[#667085]">
-                Fundamental Identity
+            <div className="bg-white dark:bg-slate-900 border border-[#ded5c5] dark:border-slate-800 rounded-2xl p-5 space-y-2 shadow-xs">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#667085] dark:text-slate-400">
+                Fundamental Pythagorean Identity
               </h3>
-              <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5] font-mono text-xs text-[#182029]">
-                <div className="flex justify-between items-center">
-                  <span>sin²(θ) + cos²(θ)</span>
-                  <span className="text-[#166534] font-bold text-sm">
-                    {(sinVal ** 2 + cosVal ** 2).toFixed(5)} = 1
-                  </span>
-                </div>
+              <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-800 text-center">
+                <BlockMath math={`\\sin^2(\\theta) + \\cos^2(\\theta) = (${sinVal.toFixed(3)})^2 + (${cosVal.toFixed(3)})^2 = 1.000`} className="text-xs text-[#166534] dark:text-emerald-400 py-0.5 my-0.5" />
               </div>
             </div>
           </div>
@@ -494,29 +490,43 @@ export const GeometryLab: React.FC = () => {
             </div>
 
             {isValidTriangle && (
-              <div className="bg-white border border-[#ded5c5] rounded-2xl p-5 space-y-3 shadow-xs">
-                <h3 className="text-sm font-bold text-[#182029] font-serif-editorial">Calculated Metrics</h3>
+              <div className="bg-white dark:bg-slate-900 border border-[#ded5c5] dark:border-slate-800 rounded-2xl p-5 space-y-3 shadow-xs">
+                <h3 className="text-sm font-bold text-[#182029] dark:text-white font-serif-editorial">Calculated Metrics & Invariants</h3>
+
+                <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-2.5 rounded-xl border border-[#ded5c5] dark:border-slate-800 text-center">
+                  <span className="text-[10px] uppercase font-bold text-[#2d5868] dark:text-sky-400 block mb-0.5">
+                    Law of Cosines
+                  </span>
+                  <BlockMath math={`c^2 = a^2 + b^2 - 2ab \\cos(C) \\implies \\cos(C) = \\frac{${sideA}^2 + ${sideB}^2 - ${sideC}^2}{2(${sideA})(${sideB})}`} className="text-xs text-[#2d5868] dark:text-sky-300 py-0.5 my-0.5" />
+                </div>
+
                 <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5]">
-                    <span className="text-[#667085]">Area (Heron's)</span>
-                    <span className="font-mono text-[#182029] font-bold block text-sm mt-0.5">
+                  <div className="bg-[#faf7f2] dark:bg-slate-800/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-700">
+                    <span className="text-[#667085] dark:text-slate-400 block">Area (Heron's Formula)</span>
+                    <span className="font-mono text-[#182029] dark:text-white font-bold block text-sm mt-0.5">
                       {triangleArea.toFixed(3)}
                     </span>
+                    <span className="text-[10px] text-[#98a2b3] block">
+                      <InlineMath math="\\sqrt{s(s-a)(s-b)(s-c)}" />
+                    </span>
                   </div>
-                  <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5]">
-                    <span className="text-[#667085]">Perimeter (2s)</span>
-                    <span className="font-mono text-[#182029] font-bold block text-sm mt-0.5">
+                  <div className="bg-[#faf7f2] dark:bg-slate-800/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-700">
+                    <span className="text-[#667085] dark:text-slate-400 block">Perimeter & Semi-perimeter</span>
+                    <span className="font-mono text-[#182029] dark:text-white font-bold block text-sm mt-0.5">
                       {(sideA + sideB + sideC).toFixed(1)}
+                    </span>
+                    <span className="text-[10px] text-[#98a2b3] block">
+                      <InlineMath math={`s = ${((sideA + sideB + sideC) / 2).toFixed(2)}`} />
                     </span>
                   </div>
                 </div>
 
-                <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5] space-y-1 text-xs">
-                  <span className="text-[#667085] block font-medium">Computed Angles:</span>
-                  <div className="flex justify-between font-mono text-[#182029]">
-                    <span>∠A = {angleAlpha.toFixed(1)}°</span>
-                    <span>∠B = {angleBeta.toFixed(1)}°</span>
-                    <span>∠C = {angleGamma.toFixed(1)}°</span>
+                <div className="bg-[#faf7f2] dark:bg-slate-800/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-700 space-y-1 text-xs">
+                  <span className="text-[#667085] dark:text-slate-400 block font-medium">Computed Angles:</span>
+                  <div className="flex justify-between font-mono text-[#182029] dark:text-white text-xs">
+                    <span><InlineMath math={`\\angle A = ${angleAlpha.toFixed(1)}^\\circ`} /></span>
+                    <span><InlineMath math={`\\angle B = ${angleBeta.toFixed(1)}^\\circ`} /></span>
+                    <span><InlineMath math={`\\angle C = ${angleGamma.toFixed(1)}^\\circ`} /></span>
                   </div>
                 </div>
               </div>

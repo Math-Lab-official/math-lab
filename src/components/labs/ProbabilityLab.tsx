@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { combinations, factorial } from '../../utils/mathUtils';
 import { Play, RotateCcw, Target } from 'lucide-react';
+import { InlineMath, BlockMath } from '../common/MathView';
 
 export const ProbabilityLab: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'distributions' | 'monte-carlo' | 'buffon'>('distributions');
@@ -501,6 +502,37 @@ export const ProbabilityLab: React.FC = () => {
                   </div>
                 </div>
               )}
+
+              {/* KaTeX Mathematical Probability Model Card */}
+              <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-3.5 rounded-xl border border-[#ded5c5] dark:border-slate-800 space-y-1.5 mt-2">
+                <span className="text-[10px] uppercase font-bold text-[#2d5868] dark:text-sky-400 block">
+                  Probability Model Specification
+                </span>
+                {distType === 'normal' && (
+                  <div>
+                    <BlockMath math={`f(x) = \\frac{1}{${sigma.toFixed(1)} \\sqrt{2\\pi}} \\exp\\left(-\\frac{1}{2}\\left(\\frac{x - ${mu.toFixed(1)}}{${sigma.toFixed(1)}}\\right)^2\\right)`} className="text-xs text-[#2d5868] dark:text-sky-300 py-1" />
+                    <div className="text-[10px] text-slate-500 text-center font-mono mt-1">
+                      <InlineMath math="\\mu \\pm 1\\sigma \\approx 68.3\\%, \\quad \\mu \\pm 2\\sigma \\approx 95.5\\%" />
+                    </div>
+                  </div>
+                )}
+                {distType === 'binomial' && (
+                  <div>
+                    <BlockMath math={`P(X = k) = \\binom{${binN}}{k} (${binP.toFixed(2)})^k (1 - ${binP.toFixed(2)})^{${binN} - k}`} className="text-xs text-[#2d5868] dark:text-sky-300 py-1" />
+                    <div className="text-[10px] text-slate-500 text-center font-mono mt-1">
+                      <InlineMath math={`\\mathbb{E}[X] = ${(binN * binP).toFixed(2)}, \\quad \\operatorname{Var}(X) = ${(binN * binP * (1 - binP)).toFixed(2)}`} />
+                    </div>
+                  </div>
+                )}
+                {distType === 'poisson' && (
+                  <div>
+                    <BlockMath math={`P(X = k) = \\frac{${lambdaP}^k e^{-${lambdaP}}}{k!}`} className="text-xs text-[#2d5868] dark:text-sky-300 py-1" />
+                    <div className="text-[10px] text-slate-500 text-center font-mono mt-1">
+                      <InlineMath math={`\\lambda = ${lambdaP}, \\quad \\mathbb{E}[X] = \\operatorname{Var}(X) = ${lambdaP}`} />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -563,10 +595,14 @@ export const ProbabilityLab: React.FC = () => {
 
           <div className="lg:col-span-5 space-y-4">
             <div className="bg-white border border-[#ded5c5] rounded-2xl p-5 space-y-4 shadow-xs">
-              <h3 className="text-sm font-bold text-[#182029] font-serif-editorial">Buffon's Needle Monte Carlo π</h3>
-              <p className="text-xs text-[#475467] leading-relaxed">
-                Needles of length L = 40 are dropped randomly onto parallel ruled lines separated by distance D = 60. The probability of line crossing is P = 2L / (π·D).
+              <h3 className="text-sm font-bold text-[#182029] dark:text-white font-serif-editorial">Buffon's Needle Monte Carlo π</h3>
+              <p className="text-xs text-[#475467] dark:text-slate-400 leading-relaxed">
+                Needles of length <InlineMath math="L = 40" /> dropped randomly onto parallel ruled lines with spacing <InlineMath math="D = 60" />.
               </p>
+
+              <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-2.5 rounded-xl border border-[#ded5c5] dark:border-slate-800 text-center">
+                <BlockMath math="P(\text{cross}) = \frac{2L}{\pi D} \implies \pi \approx \frac{2 L \cdot N}{D \cdot C}" className="text-xs text-[#2d5868] dark:text-sky-300 py-0.5 my-0.5" />
+              </div>
 
               <div className="flex gap-2">
                 <button

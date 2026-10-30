@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Matrix2x2, computeDeterminant, computeTrace, computeInverse, computeEigenvalues } from '../../utils/mathUtils';
 import { Grid, RefreshCw } from 'lucide-react';
+import { InlineMath, BlockMath } from '../common/MathView';
 
 interface MatrixPreset {
   name: string;
@@ -294,51 +295,67 @@ export const LinearAlgebraLab: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white border border-[#ded5c5] rounded-2xl p-5 space-y-3 shadow-xs">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#667085]">
-              Spectral Invariants
-            </h3>
+          <div className="bg-white dark:bg-slate-900 border border-[#ded5c5] dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-xs">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#667085] dark:text-slate-400">
+                Spectral Invariants & KaTeX Matrix Algebra
+              </h3>
+              <span className="text-[10px] font-mono text-sky-600 dark:text-sky-400 font-bold">2×2 Vector Space</span>
+            </div>
+
+            {/* Matrix Equation Overview */}
+            <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-800 text-center">
+              <span className="text-[10px] uppercase font-bold text-[#667085] dark:text-slate-400 block mb-0.5">Linear Map</span>
+              <BlockMath math={`A = \\begin{pmatrix} ${matrix.a.toFixed(2)} & ${matrix.b.toFixed(2)} \\\\ ${matrix.c.toFixed(2)} & ${matrix.d.toFixed(2)} \\end{pmatrix}`} className="text-sm text-[#2d5868] dark:text-sky-300 py-0.5 my-0.5" />
+            </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5]">
-                <span className="text-[#667085] block">Trace tr(A)</span>
-                <span className="font-mono text-[#182029] text-base font-bold mt-0.5 block">
+              <div className="bg-[#faf7f2] dark:bg-slate-800/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-700">
+                <span className="text-[#667085] dark:text-slate-400 block">
+                  <InlineMath math="\\operatorname{tr}(A) = a + d" />
+                </span>
+                <span className="font-mono text-[#182029] dark:text-white text-base font-bold mt-1 block">
                   {trace.toFixed(3)}
                 </span>
-                <span className="text-[10px] text-[#98a2b3] block">a + d</span>
               </div>
 
-              <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5]">
-                <span className="text-[#667085] block">Determinant det(A)</span>
-                <span className={`font-mono text-base font-bold mt-0.5 block ${det >= 0 ? 'text-[#166534]' : 'text-[#b91c1c]'}`}>
+              <div className="bg-[#faf7f2] dark:bg-slate-800/60 p-3 rounded-xl border border-[#ded5c5] dark:border-slate-700">
+                <span className="text-[#667085] dark:text-slate-400 block">
+                  <InlineMath math="\\det(A) = ad - bc" />
+                </span>
+                <span className={`font-mono text-base font-bold mt-1 block ${det >= 0 ? 'text-[#166534] dark:text-emerald-400' : 'text-[#b91c1c] dark:text-rose-400'}`}>
                   {det.toFixed(3)}
                 </span>
-                <span className="text-[10px] text-[#98a2b3] block">ad - bc</span>
               </div>
             </div>
 
-            <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5] text-xs font-mono">
-              <span className="text-[#667085] block text-[11px] font-sans mb-1 font-semibold">Eigenvalues:</span>
+            <div className="bg-[#faf7f2] dark:bg-slate-800/60 p-3.5 rounded-xl border border-[#ded5c5] dark:border-slate-700 text-xs">
+              <span className="text-[#667085] dark:text-slate-400 block text-[11px] mb-1 font-semibold flex items-center justify-between">
+                <span>Eigenvalues (Roots of Characteristic Polynomial):</span>
+                <InlineMath math="\\det(A - \\lambda I) = 0" />
+              </span>
               {eigen.isComplex ? (
-                <div className="text-[#b86822]">
-                  λ₁,₂ = {eigen.lambda1.toFixed(3)} ± {eigen.imagPart?.toFixed(3)}i
+                <div className="text-[#b86822] dark:text-amber-400 font-mono text-sm py-1">
+                  <InlineMath math={`\\lambda_{1,2} = ${eigen.lambda1.toFixed(3)} \\pm ${eigen.imagPart?.toFixed(3)} i`} />
                 </div>
               ) : (
-                <div className="text-[#2d5868] flex justify-between font-bold">
-                  <span>λ₁ = {eigen.lambda1.toFixed(3)}</span>
-                  <span>λ₂ = {eigen.lambda2.toFixed(3)}</span>
+                <div className="text-[#2d5868] dark:text-sky-300 flex justify-between font-bold py-1">
+                  <InlineMath math={`\\lambda_1 = ${eigen.lambda1.toFixed(3)}`} />
+                  <InlineMath math={`\\lambda_2 = ${eigen.lambda2.toFixed(3)}`} />
                 </div>
               )}
             </div>
 
-            <div className="bg-[#faf7f2] p-3 rounded-xl border border-[#ded5c5] text-xs font-mono">
-              <span className="text-[#667085] block text-[11px] font-sans mb-1 font-semibold">Inverse Matrix A⁻¹:</span>
+            <div className="bg-[#faf7f2] dark:bg-slate-800/60 p-3.5 rounded-xl border border-[#ded5c5] dark:border-slate-700 text-xs">
+              <span className="text-[#667085] dark:text-slate-400 block text-[11px] mb-1 font-semibold">
+                <InlineMath math="A^{-1} = \\frac{1}{\\det(A)}\\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}:" />
+              </span>
               {inverse ? (
-                <div className="text-[#166534]">
-                  [[{inverse.a.toFixed(2)}, {inverse.b.toFixed(2)}], [{inverse.c.toFixed(2)}, {inverse.d.toFixed(2)}]]
+                <div className="text-[#166534] dark:text-emerald-400 text-center py-1">
+                  <BlockMath math={`A^{-1} = \\begin{pmatrix} ${inverse.a.toFixed(2)} & ${inverse.b.toFixed(2)} \\\\ ${inverse.c.toFixed(2)} & ${inverse.d.toFixed(2)} \\end{pmatrix}`} className="my-0.5 py-0" />
                 </div>
               ) : (
-                <div className="text-[#b91c1c]">Singular (det = 0)</div>
+                <div className="text-[#b91c1c] dark:text-rose-400 font-bold">Singular Matrix (det = 0, no inverse exists)</div>
               )}
             </div>
           </div>

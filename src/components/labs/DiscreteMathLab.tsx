@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { primeFactors, gcdWithSteps, combinations } from '../../utils/mathUtils';
 import { Hash, Clock } from 'lucide-react';
+import { InlineMath, BlockMath } from '../common/MathView';
 
 export const DiscreteMathLab: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'primes' | 'gcd' | 'mod' | 'pascal'>('primes');
@@ -15,6 +16,7 @@ export const DiscreteMathLab: React.FC = () => {
 
   const factors = primeFactors(primeInput);
   const factorStr = factors.map((f) => (f.power > 1 ? `${f.factor}^${f.power}` : `${f.factor}`)).join(' × ') || '1';
+  const factorLatex = factors.map((f) => (f.power > 1 ? `${f.factor}^{${f.power}}` : `${f.factor}`)).join(' \\cdot ') || '1';
 
   const { gcd, steps: gcdSteps } = gcdWithSteps(gcdA, gcdB);
 
@@ -105,14 +107,14 @@ export const DiscreteMathLab: React.FC = () => {
                 />
               </div>
 
-              <div className="bg-[#faf7f2] p-4 rounded-xl border border-[#ded5c5] space-y-2">
-                <span className="text-[10px] text-[#667085] uppercase tracking-wider block font-bold">
-                  Canonical Prime Representation:
+              <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-4 rounded-xl border border-[#ded5c5] dark:border-slate-800 space-y-2">
+                <span className="text-[10px] text-[#667085] dark:text-slate-400 uppercase tracking-wider block font-bold">
+                  Canonical Prime Factorization:
                 </span>
-                <div className="text-xl font-mono font-bold text-[#182029]">
-                  {primeInput} = <span className="text-[#2d5868]">{factorStr}</span>
+                <div className="text-xl font-bold text-[#182029] dark:text-white flex items-center justify-center py-1">
+                  <BlockMath math={`${primeInput} = ${factorLatex}`} className="my-0 py-0 text-[#2d5868] dark:text-sky-300" />
                 </div>
-                <div className="text-xs text-[#667085] pt-1 border-t border-[#ded5c5]">
+                <div className="text-xs text-[#667085] dark:text-slate-400 pt-1 border-t border-[#ded5c5] dark:border-slate-800">
                   {factors.length === 1 && factors[0].power === 1
                     ? '✨ This number is a prime!'
                     : `Composite number with ${factors.length} distinct prime factor(s).`}
@@ -177,26 +179,24 @@ export const DiscreteMathLab: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-[#faf7f2] p-5 rounded-xl border border-[#ded5c5] space-y-4">
-            <div className="flex justify-between items-center pb-3 border-b border-[#ded5c5]">
-              <span className="text-sm font-bold text-[#182029] font-serif-editorial">
+          <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-5 rounded-xl border border-[#ded5c5] dark:border-slate-800 space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-[#ded5c5] dark:border-slate-800">
+              <span className="text-sm font-bold text-[#182029] dark:text-white font-serif-editorial">
                 Euclidean Remainder Reductions:
               </span>
-              <span className="text-sm font-mono font-bold text-[#166534]">
-                gcd({gcdA}, {gcdB}) = {gcd}
+              <span className="text-sm font-bold text-[#166534] dark:text-emerald-400">
+                <InlineMath math={`\\gcd(${gcdA}, ${gcdB}) = ${gcd}`} />
               </span>
             </div>
 
-            <div className="space-y-2 font-mono text-xs">
+            <div className="space-y-2 text-xs">
               {gcdSteps.map((step, idx) => (
-                <div key={idx} className="flex items-center gap-3 text-[#475467]">
-                  <span className="text-[#98a2b3] w-8">#{idx + 1}:</span>
-                  <span className="text-[#182029] font-bold">{step.a}</span> ={' '}
-                  <span className="text-[#2d5868]">{step.q}</span> ×{' '}
-                  <span className="text-[#182029]">{step.b}</span> +{' '}
-                  <span className={step.r === 0 ? 'text-[#166534] font-bold' : 'text-[#b86822]'}>
-                    {step.r}
-                  </span>
+                <div key={idx} className="flex items-center gap-3 text-[#475467] dark:text-slate-300">
+                  <span className="text-[#98a2b3] w-8 font-mono">#{idx + 1}:</span>
+                  <InlineMath math={`${step.a} = ${step.q} \\times ${step.b} + ${step.r}`} />
+                  {step.r === 0 && (
+                    <span className="text-[#166534] dark:text-emerald-400 font-bold ml-2">✓ Terminating GCD</span>
+                  )}
                 </div>
               ))}
             </div>
@@ -238,10 +238,10 @@ export const DiscreteMathLab: React.FC = () => {
                 />
               </div>
 
-              <div className="bg-[#faf7f2] p-4 rounded-xl border border-[#ded5c5] text-center space-y-1">
-                <span className="text-xs text-[#667085]">Modular Congruence:</span>
-                <div className="text-2xl font-mono font-bold text-[#166534]">
-                  {modVal} ≡ {((modVal % modN) + modN) % modN} (mod {modN})
+              <div className="bg-[#faf7f2] dark:bg-slate-950/60 p-4 rounded-xl border border-[#ded5c5] dark:border-slate-800 text-center space-y-1">
+                <span className="text-xs text-[#667085] dark:text-slate-400">Modular Congruence:</span>
+                <div className="text-xl font-bold text-[#166534] dark:text-emerald-400 py-1">
+                  <BlockMath math={`${modVal} \\equiv ${((modVal % modN) + modN) % modN} \\pmod{${modN}}`} className="my-0 py-0" />
                 </div>
               </div>
             </div>
@@ -295,15 +295,12 @@ export const DiscreteMathLab: React.FC = () => {
               <h3 className="text-sm font-bold text-[#182029] font-serif-editorial">
                 Pascal's Triangle & Binomial Coefficients
               </h3>
-              <p className="text-xs text-[#475467]">
-                Each entry is the sum of the two directly above: C(n, k) = C(n-1, k-1) + C(n-1, k).
-              </p>
+              <div className="text-xs text-[#475467] mt-0.5">
+                <InlineMath math="\\binom{n}{k} = \\binom{n-1}{k-1} + \\binom{n-1}{k}" />
+              </div>
             </div>
-            <div className="text-xs font-mono text-[#475467]">
-              C({combN}, {combK}) ={' '}
-              <span className="text-[#2d5868] font-bold text-sm">
-                {combinations(combN, combK)}
-              </span>
+            <div className="text-sm font-bold text-[#2d5868] dark:text-sky-300 bg-[#faf7f2] dark:bg-slate-900 px-3 py-1.5 rounded-xl border border-[#ded5c5] dark:border-slate-800">
+              <InlineMath math={`\\binom{${combN}}{${combK}} = ${combinations(combN, combK)}`} />
             </div>
           </div>
 
