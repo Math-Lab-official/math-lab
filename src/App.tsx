@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { LabTab } from './types';
 import { ThemeProvider } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
 import { TopUtilityBar } from './components/navigation/TopUtilityBar';
 import { MainNavigation } from './components/navigation/MainNavigation';
 import { SearchAndUtilityModals } from './components/navigation/SearchAndUtilityModals';
+import { GmailCenterModal } from './components/common/GmailCenterModal';
 import { HomePage } from './components/landing/HomePage';
 import { NationalInvestigationsPage } from './components/investigations/NationalInvestigationsPage';
 import { ShareYourWorkPage } from './components/submission/ShareYourWorkPage';
@@ -31,6 +33,7 @@ export const AppContent: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<LabTab>('overview');
   const [utilityModal, setUtilityModal] = useState<'search' | 'support' | 'newsletter' | null>(null);
   const [isProgressModalOpen, setIsProgressModalOpen] = useState<boolean>(false);
+  const [isGmailCenterOpen, setIsGmailCenterOpen] = useState<boolean>(false);
 
   return (
     <div className="min-h-screen bg-[#faf7f2] dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans selection:bg-[#0077c8]/20 selection:text-slate-900 dark:selection:text-white transition-colors">
@@ -39,6 +42,7 @@ export const AppContent: React.FC = () => {
         onOpenSearch={() => setUtilityModal('search')}
         onOpenContact={() => setUtilityModal('support')}
         onOpenProgress={() => setIsProgressModalOpen(true)}
+        onOpenGmailCenter={() => setIsGmailCenterOpen(true)}
       />
 
       {/* 2. Main Navigation Header */}
@@ -183,6 +187,12 @@ export const AppContent: React.FC = () => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
       />
+
+      {/* 7. Dedicated Gmail Communications Center Modal */}
+      <GmailCenterModal
+        isOpen={isGmailCenterOpen}
+        onClose={() => setIsGmailCenterOpen(false)}
+      />
     </div>
   );
 };
@@ -190,7 +200,9 @@ export const AppContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </ThemeProvider>
   );
 };

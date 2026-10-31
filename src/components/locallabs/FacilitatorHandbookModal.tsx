@@ -18,10 +18,14 @@ import {
   FileText, 
   ChevronRight,
   ExternalLink,
-  ShieldCheck
+  ShieldCheck,
+  FileEdit
 } from 'lucide-react';
 import { OFFICIAL_EMAIL } from '../../data/teamData';
 import { downloadFacilitatorStarterKit } from '../../utils/facilitatorKitExport';
+import { useAuth } from '../../context/AuthContext';
+import { EmailConfirmationModal } from '../common/EmailConfirmationModal';
+import { SendEmailOptions } from '../../services/gmailService';
 
 interface FacilitatorHandbookModalProps {
   isOpen: boolean;
@@ -34,10 +38,21 @@ export const FacilitatorHandbookModal: React.FC<FacilitatorHandbookModalProps> =
   onClose,
   initialSection = 1,
 }) => {
+  const { isGmailConnected, googleUser } = useAuth();
+
   const [activeSection, setActiveSection] = useState<number>(initialSection);
   const [copiedEmailTemplate, setCopiedEmailTemplate] = useState<boolean>(false);
   const [copiedFlyerTemplate, setCopiedFlyerTemplate] = useState<boolean>(false);
   
+  // Interactive Outreach Email State
+  const [isOutreachOpen, setIsOutreachOpen] = useState<boolean>(false);
+  const [outreachTo, setOutreachTo] = useState<string>('');
+  const [outreachContact, setOutreachContact] = useState<string>('Library Director / Faculty Advisor');
+  const [outreachVenue, setOutreachVenue] = useState<string>('Local Public Library');
+  const [pendingOutreachEmail, setPendingOutreachEmail] = useState<SendEmailOptions | null>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
+  const [outreachNotice, setOutreachNotice] = useState<string>('');
+
   // Interactive Checklist State
   const [checklist, setChecklist] = useState<Record<string, boolean>>({
     'c1': false,
@@ -314,19 +329,121 @@ To register or learn more, contact: [Your Email] or visit [Math Lab Website]`;
                   </div>
 
                   {/* Copyable Email Template */}
-                  <div className="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="font-bold text-sm text-amber-300">
-                        Sample Host Outreach Email Template
+                  <div className="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 space-y-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="font-bold text-sm text-amber-300 flex items-center gap-2">
+                        <span>Sample Host Outreach Email Template</span>
+                        {isGmailConnected && (
+                          <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold flex items-center gap-1">
+                            <ShieldCheck className="w-3 h-3" />
+                            Gmail Active
+                          </span>
+                        )}
                       </div>
-                      <button
-                        onClick={handleCopyEmailTemplate}
-                        className="px-3.5 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 border border-white/20"
-                      >
-                        {copiedEmailTemplate ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                        <span>{copiedEmailTemplate ? 'Copied to Clipboard!' : 'Copy Template'}</span>
-                      </button>
+                      
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setIsOutreachOpen(!isOutreachOpen)}
+                          className="px-3.5 py-1.5 bg-[#ea4335] hover:bg-[#d93025] text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm"
+                        >
+                          <Mail className="w-3.5 h-3.5" />
+                          <span>{isOutreachOpen ? 'Hide Composer' : 'Send with Gmail'}</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleCopyEmailTemplate}
+                          className="px-3.5 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 border border-white/20"
+                        >
+                          {copiedEmailTemplate ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                          <span>{copiedEmailTemplate ? 'Copied to Clipboard!' : 'Copy Template'}</span>
+                        </button>
+                      </div>
                     </div>
+
+                    {outreachNotice && (
+                      <div className="p-3 bg-emerald-950/80 border border-emerald-600 rounded-xl text-xs text-emerald-200 flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>{outreachNotice}</span>
+                      </div>
+                    )}
+
+                    {/* Integrated Gmail Outreach Composer */}
+                    {isOutreachOpen && (
+                      <div className="bg-slate-800/90 border border-slate-700 rounded-xl p-4 space-y-3 animate-in fade-in text-xs">
+                        <div className="font-bold text-white flex items-center justify-between">
+                          <span>Compose Venue Outreach via Connected Gmail</span>
+                          <span className="text-[11px] font-normal text-slate-400">Sent from {googleUser?.email || 'your Gmail account'}</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                          <div>
+                            <label className="block text-slate-300 text-[11px] font-semibold mb-1">Host Contact Email *</label>
+                            <input
+                              type="email"
+                              required
+                              value={outreachTo}
+                              onChange={(e) => setOutreachTo(e.target.value)}
+                              placeholder="librarian@library.org"
+                              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-mono text-xs focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-slate-300 text-[11px] font-semibold mb-1">Contact Name</label>
+                            <input
+                              type="text"
+                              value={outreachContact}
+                              onChange={(e) => setOutreachContact(e.target.value)}
+                              placeholder="e.g. Ms. Jenkins"
+                              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-slate-300 text-[11px] font-semibold mb-1">Organization / Venue</label>
+                            <input
+                              type="text"
+                              value={outreachVenue}
+                              onChange={(e) => setOutreachVenue(e.target.value)}
+                              placeholder="e.g. City Central Library"
+                              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-1">
+                          <span className="text-[11px] text-slate-400">
+                            A confirmation modal will verify the message before sending via Gmail.
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (!outreachTo.trim()) {
+                                alert('Please provide the host contact email address.');
+                                return;
+                              }
+                              const facilitatorName = googleUser?.displayName || 'Local Lab Facilitator';
+                              const formattedBody = `Dear ${outreachContact || '[Contact Name]'},\n\nMy name is ${facilitatorName}, and I am organizing a local Math Lab chapter to provide opportunities for students and community members to explore mathematics through investigation, problem-solving, and collaboration.\n\nMath Lab follows the principle “One Investigation → Multiple Levels → Shared Discovery.” Participants investigate mathematical questions, develop their own approaches, and learn by sharing ideas with others.\n\nI am reaching out to ask whether ${outreachVenue || '[Organization Name]'} might be interested in hosting our Local Lab. We hope to hold sessions at a convenient recurring time, with activities and intended audience adapted to the needs of the community.\n\nWe would be happy to discuss possible scheduling, room availability, supervision requirements, and any policies we would need to follow.\n\nWould you be available to discuss this possibility? Thank you for considering the opportunity to support mathematical exploration in our community.\n\nBest regards,\n\n${facilitatorName}\nLocal Lab Facilitator, Math Lab\n${googleUser?.email || ''}\nOfficial Initiative: ${OFFICIAL_EMAIL}`;
+
+                              setPendingOutreachEmail({
+                                to: outreachTo.trim(),
+                                subject: `Request to Host a Local Math Lab Session at ${outreachVenue || 'Your Venue'}`,
+                                bodyText: formattedBody,
+                                fromName: facilitatorName,
+                              });
+                              setIsConfirmOpen(true);
+                            }}
+                            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition flex items-center gap-1.5 shadow-xs"
+                          >
+                            <Send className="w-3.5 h-3.5" />
+                            <span>Review & Send via Gmail</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="bg-slate-950 p-4 rounded-xl text-slate-300 font-mono text-[11px] leading-relaxed overflow-x-auto whitespace-pre-wrap border border-slate-800">
 {`Subject: Request to Host a Local Math Lab
@@ -828,6 +945,24 @@ To register: [Insert Link or QR Code]`}
           </div>
         </div>
       </div>
+
+      {/* Explicit Gmail Confirmation Modal */}
+      <EmailConfirmationModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        emailDetails={pendingOutreachEmail}
+        title="Confirm Venue Outreach Dispatch"
+        description="Verify host contact details before dispatching the Local Math Lab host request from your Gmail account."
+        onSuccess={(res) => {
+          setIsConfirmOpen(false);
+          setIsOutreachOpen(false);
+          setOutreachNotice(
+            res.type === 'sent'
+              ? `Outreach request successfully sent via Gmail to ${pendingOutreachEmail?.to}!`
+              : `Outreach draft saved in your Gmail account.`
+          );
+        }}
+      />
     </div>
   );
 };

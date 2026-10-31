@@ -1,18 +1,23 @@
 import React from 'react';
-import { Search, Mail, ExternalLink } from 'lucide-react';
+import { Search, Mail, ExternalLink, ShieldCheck, UserCheck } from 'lucide-react';
 import { OFFICIAL_EMAIL, INSTAGRAM_HANDLE, INSTAGRAM_URL, STAFF_APPLICATION_URL } from '../../data/teamData';
+import { useAuth } from '../../context/AuthContext';
 
 interface TopUtilityBarProps {
   onOpenSearch: () => void;
   onOpenContact: () => void;
   onOpenProgress?: () => void;
+  onOpenGmailCenter?: () => void;
 }
 
 export const TopUtilityBar: React.FC<TopUtilityBarProps> = ({
   onOpenSearch,
   onOpenContact,
   onOpenProgress,
+  onOpenGmailCenter,
 }) => {
+  const { isGmailConnected, googleUser } = useAuth();
+
   return (
     <div className="bg-[#182029] dark:bg-slate-950 text-slate-300 dark:text-slate-400 text-xs py-2 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 transition-colors">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -27,6 +32,27 @@ export const TopUtilityBar: React.FC<TopUtilityBarProps> = ({
 
         {/* Right: Essential, unboxed utility links */}
         <div className="flex items-center gap-4 ml-auto text-xs font-medium">
+          {/* Gmail Connect & Compose Hub */}
+          {onOpenGmailCenter && (
+            <button
+              onClick={onOpenGmailCenter}
+              className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md transition text-xs font-semibold ${
+                isGmailConnected
+                  ? 'bg-emerald-950/70 border border-emerald-700/60 text-emerald-300 hover:bg-emerald-900/80'
+                  : 'bg-red-950/60 border border-red-800/60 text-red-200 hover:bg-red-900/80'
+              }`}
+              title="Open Math Lab Gmail Center (Compose, Send, Check status)"
+            >
+              <Mail className="w-3 h-3 text-[#ea4335]" />
+              <span className="truncate max-w-[140px]">
+                {isGmailConnected && googleUser ? (googleUser.displayName || googleUser.email?.split('@')[0]) : 'Gmail'}
+              </span>
+              {isGmailConnected && <ShieldCheck className="w-3 h-3 text-emerald-400" />}
+            </button>
+          )}
+
+          <span className="text-slate-700" aria-hidden="true">·</span>
+
           <a
             href={STAFF_APPLICATION_URL}
             target="_blank"
@@ -40,13 +66,13 @@ export const TopUtilityBar: React.FC<TopUtilityBarProps> = ({
 
           <span className="text-slate-700" aria-hidden="true">·</span>
 
-          <a
-            href={`mailto:${OFFICIAL_EMAIL}`}
+          <button
+            onClick={onOpenContact}
             className="hover:text-white transition-colors hidden md:flex items-center gap-1.5 text-slate-300 dark:text-slate-400"
           >
             <Mail className="w-3.5 h-3.5 opacity-70" />
             <span>{OFFICIAL_EMAIL}</span>
-          </a>
+          </button>
 
           <span className="text-slate-700 hidden md:inline" aria-hidden="true">·</span>
 
@@ -75,4 +101,5 @@ export const TopUtilityBar: React.FC<TopUtilityBarProps> = ({
     </div>
   );
 };
+
 

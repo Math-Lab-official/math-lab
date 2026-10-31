@@ -14,18 +14,31 @@ import {
   ExternalLink, 
   Clock, 
   Mail,
-  Check
+  Check,
+  ShieldCheck
 } from 'lucide-react';
 import { LocalLabInquiry } from '../../types';
 import { LocalLabsDirectoryMap, LocalLabChapter } from './LocalLabsDirectoryMap';
 import { FacilitatorHandbookModal } from './FacilitatorHandbookModal';
 import { STAFF_APPLICATION_URL, OFFICIAL_EMAIL } from '../../data/teamData';
 import { downloadFacilitatorStarterKit } from '../../utils/facilitatorKitExport';
+import { useAuth } from '../../context/AuthContext';
+import { EmailConfirmationModal } from '../common/EmailConfirmationModal';
+import { SendEmailOptions } from '../../services/gmailService';
 
 export const StartLocalLabPage: React.FC = () => {
+  const { isGmailConnected, googleUser } = useAuth();
+
   const [activeTab, setActiveTab] = useState<'directory' | 'guide' | 'organizer-form' | 'resources' | 'feedback'>('directory');
   const [isHandbookModalOpen, setIsHandbookModalOpen] = useState<boolean>(false);
   const [handbookSection, setHandbookSection] = useState<number>(1);
+
+  // Email Confirmation State
+  const [pendingEmail, setPendingEmail] = useState<SendEmailOptions | null>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
+  const [confirmTitle, setConfirmTitle] = useState<string>('Confirm Email Dispatch');
+  const [confirmDesc, setConfirmDesc] = useState<string>('');
+  const [emailStatusMsg, setEmailStatusMsg] = useState<string>('');
 
   // Interest Form state
   const [organizerForm, setOrganizerForm] = useState<LocalLabInquiry>({
@@ -443,6 +456,75 @@ export const StartLocalLabPage: React.FC = () => {
                 </div>
               )}
 
+              {emailStatusMsg && (
+                <div className="max-w-md mx-auto p-3 bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-700 rounded-xl text-xs text-emerald-800 dark:text-emerald-300 flex items-center justify-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-600" />
+                  <span>{emailStatusMsg}</span>
+                </div>
+              )}
+
+              {/* Gmail Action Hub */}
+              <div className="max-w-md mx-auto p-4 bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 rounded-xl space-y-2 text-xs">
+                <div className="font-bold text-slate-900 dark:text-white flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-[#ea4335]" />
+                    <span>Gmail Confirmation Options</span>
+                  </span>
+                  {isGmailConnected && (
+                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3" />
+                      Connected
+                    </span>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const subject = `Welcome to Math Lab: Chapter Registration for ${organizerForm.organizationOrVenue || organizerForm.cityState}`;
+                      const body = `Dear ${organizerForm.organizerName},\n\nCongratulations on establishing your local Math Lab chapter!\n\nChapter: ${organizerForm.organizationOrVenue || organizerForm.cityState}\nCity/State: ${organizerForm.cityState}\nMeeting Frequency: ${organizerForm.meetingFrequency}\nEstimated Group: ${organizerForm.approximateAttendees}\n\nYour chapter has been officially indexed in our directory. Next steps:\n1. Download the Facilitator Starter Kit\n2. Introduce our "One Investigation → Multiple Levels → Shared Discovery" model to your participants\n3. Contact us at ${OFFICIAL_EMAIL} if you require printed student investigation materials.\n\nWarm regards,\nMath Lab National Outreach Committee`;
+
+                      setPendingEmail({
+                        to: organizerForm.email,
+                        subject,
+                        bodyText: body,
+                        fromName: 'Math Lab Local Chapter Directory',
+                      });
+                      setConfirmTitle('Send Facilitator Confirmation via Gmail');
+                      setConfirmDesc(`Dispatch chapter onboarding record to your email (${organizerForm.email})`);
+                      setIsConfirmOpen(true);
+                    }}
+                    className="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-sky-50 dark:hover:bg-slate-800 text-left transition"
+                  >
+                    <div className="font-bold text-slate-800 dark:text-slate-200">Email Me Packet</div>
+                    <div className="text-[10px] text-slate-500 truncate">{organizerForm.email}</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const subject = `[New Chapter Registered] ${organizerForm.organizationOrVenue || organizerForm.cityState} - Facilitated by ${organizerForm.organizerName}`;
+                      const body = `New Local Lab Chapter Onboarded:\n\nOrganizer: ${organizerForm.organizerName}\nEmail: ${organizerForm.email}\nRole: ${organizerForm.role}\nVenue: ${organizerForm.organizationOrVenue || 'Community Venue'}\nCity/State: ${organizerForm.cityState}\nFrequency: ${organizerForm.meetingFrequency}\nAttendees: ${organizerForm.approximateAttendees}\nRequested Materials: ${organizerForm.requestedMaterials.join(', ')}\n\nNotes: ${organizerForm.additionalNotes || 'None'}\n\nTimestamp: ${new Date().toISOString()}`;
+
+                      setPendingEmail({
+                        to: OFFICIAL_EMAIL,
+                        subject,
+                        bodyText: body,
+                        fromName: organizerForm.organizerName,
+                      });
+                      setConfirmTitle('Notify National Team via Gmail');
+                      setConfirmDesc(`Send official notification to Math Lab Executive Leadership (${OFFICIAL_EMAIL})`);
+                      setIsConfirmOpen(true);
+                    }}
+                    className="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-amber-50 dark:hover:bg-slate-800 text-left transition"
+                  >
+                    <div className="font-bold text-slate-800 dark:text-slate-200">Notify Leadership</div>
+                    <div className="text-[10px] text-slate-500 truncate">{OFFICIAL_EMAIL}</div>
+                  </button>
+                </div>
+              </div>
+
               <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
                 <button
                   type="button"
@@ -808,7 +890,37 @@ export const StartLocalLabPage: React.FC = () => {
               <p className="text-xs sm:text-sm text-emerald-900/80 dark:text-emerald-300/90 max-w-lg mx-auto leading-relaxed">
                 Thank you for reporting back to the national team. Your notes have been stored and logged for review by the Curriculum & Impact committees.
               </p>
-              <div className="pt-2">
+
+              {emailStatusMsg && (
+                <div className="max-w-md mx-auto p-3 bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-700 rounded-xl text-xs text-emerald-800 dark:text-emerald-300 flex items-center justify-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-600" />
+                  <span>{emailStatusMsg}</span>
+                </div>
+              )}
+
+              <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const subject = `[Session Debrief] ${feedbackForm.labName} (${feedbackForm.sessionDate || 'Recent Session'})`;
+                    const body = `LOCAL LAB SESSION OUTCOME REPORT\n===============================\nChapter: ${feedbackForm.labName}\nFacilitator: ${feedbackForm.facilitatorEmail}\nDate: ${feedbackForm.sessionDate || 'Not specified'}\nAttendees: ${feedbackForm.attendeeCount || 'Not specified'}\nInvestigation: ${feedbackForm.investigationExplored}\n\nSession Highlights & Student Questions:\n${feedbackForm.highlightsAndQuestions}\n\nSuggestions for National Team:\n${feedbackForm.suggestionsForNationalTeam || 'None'}\n\n---\nReported via Math Lab Facilitator Portal`;
+
+                    setPendingEmail({
+                      to: OFFICIAL_EMAIL,
+                      subject,
+                      bodyText: body,
+                      fromName: feedbackForm.labName,
+                    });
+                    setConfirmTitle('Email Session Debrief via Gmail');
+                    setConfirmDesc(`Send full outcome debrief to Math Lab National Curriculum Committee (${OFFICIAL_EMAIL})`);
+                    setIsConfirmOpen(true);
+                  }}
+                  className="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded-md transition shadow-xs flex items-center gap-2"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>Email Debrief via Gmail</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={() => setFeedbackSubmitted(false)}
@@ -932,6 +1044,23 @@ export const StartLocalLabPage: React.FC = () => {
         isOpen={isHandbookModalOpen}
         onClose={() => setIsHandbookModalOpen(false)}
         initialSection={handbookSection}
+      />
+
+      {/* Gmail Confirmation Modal */}
+      <EmailConfirmationModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        emailDetails={pendingEmail}
+        title={confirmTitle}
+        description={confirmDesc || 'Please review before dispatching from your Gmail account.'}
+        onSuccess={(res) => {
+          setIsConfirmOpen(false);
+          setEmailStatusMsg(
+            res.type === 'sent'
+              ? `Message successfully dispatched via Gmail to ${pendingEmail?.to}!`
+              : `Draft saved in your Gmail account.`
+          );
+        }}
       />
     </div>
   );
