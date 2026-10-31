@@ -105,49 +105,92 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
     setProgressState(next);
   };
 
+  const downloadProblemPack = () => {
+    let md = `# Math Lab — National Investigation\n`;
+    md += `## ${activeInvestigation.title}\n`;
+    md += `*Published:* ${activeInvestigation.month} ${activeInvestigation.year} | *Category:* ${activeInvestigation.category}\n\n`;
+    md += `### The Core Question\n> ${activeInvestigation.theCoreQuestion}\n\n`;
+    md += `### Overview\n${activeInvestigation.overview}\n\n`;
+    md += `### Five Levels of Mathematical Depth\n\n`;
+    activeInvestigation.levels.forEach((lvl) => {
+      md += `#### Level ${lvl.level}: ${lvl.title}\n`;
+      md += `*Focus:* ${lvl.subtitle}\n\n`;
+      md += `**Investigation Prompt:**\n${lvl.prompt}\n\n`;
+      md += `**Guiding Questions:**\n`;
+      lvl.guidingQuestions.forEach((q) => {
+        md += `- ${q}\n`;
+      });
+      md += `\n---\n\n`;
+    });
+    md += `### Facilitator Notes for Local Math Labs\n`;
+    activeInvestigation.facilitatorTips.forEach((tip) => {
+      md += `- ${tip}\n`;
+    });
+    md += `\nMath Lab Initiative · mathlab.org\n`;
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `mathlab-investigation-${activeInvestigation.id}.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <div className="space-y-12 py-4">
+    <div className="space-y-8 py-2">
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-slate-900 via-[#0a192f] to-[#4a044e] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-2xl border border-slate-800">
+      <div className="bg-[#0d1527] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xl border border-slate-800">
+        <div 
+          aria-hidden="true" 
+          className="absolute inset-0 pointer-events-none opacity-[0.06] overflow-hidden"
+        >
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
+            <line x1="0" y1="200" x2="1000" y2="200" stroke="currentColor" strokeWidth="2" />
+            <line x1="500" y1="0" x2="500" y2="400" stroke="currentColor" strokeWidth="2" />
+            <circle cx="500" cy="200" r="120" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="500" cy="200" r="240" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+        </div>
+
         <div className="relative max-w-3xl space-y-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Monthly Flagship Program</span>
-            </div>
+          <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-400 font-semibold">
+            <Compass className="w-3.5 h-3.5" />
+            <span>Monthly Flagship Program</span>
+            <span aria-hidden="true">·</span>
+            <span>5 Depth Levels</span>
+            <span aria-hidden="true">·</span>
+            <span>Open Access Inquiry</span>
+          </div>
+
+          <h1 className="font-serif-editorial text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+            National Mathematical Investigations
+          </h1>
+
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Every month, Math Lab releases a rich mathematical inquiry designed for collaborative discovery across five progressive levels of depth. Rather than routine calculation drills, these investigations challenge students to notice patterns, formulate invariants, construct proofs, and explore open questions.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <button
+              onClick={downloadProblemPack}
+              className="px-4 py-2 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs rounded-xl shadow-xs transition flex items-center gap-2"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Download Problem Pack (.md)</span>
+            </button>
 
             {onOpenProgress && (
               <button
                 onClick={onOpenProgress}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-sky-300 text-xs font-bold transition"
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs rounded-xl transition flex items-center gap-2"
               >
-                <Award className="w-3.5 h-3.5 text-amber-400" />
-                <span>My Research Progress Tracker</span>
+                <Award className="w-4 h-4 text-amber-400" />
+                <span>My Research Portfolio</span>
               </button>
             )}
-          </div>
-
-          <h1 className="font-display-bold text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            NATIONAL INVESTIGATIONS
-          </h1>
-
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Every month, Math Lab releases a rich mathematical investigation designed for collaborative inquiry across five progressive levels of mathematical depth. Rather than routine calculation drills, these investigations challenge students to notice patterns, formulate invariants, construct proofs, and explore open questions.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-4 pt-3 text-xs font-medium text-slate-300">
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Free for All Students & Local Labs</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-sky-400" />
-              <span>5 Progressive Depth Levels</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-amber-400" />
-              <span>Interactive Experiment Simulator</span>
-            </div>
           </div>
         </div>
       </div>
@@ -156,13 +199,13 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Archive Browser & Category Filter */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs space-y-4 transition-colors">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs space-y-4 transition-colors">
             <div className="flex items-center justify-between">
-              <h2 className="font-display-bold text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <h2 className="font-serif-editorial text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-[#0077c8] dark:text-sky-400" />
                 <span>Monthly Archive</span>
               </h2>
-              <span className="text-xs font-bold text-slate-400">
+              <span className="text-xs font-mono font-semibold text-slate-400">
                 {NATIONAL_INVESTIGATIONS.length} Available
               </span>
             </div>

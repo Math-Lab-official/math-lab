@@ -21,6 +21,10 @@ import { ProbabilityLab } from './components/labs/ProbabilityLab';
 import { DiscreteMathLab } from './components/labs/DiscreteMathLab';
 import { DigitalLabsComingSoonPage } from './components/labs/DigitalLabsComingSoonPage';
 import { StudentProgressModal } from './components/progress/StudentProgressModal';
+import { StudentLearningHub } from './components/education/StudentLearningHub';
+import { FormulaReference } from './components/FormulaReference';
+import { DailyChallenge } from './components/DailyChallenge';
+import { LabNotebook } from './components/LabNotebook';
 import { Footer } from './components/Footer';
 
 export const AppContent: React.FC = () => {
@@ -145,12 +149,18 @@ export const AppContent: React.FC = () => {
           </LabContainer>
         )}
 
-        {/* Fallback for secondary tabs */}
-        {(currentTab === 'education' || 
-          currentTab === 'formulas' || 
-          currentTab === 'challenges' || 
-          currentTab === 'notebook') && (
-          <DigitalLabsComingSoonPage onNavigate={(tab) => setCurrentTab(tab)} />
+        {/* Dedicated Student & Research Exploration Pathways */}
+        {currentTab === 'education' && (
+          <StudentLearningHub onNavigateToLab={(tab) => setCurrentTab(tab)} user={null} />
+        )}
+        {currentTab === 'formulas' && (
+          <FormulaReference onNavigateToLab={(tab) => setCurrentTab(tab)} />
+        )}
+        {currentTab === 'challenges' && (
+          <DailyChallenge />
+        )}
+        {currentTab === 'notebook' && (
+          <LabNotebook />
         )}
       </main>
 

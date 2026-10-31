@@ -93,12 +93,12 @@ export const FormulaReference: React.FC<FormulaReferenceProps> = ({ onNavigateTo
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-[#faf7f2] dark:bg-slate-800 text-[#2d5868] dark:text-sky-400 border border-[#e2dacb] dark:border-slate-700">
+                <span className="text-xs font-mono font-semibold text-[#0077c8] dark:text-sky-400">
                   {formula.category}
                 </span>
                 <button
                   onClick={() => handleCopy(formula)}
-                  className="p-1.5 text-[#98a2b3] hover:text-[#182029] dark:hover:text-white rounded-lg hover:bg-[#faf7f2] dark:hover:bg-slate-800 transition"
+                  className="p-1.5 text-slate-400 hover:text-slate-800 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
                   title="Copy LaTeX source"
                 >
                   {copiedId === formula.id ? (
@@ -109,7 +109,7 @@ export const FormulaReference: React.FC<FormulaReferenceProps> = ({ onNavigateTo
                 </button>
               </div>
 
-              <h3 className="font-display-bold text-lg font-bold text-[#182029] dark:text-white mb-2">
+              <h3 className="font-serif-editorial text-xl font-bold text-slate-900 dark:text-white mb-2">
                 {formula.name}
               </h3>
 

@@ -21,6 +21,23 @@ interface Props {
   onNavigateHome?: () => void;
 }
 
+export interface SavedSubmission {
+  id: string;
+  studentNameOrTeam: string;
+  email: string;
+  gradeLevel: string;
+  schoolOrLocalLab: string;
+  investigationId: string;
+  investigationTitle: string;
+  levelAddressed: number;
+  title: string;
+  summaryOfApproach: string;
+  conjecturesOrProofs: string;
+  externalDocumentUrl: string;
+  timestamp: number;
+  status: string;
+}
+
 export const ShareYourWorkPage: React.FC<Props> = () => {
   const [formData, setFormData] = useState({
     studentNameOrTeam: '',
@@ -36,8 +53,18 @@ export const ShareYourWorkPage: React.FC<Props> = () => {
     allowPublicDisplayWithPermission: false,
   });
 
-  const [submitted, setSubmitted] = useState<boolean>(false);
+  const [submissions, setSubmissions] = useState<SavedSubmission[]>(() => {
+    try {
+      const saved = localStorage.getItem('math_lab_submissions');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [submittedId, setSubmittedId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'submit' | 'history'>('submit');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,8 +73,51 @@ export const ShareYourWorkPage: React.FC<Props> = () => {
       return;
     }
 
+    const currentInv = NATIONAL_INVESTIGATIONS.find((i) => i.id === formData.investigationId);
+    const newSubmission: SavedSubmission = {
+      id: `SUB-${Date.now().toString(36).toUpperCase()}`,
+      ...formData,
+      investigationTitle: currentInv ? `${currentInv.month} ${currentInv.year}: ${currentInv.title}` : 'Independent Inquiry',
+      timestamp: Date.now(),
+      status: 'Received & In Committee Queue',
+    };
+
+    const updated = [newSubmission, ...submissions];
+    setSubmissions(updated);
+    localStorage.setItem('math_lab_submissions', JSON.stringify(updated));
+
     setErrorMsg('');
-    setSubmitted(true);
+    setSubmittedId(newSubmission.id);
+  };
+
+  const downloadReceipt = (sub: SavedSubmission) => {
+    let md = `# Math Lab — Submission Confirmation Receipt\n`;
+    md += `**Receipt ID:** ${sub.id}\n`;
+    md += `**Date of Submission:** ${new Date(sub.timestamp).toLocaleString()}\n`;
+    md += `**Student / Collaborative Team:** ${sub.studentNameOrTeam}\n`;
+    md += `**Contact Email:** ${sub.email}\n`;
+    md += `**Institution / Local Lab:** ${sub.schoolOrLocalLab || 'Self-Guided'}\n`;
+    md += `**Investigation:** ${sub.investigationTitle}\n`;
+    md += `**Highest Level Addressed:** Level ${sub.levelAddressed}\n`;
+    md += `**Approach Title:** ${sub.title || 'Untitled Approach'}\n\n`;
+    md += `### Summary of Approach\n${sub.summaryOfApproach}\n\n`;
+    if (sub.conjecturesOrProofs) {
+      md += `### Formulated Conjectures & Invariants\n${sub.conjecturesOrProofs}\n\n`;
+    }
+    if (sub.externalDocumentUrl) {
+      md += `### External Document / LaTeX Source\n${sub.externalDocumentUrl}\n\n`;
+    }
+    md += `\n---\n*Status:* ${sub.status}\n*Review Body:* Math Lab Solutions Review & Student Scholarship Committee\n`;
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `mathlab-receipt-${sub.id}.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   };
 
   const resetForm = () => {
@@ -64,40 +134,61 @@ export const ShareYourWorkPage: React.FC<Props> = () => {
       externalDocumentUrl: '',
       allowPublicDisplayWithPermission: false,
     });
-    setSubmitted(false);
+    setSubmittedId(null);
   };
 
   return (
-    <div className="space-y-12 py-4 transition-colors">
+    <div className="space-y-8 py-2 transition-colors">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-[#0a192f] to-[#4a044e] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-2xl border border-slate-800">
+      <div className="bg-[#0d1527] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xl border border-slate-800">
+        <div 
+          aria-hidden="true" 
+          className="absolute inset-0 pointer-events-none opacity-[0.06] overflow-hidden"
+        >
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
+            <line x1="0" y1="200" x2="1000" y2="200" stroke="currentColor" strokeWidth="2" />
+            <line x1="500" y1="0" x2="500" y2="400" stroke="currentColor" strokeWidth="2" />
+            <circle cx="500" cy="200" r="100" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+        </div>
+
         <div className="relative max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-bold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Student Mathematical Scholarship</span>
+          <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-400 font-semibold">
+            <Send className="w-3.5 h-3.5" />
+            <span>Student Research Submission Portal</span>
+            <span aria-hidden="true">·</span>
+            <span>Solutions Review Committee</span>
           </div>
 
-          <h1 className="font-display-bold text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            SHARE YOUR WORK
+          <h1 className="font-serif-editorial text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+            Share Your Mathematical Work
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Mathematics advances through shared inquiry, multiple perspectives, and constructive dialogue. We invite students, collaborative teams, and Local Labs to submit their findings, novel approaches, conjectures, or open questions for review by our Solutions Review & Student Scholarship committee.
+            Mathematics advances through shared inquiry, multiple perspectives, and constructive dialogue. Submit findings, partial solutions, counterexamples, or formal proofs for review by our Student Scholarship Committee.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-medium text-slate-300">
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Constructive Committee Feedback</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-sky-400" />
-              <span>Partial Insights Welcome</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-amber-400" />
-              <span>Strict Student Privacy Safeguards</span>
-            </div>
+          <div className="flex items-center gap-3 pt-2">
+            <button
+              onClick={() => setActiveTab('submit')}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
+                activeTab === 'submit'
+                  ? 'bg-[#0077c8] text-white shadow-xs'
+                  : 'bg-white/10 text-slate-300 hover:bg-white/20'
+              }`}
+            >
+              Submit Investigation Work
+            </button>
+            <button
+              onClick={() => setActiveTab('history')}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
+                activeTab === 'history'
+                  ? 'bg-[#0077c8] text-white shadow-xs'
+                  : 'bg-white/10 text-slate-300 hover:bg-white/20'
+              }`}
+            >
+              My Submissions ({submissions.length})
+            </button>
           </div>
         </div>
       </div>
@@ -186,7 +277,7 @@ export const ShareYourWorkPage: React.FC<Props> = () => {
             </p>
           </div>
 
-          {submitted ? (
+          {submittedId ? (
             <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-8 text-center space-y-4">
               <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 rounded-full flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6" />

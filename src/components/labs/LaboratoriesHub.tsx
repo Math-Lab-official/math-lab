@@ -149,43 +149,49 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
   });
 
   return (
-    <div className="space-y-8 py-4">
+    <div className="space-y-8 py-2">
       {/* 1. Page Header Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-[#0a192f] to-[#4a044e] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-2xl border border-slate-800">
+      <div className="bg-[#0d1527] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xl border border-slate-800">
+        {/* Subtle geometric grid backdrop */}
+        <div 
+          aria-hidden="true" 
+          className="absolute inset-0 pointer-events-none opacity-[0.06] overflow-hidden"
+        >
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
+            <line x1="0" y1="200" x2="1000" y2="200" stroke="currentColor" strokeWidth="2" />
+            <line x1="500" y1="0" x2="500" y2="400" stroke="currentColor" strokeWidth="2" />
+            <circle cx="500" cy="200" r="80" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="500" cy="200" r="160" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+        </div>
+
         <div className="relative max-w-3xl space-y-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Interactive Mathematics Laboratories</span>
-            </div>
-            {onOpenProgress && (
-              <button
-                onClick={onOpenProgress}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-sky-200 text-xs font-bold transition"
-              >
-                <Award className="w-3.5 h-3.5 text-amber-400" />
-                <span>My Lab Milestones ({completedCount}/6 Completed)</span>
-              </button>
-            )}
+          <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-400 font-semibold">
+            <Activity className="w-3.5 h-3.5" />
+            <span>Academic Simulation Suite</span>
+            <span aria-hidden="true">·</span>
+            <span>6 Interactive Laboratories</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-amber-400 font-bold">{completedCount}/6 Completed</span>
           </div>
 
-          <h1 className="font-display-bold text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            THE MATHEMATICAL LAB SUITE
+          <h1 className="font-serif-editorial text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+            The Mathematical Laboratory Suite
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Every laboratory in Math Lab is an authentic, interactive investigation engine. Manipulate parameters, test boundary cases, visualize Riemann sums, and explore geometric invariants with live numerical feedback.
+            Every laboratory in Math Lab is an authentic, interactive investigation engine. Manipulate parameters, test boundary cases, visualize Riemann sums, and explore geometric invariants with live numerical feedback and instant canvas image export.
           </p>
 
-          {/* Category Filter Pills */}
+          {/* Category Filter Tabs */}
           <div className="flex flex-wrap items-center gap-2 pt-2">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   activeCategory === cat.id
-                    ? 'bg-[#0077c8] text-white shadow-md'
+                    ? 'bg-[#0077c8] text-white shadow-xs'
                     : 'bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white border border-white/10'
                 }`}
               >
@@ -197,7 +203,7 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
       </div>
 
       {/* 2. Progress Strip */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950 text-[#0077c8] dark:text-sky-400 flex items-center justify-center font-bold">
             <Award className="w-5 h-5" />
@@ -268,10 +274,10 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
             >
               <div className="p-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-slate-400">
-                    LAB {lab.num}
+                  <span className="font-mono text-xs font-semibold text-slate-400">
+                    Studio 0{lab.num}
                   </span>
-                  <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${lab.tagColor}`}>
+                  <span className="text-xs font-mono font-semibold text-[#0077c8] dark:text-sky-400">
                     {lab.badge}
                   </span>
                 </div>
@@ -285,7 +291,7 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
                     <Icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-display-bold text-lg font-bold text-slate-900 dark:text-white group-hover:text-[#0077c8] dark:group-hover:text-sky-400 transition-colors">
+                    <h3 className="font-serif-editorial text-xl font-bold text-slate-900 dark:text-white group-hover:text-[#0077c8] dark:group-hover:text-sky-400 transition-colors">
                       {lab.title}
                     </h3>
                     <div className="text-[11px] text-slate-400 font-medium mt-0.5">

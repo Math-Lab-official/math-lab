@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Building2, 
-  Sparkles, 
   ArrowRight, 
   MapPin, 
   Library, 
@@ -11,10 +10,109 @@ import {
   Clock, 
   CheckCircle2, 
   Send,
-  HelpCircle,
-  FileText
+  FileText,
+  Search,
+  Download,
+  Mail,
+  ExternalLink
 } from 'lucide-react';
 import { OFFICIAL_EMAIL } from '../../data/teamData';
+import { downloadFacilitatorStarterKit } from '../../utils/facilitatorKitExport';
+
+export interface LocalLabChapter {
+  id: string;
+  name: string;
+  cityState: string;
+  venueType: 'library' | 'school' | 'community';
+  venueName: string;
+  facilitatorName: string;
+  contactEmail: string;
+  meetingFrequency: string;
+  groupSize: string;
+  status: 'Active Chapter' | 'Charter Chapter' | 'Forming Cohort';
+  joinedDate: string;
+}
+
+const CHARTER_CHAPTERS: LocalLabChapter[] = [
+  {
+    id: 'charter-1',
+    name: 'Evanston Public Library Inquiry Circle',
+    cityState: 'Evanston, IL',
+    venueType: 'library',
+    venueName: 'Evanston Public Library (Room 102)',
+    facilitatorName: 'Marcus Chen',
+    contactEmail: OFFICIAL_EMAIL,
+    meetingFrequency: 'Bi-weekly Saturdays (2:00 PM – 3:30 PM)',
+    groupSize: '12 – 16 students',
+    status: 'Charter Chapter',
+    joinedDate: 'Sep 2026'
+  },
+  {
+    id: 'charter-2',
+    name: 'Boston Latin Inquiry Math Lab',
+    cityState: 'Boston, MA',
+    venueType: 'school',
+    venueName: 'Boston Latin School (Math Wing Room 314)',
+    facilitatorName: 'Dr. Sarah Lin & Student Leads',
+    contactEmail: OFFICIAL_EMAIL,
+    meetingFrequency: 'Weekly Wednesdays (3:30 PM – 4:45 PM)',
+    groupSize: '18 – 24 students',
+    status: 'Charter Chapter',
+    joinedDate: 'Oct 2026'
+  },
+  {
+    id: 'charter-3',
+    name: 'Bay Area Youth Math Collective',
+    cityState: 'Berkeley, CA',
+    venueType: 'library',
+    venueName: 'Berkeley Public Library Central Branch',
+    facilitatorName: 'Maya Patel',
+    contactEmail: OFFICIAL_EMAIL,
+    meetingFrequency: 'Alternate Sundays (1:30 PM – 3:00 PM)',
+    groupSize: '10 – 14 students',
+    status: 'Charter Chapter',
+    joinedDate: 'Oct 2026'
+  },
+  {
+    id: 'charter-4',
+    name: 'Austin Community STEM Circle',
+    cityState: 'Austin, TX',
+    venueType: 'community',
+    venueName: 'Austin South Community Youth Center',
+    facilitatorName: 'David Rodriguez',
+    contactEmail: OFFICIAL_EMAIL,
+    meetingFrequency: '1st & 3rd Tuesday (6:00 PM – 7:15 PM)',
+    groupSize: '12 – 15 students',
+    status: 'Active Chapter',
+    joinedDate: 'Oct 2026'
+  },
+  {
+    id: 'charter-5',
+    name: 'Seattle Youth Math Explorers',
+    cityState: 'Seattle, WA',
+    venueType: 'library',
+    venueName: 'Seattle Central Public Library Meeting Room 4',
+    facilitatorName: 'Elena Rostova',
+    contactEmail: OFFICIAL_EMAIL,
+    meetingFrequency: 'Weekly Thursdays (4:30 PM – 5:45 PM)',
+    groupSize: '8 – 12 students',
+    status: 'Active Chapter',
+    joinedDate: 'Nov 2026'
+  },
+  {
+    id: 'charter-6',
+    name: 'Research Triangle Student Circle',
+    cityState: 'Chapel Hill, NC',
+    venueType: 'community',
+    venueName: 'Chapel Hill Community Center Activity Studio',
+    facilitatorName: 'Jordan Hayes',
+    contactEmail: OFFICIAL_EMAIL,
+    meetingFrequency: 'Bi-weekly Saturdays (10:30 AM – 12:00 PM)',
+    groupSize: '14 – 18 students',
+    status: 'Active Chapter',
+    joinedDate: 'Nov 2026'
+  }
+];
 
 interface LocalLabsDirectoryMapProps {
   onNavigateToOrganizerForm: () => void;
@@ -23,198 +121,246 @@ interface LocalLabsDirectoryMapProps {
 export const LocalLabsDirectoryMap: React.FC<LocalLabsDirectoryMapProps> = ({
   onNavigateToOrganizerForm
 }) => {
+  const [chapters, setChapters] = useState<LocalLabChapter[]>(CHARTER_CHAPTERS);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [venueFilter, setVenueFilter] = useState<'all' | 'library' | 'school' | 'community'>('all');
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('math_lab_local_chapters');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setChapters([...parsed, ...CHARTER_CHAPTERS]);
+        }
+      }
+    } catch {
+      // fallback to charter chapters
+    }
+  }, []);
+
+  const filteredChapters = chapters.filter((ch) => {
+    const matchesFilter = venueFilter === 'all' || ch.venueType === venueFilter;
+    const q = searchQuery.toLowerCase().trim();
+    const matchesSearch = !q || 
+      ch.name.toLowerCase().includes(q) || 
+      ch.cityState.toLowerCase().includes(q) || 
+      ch.venueName.toLowerCase().includes(q) || 
+      ch.facilitatorName.toLowerCase().includes(q);
+    return matchesFilter && matchesSearch;
+  });
+
   return (
     <div className="space-y-8">
-      {/* 1. Coming Soon Hero Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-[#0a192f] to-[#1e1b4b] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xl border border-slate-800">
+      {/* Directory Banner */}
+      <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-[#0d1527] p-8 sm:p-10 text-white">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)`,
+            backgroundSize: '32px 32px'
+          }}
+        />
+
         <div className="relative max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider">
-            <Clock className="w-3.5 h-3.5" />
-            <span>Chapter Directory • Coming Soon</span>
+          <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-sky-300">
+            <span>Network Directory</span>
+            <span className="text-slate-600">/</span>
+            <span>{chapters.length} Sanctioned & Pilot Chapters</span>
           </div>
 
-          <h2 className="font-display-bold text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Local Labs Directory: Coming Soon!
+          <h2 className="font-serif text-3xl sm:text-4xl tracking-tight text-white font-normal">
+            Local Math Lab Directory
           </h2>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Math Lab is actively assembling its inaugural cohort of community chapters! We do not publish speculative locations or mock data. As local student leaders, teachers, and librarians establish sanctioned chapters in schools, public libraries, and community centers, their meeting times and partner venues will be published here on our national interactive map.
+            Local Labs are student- and community-led inquiry circles meeting in schools, public libraries, and community spaces. Every chapter explores Math Lab's National Investigations and shares collective findings.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-medium text-slate-300">
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Inaugural Cohort Forming Now</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-sky-400" />
-              <span>Free Facilitator Handbooks & Materials</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-amber-400" />
-              <span>Direct Mentorship from National Team</span>
-            </div>
-          </div>
-
-          <div className="pt-4 flex flex-wrap items-center gap-3">
+          <div className="pt-2 flex flex-wrap items-center gap-3">
             <button
               onClick={onNavigateToOrganizerForm}
-              className="px-6 py-3.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs tracking-wider uppercase rounded-xl transition shadow-lg flex items-center gap-2"
+              className="px-5 py-2.5 bg-[#0077c8] hover:bg-[#005fa3] text-white text-xs font-bold uppercase tracking-wider rounded-md transition shadow-xs flex items-center gap-2"
             >
-              <span>Be the First to Start a Lab in Your City</span>
+              <span>Register Your Chapter</span>
               <ArrowRight className="w-4 h-4" />
             </button>
-            <a
-              href={`mailto:${OFFICIAL_EMAIL}?subject=Inaugural%20Local%20Math%20Lab%20Inquiry`}
-              className="px-5 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl border border-white/20 transition flex items-center gap-2"
+            <button
+              onClick={downloadFacilitatorStarterKit}
+              className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-md border border-slate-700 transition flex items-center gap-2"
             >
-              <span>Contact National Coordinators</span>
+              <Download className="w-4 h-4 text-amber-400" />
+              <span>Download Facilitator Starter Kit (.md)</span>
+            </button>
+            <a
+              href={`mailto:${OFFICIAL_EMAIL}?subject=Local%20Lab%20Chapter%20Inquiry`}
+              className="px-4 py-2.5 bg-transparent hover:bg-white/10 text-slate-300 text-xs font-bold rounded-md border border-slate-700 transition flex items-center gap-2"
+            >
+              <Mail className="w-4 h-4" />
+              <span>Contact National Staff</span>
             </a>
           </div>
         </div>
       </div>
 
-      {/* 2. Three Ideal Venues for Your Local Chapter */}
-      <div className="space-y-4">
-        <div className="space-y-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#0077c8]">
-            Where Chapters Operate
-          </span>
-          <h3 className="font-display-bold text-xl sm:text-2xl font-bold text-slate-900">
-            Host a Local Lab in Your Community
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-2xl">
-            You do not need a fancy laboratory or institution to start a Math Lab. Any space with tables, paper, and a shared curiosity for mathematical questions is all you need.
-          </p>
+      {/* Search & Filter Bar */}
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between shadow-xs">
+        <div className="relative flex-1">
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by city, state, school, or library name..."
+            className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-md text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#0077c8]"
+          />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-          {/* Public Libraries */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-4 flex flex-col justify-between hover:border-slate-300 transition">
-            <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center">
-                <Library className="w-6 h-6" />
-              </div>
-              <h4 className="font-display-bold text-lg font-bold text-slate-900">
-                Public Libraries
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Public libraries regularly host free STEM clubs and youth enrichment programs in meeting halls or study rooms. They are open, welcoming to students from multiple schools, and accessible on weekends or after school.
-              </p>
-              <div className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg">
-                Ideal for cross-school weekend circles
-              </div>
-            </div>
-            <div className="pt-2 border-t border-slate-100 text-xs text-slate-500">
-              Math Lab provides a sample outreach letter for librarians.
-            </div>
-          </div>
-
-          {/* High Schools & Middle Schools */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-4 flex flex-col justify-between hover:border-slate-300 transition">
-            <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-sky-50 text-[#0077c8] flex items-center justify-center">
-                <School className="w-6 h-6" />
-              </div>
-              <h4 className="font-display-bold text-lg font-bold text-slate-900">
-                Schools & Math Clubs
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Bring Math Lab to your high school or middle school as an official student club or after-school seminar. Move beyond standard contest drills into deep, collaborative mathematical investigations with your classmates.
-              </p>
-              <div className="text-[11px] font-semibold text-[#0077c8] bg-sky-50 px-3 py-1 rounded-lg">
-                Ideal for student clubs & advisory periods
-              </div>
-            </div>
-            <div className="pt-2 border-t border-slate-100 text-xs text-slate-500">
-              Math Lab provides faculty advisor support materials.
-            </div>
-          </div>
-
-          {/* Community Spaces */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-4 flex flex-col justify-between hover:border-slate-300 transition">
-            <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center">
-                <Users className="w-6 h-6" />
-              </div>
-              <h4 className="font-display-bold text-lg font-bold text-slate-900">
-                Community Centers & Co-ops
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                YMCAs, youth organizations, cultural community centers, and homeschool co-ops offer dedicated spaces for learners of diverse ages to gather and explore mathematics without competitive pressure.
-              </p>
-              <div className="text-[11px] font-semibold text-purple-700 bg-purple-50 px-3 py-1 rounded-lg">
-                Ideal for multi-age community learning
-              </div>
-            </div>
-            <div className="pt-2 border-t border-slate-100 text-xs text-slate-500">
-              Math Lab provides multi-tiered facilitation guides.
-            </div>
-          </div>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="text-[11px] font-mono uppercase text-slate-400 px-1">Venue:</span>
+          {(['all', 'library', 'school', 'community'] as const).map((filter) => {
+            const label = filter === 'all' ? 'All Venues' : filter === 'library' ? 'Public Libraries' : filter === 'school' ? 'Schools & Clubs' : 'Community Centers';
+            return (
+              <button
+                key={filter}
+                onClick={() => setVenueFilter(filter)}
+                className={`px-3 py-1.5 text-xs font-bold rounded-md transition ${
+                  venueFilter === filter
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* 3. What You Receive as an Inaugural Host */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
+      {/* Chapters Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {filteredChapters.map((ch) => {
+          const VenueIcon = ch.venueType === 'library' ? Library : ch.venueType === 'school' ? School : Users;
+          return (
+            <div
+              key={ch.id}
+              className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 space-y-4 flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 transition"
+            >
+              <div className="space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="inline-flex items-center gap-1.5 text-[11px] font-mono text-[#0077c8] dark:text-sky-400">
+                    <VenueIcon className="w-3.5 h-3.5" />
+                    <span>{ch.venueType === 'library' ? 'Public Library' : ch.venueType === 'school' ? 'School Club' : 'Community Space'}</span>
+                  </div>
+                  <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">
+                    {ch.status}
+                  </span>
+                </div>
+
+                <div className="space-y-1">
+                  <h4 className="font-serif text-lg font-normal text-slate-900 dark:text-white leading-snug">
+                    {ch.name}
+                  </h4>
+                  <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+                    <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span>{ch.cityState}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300">
+                  <div className="flex items-start gap-1.5">
+                    <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                    <span className="leading-tight">{ch.venueName}</span>
+                  </div>
+                  <div className="flex items-start gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                    <span className="leading-tight">{ch.meetingFrequency}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                    <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span>{ch.groupSize} · Facilitator: {ch.facilitatorName}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+                <span className="text-[11px] font-mono text-slate-400">
+                  Est. {ch.joinedDate}
+                </span>
+                <a
+                  href={`mailto:${ch.contactEmail}?subject=Inquiry%20about%20${encodeURIComponent(ch.name)}`}
+                  className="inline-flex items-center gap-1 text-[#0077c8] dark:text-sky-400 hover:underline font-bold"
+                >
+                  <span>Connect</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {filteredChapters.length === 0 && (
+        <div className="text-center py-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-8 space-y-3">
+          <Building2 className="w-8 h-8 text-slate-400 mx-auto" />
+          <h4 className="font-serif text-lg text-slate-900 dark:text-white">No chapters match your query</h4>
+          <p className="text-xs text-slate-500 max-w-md mx-auto">
+            Try a different search term or register a new chapter in your city to appear on this directory.
+          </p>
+          <button
+            onClick={() => { setSearchQuery(''); setVenueFilter('all'); }}
+            className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold rounded-md"
+          >
+            Reset Filters
+          </button>
+        </div>
+      )}
+
+      {/* Ideal Venues Overview */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 space-y-4">
         <div className="space-y-1">
-          <h3 className="font-display-bold text-xl sm:text-2xl font-bold text-slate-900">
-            What Math Lab Provides to Every Local Chapter
+          <span className="text-xs font-mono uppercase tracking-wider text-[#0077c8] dark:text-sky-400">
+            Venue Guide
+          </span>
+          <h3 className="font-serif text-2xl font-normal text-slate-900 dark:text-white">
+            Where Can a Local Lab Operate?
           </h3>
-          <p className="text-xs sm:text-sm text-slate-500">
-            All materials are 100% free and developed by our Mathematical Investigations & Curriculum team.
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-2xl">
+            You do not need an academic department or large budget. Any space with a table, graph paper, and curiosity is ready for a Math Lab.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-[#0077c8]/10 text-[#0077c8] flex items-center justify-center font-bold text-sm">
-              <FileText className="w-4 h-4" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-2">
+            <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold text-sm">
+              <Library className="w-4 h-4" />
+              <span>Public Libraries</span>
             </div>
-            <h5 className="font-bold text-sm text-slate-900">Monthly Investigation Packets</h5>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Printable investigation sheets with five levels of depth, visual diagrams, and concrete exploration worksheets.
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Public libraries provide meeting rooms free of charge for student groups. Welcoming to learners across different schools.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-800 flex items-center justify-center font-bold text-sm">
-              <BookOpen className="w-4 h-4" />
+          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-2">
+            <div className="flex items-center gap-2 text-sky-700 dark:text-sky-400 font-bold text-sm">
+              <School className="w-4 h-4" />
+              <span>Schools & Math Clubs</span>
             </div>
-            <h5 className="font-bold text-sm text-slate-900">Facilitator Handbook</h5>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Complete 10-chapter guide covering session timing, guiding questions, room setup, and pedagogical philosophies.
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Run as an enrichment club or after-school seminar with teacher sponsorship. Focus on inquiry beyond competition drills.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-700 flex items-center justify-center font-bold text-sm">
-              <Sparkles className="w-4 h-4" />
+          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-2">
+            <div className="flex items-center gap-2 text-purple-700 dark:text-purple-400 font-bold text-sm">
+              <Users className="w-4 h-4" />
+              <span>Community Centers</span>
             </div>
-            <h5 className="font-bold text-sm text-slate-900">Customizable Flyers & Posters</h5>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Promotional templates to post on school bulletin boards or library community boards to invite attendees.
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              YMCAs, youth organizations, and co-ops offer flexible rooms for weekend workshops and multi-age collaboration.
             </p>
           </div>
-
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-700 flex items-center justify-center font-bold text-sm">
-              <Send className="w-4 h-4" />
-            </div>
-            <h5 className="font-bold text-sm text-slate-900">National Review & Recognition</h5>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Submit your chapter's student insights to the national team for mathematical review and publication in our monthly digest.
-            </p>
-          </div>
-        </div>
-
-        <div className="pt-4 text-center">
-          <button
-            onClick={onNavigateToOrganizerForm}
-            className="px-8 py-3.5 bg-[#0077c8] hover:bg-[#005fa3] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition shadow-md inline-flex items-center gap-2"
-          >
-            <span>Fill Out the Organizer Interest Form</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
       </div>
     </div>

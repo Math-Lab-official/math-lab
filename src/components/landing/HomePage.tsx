@@ -47,93 +47,114 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
   return (
     <div className="space-y-16 pb-12 transition-colors">
       {/* 1. Hero Section: Clear Introduction to Math Lab & Mission */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-[#0a192f] to-[#4a044e] text-white pt-16 pb-20 sm:pt-20 sm:pb-24 rounded-3xl border border-slate-800 shadow-2xl">
+      {/* 1. Hero Section: Authentic Scholarly Mathematical Design */}
+      <section className="relative overflow-hidden bg-[#0d1527] text-white pt-16 pb-20 sm:pt-20 sm:pb-24 rounded-3xl border border-slate-800 shadow-xl">
+        {/* Subtle SVG Mathematical Blueprint / Polar Coordinates */}
         <div 
           aria-hidden="true" 
-          className="absolute -top-24 right-1/4 w-96 h-96 bg-sky-500/15 rounded-full blur-3xl pointer-events-none" 
-        />
-        <div 
-          aria-hidden="true" 
-          className="absolute -bottom-20 left-10 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" 
-        />
+          className="absolute inset-0 pointer-events-none opacity-[0.07] overflow-hidden"
+        >
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600">
+            <defs>
+              <pattern id="math-grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#math-grid-pattern)" />
+            {/* Concentric polar coordinate rings */}
+            <circle cx="500" cy="300" r="100" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="500" cy="300" r="180" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="500" cy="300" r="260" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="500" y1="0" x2="500" y2="600" stroke="currentColor" strokeWidth="2" />
+            <line x1="0" y1="300" x2="1000" y2="300" stroke="currentColor" strokeWidth="2" />
+            {/* Spiral curve preview */}
+            <path d="M 500 300 Q 560 300 560 360 T 420 360 T 420 220 T 600 220" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 4" />
+          </svg>
+        </div>
 
-        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold text-amber-300 backdrop-blur-xs tracking-wider uppercase">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Student-Centered Mathematical Exploration</span>
+        <div className="relative max-w-4xl mx-auto px-6 sm:px-10 text-center space-y-6">
+          {/* Quiet Unboxed Kicker */}
+          <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-sky-400 font-semibold">
+            <span>National Student Initiative</span>
+            <span aria-hidden="true">·</span>
+            <span>Open Access Inquiry</span>
+            <span aria-hidden="true">·</span>
+            <span>Five Levels of Rigor</span>
           </div>
 
-          <h1 className="font-display-bold text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
+          <h1 className="font-serif-editorial text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.12]">
             Explore mathematics. Investigate questions. Learn together.
           </h1>
 
-          <p className="font-serif italic text-xl sm:text-2xl text-amber-200/90 max-w-2xl mx-auto">
+          <p className="font-serif italic text-lg sm:text-xl text-amber-200/90 max-w-2xl mx-auto">
             "One Investigation → Multiple Levels → Shared Discovery."
           </p>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl mx-auto font-normal">
-            Math Lab is built around a simple idea: mathematics is more than a subject to study — it is something to investigate, question, and discover together. Through collaborative mathematical investigations, interactive laboratories, and locally organized learning communities, we give students opportunities to develop reasoning skills and participate in a wider community of mathematical exploration.
+          <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl mx-auto font-normal">
+            Math Lab is built around a fundamental conviction: mathematics is more than an exercise in memorization — it is a living discipline to investigate, question, and discover collaboratively. Through structured nationwide monthly inquiries, interactive simulation studios, and community Local Labs, we nurture mathematical intuition and genuine student research.
           </p>
 
-          {/* Core Action Links */}
-          <div className="flex flex-wrap items-center justify-center gap-3.5 pt-4">
+          {/* Action CTAs */}
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
             <button
               onClick={() => onSelectTab('investigations')}
-              className="px-7 py-3.5 bg-[#0077c8] hover:bg-[#005fa3] text-white font-extrabold text-xs tracking-wider uppercase rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center gap-2"
+              className="px-6 py-3 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs tracking-wider uppercase rounded-xl shadow-md transition-all flex items-center gap-2"
             >
               <span>Explore National Investigations</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 text-sky-200" />
             </button>
 
             <button
               onClick={() => onSelectTab('laboratories')}
-              className="px-7 py-3.5 bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs tracking-wider uppercase rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center gap-2"
+              className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold text-xs tracking-wider uppercase rounded-xl border border-slate-700 shadow-md transition-all flex items-center gap-2"
             >
-              <Activity className="w-4 h-4 text-purple-200" />
-              <span>Interactive Labs Suite</span>
+              <Activity className="w-4 h-4 text-sky-400" />
+              <span>Interactive Studios</span>
             </button>
 
             <button
               onClick={() => onSelectTab('local-labs')}
-              className="px-7 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs tracking-wider uppercase rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center gap-2"
+              className="px-6 py-3 bg-slate-800/80 hover:bg-slate-700 text-slate-100 font-semibold text-xs tracking-wider uppercase rounded-xl border border-slate-700 transition-all flex items-center gap-2"
             >
-              <Building2 className="w-4 h-4" />
+              <Building2 className="w-4 h-4 text-emerald-400" />
               <span>Start a Local Lab</span>
             </button>
           </div>
         </div>
       </section>
 
-      {/* 2. Interactive Studios Callout Banner (Actual Math Feature) */}
-      <section className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+      {/* 2. Interactive Studios Callout */}
+      <section className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xs transition-colors">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/20 border border-sky-400/30 text-sky-300 text-xs font-bold uppercase tracking-wider">
-              <Activity className="w-3.5 h-3.5 text-sky-400" />
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#0077c8] dark:text-sky-400 font-semibold">
+              <Activity className="w-3.5 h-3.5" />
               <span>Interactive Simulation Studios Live</span>
+              <span aria-hidden="true">·</span>
+              <span>Canvas Export Enabled</span>
             </div>
-            <h3 className="font-display-bold text-2xl font-extrabold text-white">
+            <h3 className="font-serif-editorial text-2xl font-bold text-slate-900 dark:text-white">
               6 Dedicated Hands-On Mathematical Laboratories
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Explore dynamic coordinate deformations in the Linear Algebra studio, test the empirical 68-95-99.7% normal distribution, approximate definite integrals with Riemann partitions, or solve SSS triangles in real time.
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Deform coordinate grids in real-time, compute dynamic Taylor series polynomials, simulate Buffon's Needle for Monte Carlo approximations of π, and download high-resolution canvas plots for papers and research notes.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <button
               onClick={() => onSelectTab('laboratories')}
-              className="px-5 py-3 bg-[#0077c8] hover:bg-[#005fa3] text-white font-extrabold text-xs tracking-wider uppercase rounded-xl shadow-md transition flex items-center gap-2"
+              className="px-5 py-2.5 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs tracking-wider uppercase rounded-xl shadow-xs transition flex items-center gap-2"
             >
               <Activity className="w-4 h-4 text-sky-200" />
-              <span>Launch Lab Suite</span>
+              <span>Launch Studio Suite</span>
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => onSelectTab('investigations')}
-              className="px-5 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition border border-white/10 flex items-center gap-2"
+              className="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs rounded-xl transition border border-slate-200 dark:border-slate-700 flex items-center gap-2"
             >
-              <Grid className="w-4 h-4 text-amber-300" />
+              <Grid className="w-4 h-4 text-amber-500" />
               <span>Integer Lattice Coloring</span>
             </button>
           </div>
@@ -230,18 +251,20 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
       </section>
 
       {/* 4. The Five Levels of Mathematical Depth */}
-      <section className="bg-slate-100/70 dark:bg-slate-900/60 border-y border-slate-200 dark:border-slate-800 py-16 px-4 sm:px-6 lg:px-8 transition-colors">
+      <section className="bg-slate-100/60 dark:bg-slate-900/60 border-y border-slate-200/80 dark:border-slate-800 py-16 px-4 sm:px-6 lg:px-8 transition-colors">
         <div className="max-w-7xl mx-auto space-y-10">
-          <div className="max-w-3xl space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 text-xs font-bold uppercase tracking-wider">
+          <div className="max-w-3xl space-y-2">
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#0077c8] dark:text-sky-400 font-semibold">
               <Layers className="w-3.5 h-3.5" />
-              <span>Pedagogical Model</span>
+              <span>Pedagogical Architecture</span>
+              <span aria-hidden="true">·</span>
+              <span>5 Depth Levels</span>
             </div>
-            <h2 className="font-display-bold text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+            <h2 className="font-serif-editorial text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
               The Five Levels of Mathematical Depth
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Every Math Lab investigation is calibrated across five tiers of depth. <strong>Crucially, levels represent the depth of mathematical thinking, not fixed grade levels.</strong> This structure allows students of diverse backgrounds to investigate the exact same question simultaneously.
+              Every Math Lab inquiry is calibrated across five tiers of depth. <strong>Crucially, levels represent the depth of mathematical thinking, not fixed grade levels.</strong> This structure allows students of diverse backgrounds to investigate the exact same question simultaneously.
             </p>
           </div>
 
@@ -249,12 +272,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
             {FIVE_LEVELS_OVERVIEW.map((lvl) => (
               <div 
                 key={lvl.level}
-                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 space-y-3 shadow-2xs hover:border-[#0077c8] dark:hover:border-sky-500 hover:shadow-xs transition flex flex-col justify-between"
+                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-3 shadow-2xs hover:border-[#0077c8] dark:hover:border-sky-500 hover:shadow-xs transition flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-extrabold px-2 py-0.5 rounded bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-950">
-                      LEVEL 0{lvl.level}
+                    <span className="font-mono text-xs font-bold text-slate-500 dark:text-slate-400">
+                      Level 0{lvl.level}
                     </span>
                     {getLevelIcon(lvl.level)}
                   </div>
@@ -277,12 +300,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
 
           <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-400">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-purple-600" />
+              <span className="font-semibold text-slate-800 dark:text-slate-200">Shared Inquiry Principle:</span>
               <span>One inquiry question → progressive levels of exploration → shared collaborative discovery.</span>
             </div>
             <button
               onClick={() => onSelectTab('investigations')}
-              className="text-[#0077c8] dark:text-sky-400 font-bold hover:underline shrink-0"
+              className="text-[#0077c8] dark:text-sky-400 font-semibold hover:underline shrink-0"
             >
               See Level Scaffolding in Action →
             </button>
@@ -294,11 +317,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 text-xs font-bold uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-600 dark:text-amber-400 font-semibold">
               <Calendar className="w-3.5 h-3.5" />
-              <span>Featured National Investigation • {latestInvestigation.month} {latestInvestigation.year}</span>
+              <span>Featured National Investigation</span>
+              <span aria-hidden="true">·</span>
+              <span>{latestInvestigation.month} {latestInvestigation.year}</span>
             </div>
-            <h2 className="font-display-bold text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+            <h2 className="font-serif-editorial text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
               {latestInvestigation.title}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
@@ -308,14 +333,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
 
           <button
             onClick={() => onSelectTab('investigations')}
-            className="text-xs font-bold text-[#0077c8] dark:text-sky-400 hover:underline flex items-center gap-1 self-start sm:self-auto"
+            className="text-xs font-semibold text-[#0077c8] dark:text-sky-400 hover:underline flex items-center gap-1 self-start sm:self-auto"
           >
             <span>View All Investigations Archive</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <div className="bg-gradient-to-r from-slate-900 via-[#0a192f] to-[#1e1b4b] rounded-3xl p-6 sm:p-10 text-white border border-slate-800 shadow-xl space-y-6">
+        <div className="bg-[#0d1627] rounded-3xl p-6 sm:p-10 text-white border border-slate-800 shadow-xl space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8 space-y-4">
               <div className="space-y-2">

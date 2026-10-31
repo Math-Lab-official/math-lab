@@ -21,6 +21,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { OFFICIAL_EMAIL } from '../../data/teamData';
+import { downloadFacilitatorStarterKit } from '../../utils/facilitatorKitExport';
 
 interface FacilitatorHandbookModalProps {
   isOpen: boolean;
@@ -130,24 +131,42 @@ To register or learn more, contact: [Your Email] or visit [Math Lab Website]`;
         onClick={(e) => e.stopPropagation()}
       >
         {/* Handbook Header */}
-        <div className="bg-gradient-to-r from-slate-900 via-[#0a192f] to-[#4a044e] text-white p-6 sm:p-8 relative shrink-0">
-          <button
-            onClick={onClose}
-            className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition"
-            aria-label="Close handbook"
-          >
-            <X className="w-5 h-5" />
-          </button>
+        <div className="relative bg-[#0d1527] border-b border-slate-800 text-white p-6 sm:p-8 shrink-0">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px),
+                                linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)`,
+              backgroundSize: '24px 24px'
+            }}
+          />
 
-          <div className="max-w-3xl space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/20 border border-sky-400/40 text-sky-300 text-xs font-bold uppercase tracking-wider">
+          <div className="absolute top-5 right-5 flex items-center gap-2">
+            <button
+              onClick={downloadFacilitatorStarterKit}
+              className="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5"
+            >
+              <Download className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Export Kit (.md)</span>
+            </button>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
+              aria-label="Close handbook"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="relative max-w-3xl space-y-2">
+            <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-sky-300">
               <BookOpen className="w-3.5 h-3.5" />
               <span>Official Facilitator Handbook & Practical Packet</span>
             </div>
-            <h2 className="font-display-bold text-2xl sm:text-3xl font-extrabold text-white">
+            <h2 className="font-serif text-2xl sm:text-3xl font-normal text-white">
               Local Lab Facilitator Handbook
             </h2>
-            <p className="font-serif italic text-amber-200 text-sm sm:text-base">
+            <p className="font-serif italic text-amber-200 text-sm">
               One Investigation → Multiple Levels → Shared Discovery.
             </p>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
