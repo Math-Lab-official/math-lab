@@ -268,7 +268,7 @@ export interface OverallProgressStats {
 export function getOverallProgressStats(state: StudentProgressState): OverallProgressStats {
   let explored = 0;
   let mastered = 0;
-  const totalPossibleLevels = 5; // October investigation 5 levels
+  const totalPossibleLevels = 5; // November investigation 5 levels
 
   const inv = state.investigations['lattice-coloring'] || {};
   Object.values(inv).forEach((lvl) => {

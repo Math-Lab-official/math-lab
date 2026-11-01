@@ -32,7 +32,7 @@ export const SearchAndUtilityModals: React.FC<SearchAndUtilityModalsProps> = ({
 
   const searchableItems: { title: string; category: string; tab: LabTab; desc: string }[] = [
     { title: 'National Investigations', category: 'Inquiry', tab: 'investigations', desc: 'Monthly mathematical investigations across five levels of depth' },
-    { title: 'Chromatic Invariants of Integer Lattices', category: 'Investigation', tab: 'investigations', desc: 'Featured October 2026 investigation on grid colorings and monochromatic rectangles' },
+    { title: 'Chromatic Invariants of Integer Lattices', category: 'Investigation', tab: 'investigations', desc: 'Featured November 2026 investigation on grid colorings and monochromatic rectangles' },
     { title: 'Chord Invariants of the Unit Circle', category: 'Investigation', tab: 'investigations', desc: 'Archived September 2026 investigation on intersecting secants and angle sums' },
     { title: 'Schur Partitions & Additive Triples', category: 'Investigation', tab: 'investigations', desc: 'Archived August 2026 investigation on sum-free partitions and Ramsey bounds' },
     { title: 'Share Your Work', category: 'Submissions', tab: 'share-work', desc: 'Submit investigation solutions, alternative approaches, conjectures & proofs' },

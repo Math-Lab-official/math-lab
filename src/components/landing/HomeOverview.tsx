@@ -251,7 +251,7 @@ export const HomeOverview: React.FC<Props> = ({ onNavigate }) => {
               onClick={() => onNavigate('investigations')}
               className="px-4 py-2 bg-[#0077c8] hover:bg-[#005fa3] text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5"
             >
-              <span>View in October Investigation</span>
+              <span>View in November Investigation</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

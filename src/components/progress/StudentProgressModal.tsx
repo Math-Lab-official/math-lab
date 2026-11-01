@@ -285,7 +285,7 @@ export const StudentProgressModal: React.FC<StudentProgressModalProps> = ({
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="font-display-bold text-base font-bold text-slate-900 dark:text-white">
-                    The Chromatic Invariants of Integer Lattices (October 2026)
+                    The Chromatic Invariants of Integer Lattices (November 2026)
                   </h4>
                   <p className="text-xs text-slate-500">Track your progress through each of the five mathematical levels.</p>
                 </div>

@@ -193,7 +193,7 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                     <Sparkles className="w-3.5 h-3.5 text-sky-400" />
                     Current National Focus
                   </span>
-                  <span className="text-slate-400">October 2026</span>
+                  <span className="text-slate-400">November 2026</span>
                 </div>
                 <h3 className="font-serif-editorial text-lg font-bold text-white leading-snug">
                   Monochromatic Rectangles on Integer Lattices

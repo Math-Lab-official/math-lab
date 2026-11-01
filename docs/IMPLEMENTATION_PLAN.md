@@ -21,7 +21,7 @@
 
 | Area | Status | Notes |
 |------|--------|-------|
-| **Home Page** | Complete & Production-Ready | Introduces mission, 5 levels of mathematical depth, featured October investigation, two core pillars, and leadership. |
+| **Home Page** | Complete & Production-Ready | Introduces mission, 5 levels of mathematical depth, featured November investigation, two core pillars, and leadership. |
 | **National Investigations Engine** | Complete & Multi-Tiered | Scaffolds inquiry across 5 progressive levels: Level 1 (Concrete Observation), Level 2 (Conjectures & Invariants), Level 3 (Algebraic Generalization), Level 4 (Rigorous Proof), Level 5 (Open Extensions). |
 | **Share Your Work** | Complete | Structured submission workflow for solutions, conjectures, and partial insights with strict student privacy protections. |
 | **Start a Local Math Lab** | Complete | Practical 4-step startup guide, host outreach templates for libraries and schools, and full 10-Chapter Facilitator Handbook modal. |
@@ -35,7 +35,7 @@
 
 ## 3. Mathematical Correctness & Educational Integrity
 
-- **The Chromatic Invariants of Integer Lattices (October 2026):**
+- **The Chromatic Invariants of Integer Lattices (November 2026):**
   - **Level 1 (Concrete):** $3 \times 3$ grid coloring with 2 colors without monochromatic rectangles (Pigeonhole argument on 8 column configurations).
   - **Level 2 (Invariants):** Column-pair invariant: counting monochromatic pairs within columns ($C(m, 2)$ pairs per column) bounded by $c \cdot C(r, 2)$.
   - **Level 3 (Generalization):** $n(r, c)$ bound derivation using $\lceil r/c \rceil$ and double-counting pairs.

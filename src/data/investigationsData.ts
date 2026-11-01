@@ -2,8 +2,8 @@ import { NationalInvestigation } from '../types';
 
 export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
   {
-    id: 'october-2026-grid-invariants',
-    month: 'October',
+    id: 'lattice-coloring',
+    month: 'November',
     year: 2026,
     title: 'The Chromatic Invariants of Integer Lattices & Orthogonal Graphs',
     subtitle: 'From grid paths and forbidden monochromatic rectangles to algebraic area invariants',
@@ -17,7 +17,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
       'Bivariate Generating Functions for Grid Walk Areas',
       'Polynomial Invariants under Lattice Shear Transformations'
     ],
-    submissionDeadline: 'October 31, 2026',
+    submissionDeadline: 'November 30, 2026',
     facilitatorTips: [
       'Encourage students to begin with physical graph paper or 3×3 and 4×4 pegboards using 2 colors.',
       'Have groups list all possible column colorings before trying to prove impossibility.',

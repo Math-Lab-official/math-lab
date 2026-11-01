@@ -204,7 +204,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
               <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-700/80 space-y-1.5 text-xs text-slate-300">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[11px] text-amber-300 font-bold uppercase tracking-wider">
-                    Featured October 2026 Investigation
+                    Featured November 2026 Investigation
                   </span>
                   <span className="text-[10px] font-mono text-slate-400">Level 1–5 Open</span>
                 </div>
