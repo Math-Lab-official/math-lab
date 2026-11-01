@@ -182,7 +182,7 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
           <div className="lg:col-span-5 p-6 lg:p-8 border-t lg:border-t-0 lg:border-l border-slate-800/80 bg-slate-900/60">
             <div className="relative rounded-2xl overflow-hidden border border-slate-700/60 shadow-lg group">
               <img
-                src="/src/assets/images/investigation_lattice_preview_1793523477483.jpg"
+                src="/assets/images/investigation_lattice_preview_1793523477483.jpg"
                 alt="Integer lattice monochromatic rectangle coloring proof blueprint"
                 className="w-full h-52 sm:h-56 object-cover object-center group-hover:scale-105 transition-transform duration-500"
               />

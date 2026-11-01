@@ -193,7 +193,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
           <div className="lg:col-span-5 relative">
             <div className="relative rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900 group">
               <img
-                src="/src/assets/images/hero_mathematical_inquiry_1793523476009.jpg"
+                src="/assets/images/hero_mathematical_inquiry_1793523476009.jpg"
                 alt="Mathematical research on blackboard with golden spiral and geometric proofs"
                 className="w-full h-80 sm:h-96 object-cover object-center group-hover:scale-[1.02] transition-transform duration-500"
                 referrerPolicy="no-referrer"
@@ -274,7 +274,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
           <div className="lg:col-span-5 space-y-5">
             <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm relative group bg-slate-950">
               <img
-                src="/src/assets/images/investigation_lattice_preview_1793523477483.jpg"
+                src="/assets/images/investigation_lattice_preview_1793523477483.jpg"
                 alt="Integer lattice chromatic coloring schematic blueprint"
                 className="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-300"
                 referrerPolicy="no-referrer"
@@ -597,7 +597,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
           <div className="lg:col-span-6">
             <div className="rounded-2xl overflow-hidden border border-slate-700 shadow-xl">
               <img
-                src="/src/assets/images/collaborative_math_lab_1793523478407.jpg"
+                src="/assets/images/collaborative_math_lab_1793523478407.jpg"
                 alt="Students collaborating on mathematics whiteboard and polyhedra models"
                 className="w-full h-72 sm:h-80 object-cover"
                 referrerPolicy="no-referrer"
