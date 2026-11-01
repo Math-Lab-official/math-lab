@@ -8,14 +8,13 @@ import {
   Compass, 
   Binary, 
   ArrowRight, 
-  Sparkles, 
   CheckCircle2, 
   CheckCircle,
   Clock,
   RotateCcw,
   Play,
   Award,
-  BookOpen
+  Sparkles
 } from 'lucide-react';
 import { getStudentProgress, setLabProgressStatus } from '../../utils/studentProgress';
 
@@ -58,10 +57,8 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
       id: 'graphing' as LabTab,
       num: '01',
       title: 'Function & Graphing Studio',
-      badge: 'Continuous Analysis',
+      domain: 'Continuous Analysis',
       category: 'analysis',
-      accentColor: 'border-l-sky-500 text-sky-600 dark:text-sky-400',
-      tagColor: 'bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-800',
       icon: Activity,
       desc: 'High-precision 2D Cartesian plotter with instantaneous numerical derivatives f\'(x), tangent line visualizer, and live numerical Riemann integration.',
       features: ['Dynamic polynomial & trigonometric equations', 'Instantaneous tangent line & slope readout', 'Live shaded numerical definite integral'],
@@ -71,10 +68,8 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
       id: 'geometry' as LabTab,
       num: '02',
       title: 'Geometry & Unit Circle Studio',
-      badge: 'Trigonometry & Invariants',
+      domain: 'Trigonometry & Invariants',
       category: 'geometry',
-      accentColor: 'border-l-amber-500 text-amber-600 dark:text-amber-400',
-      tagColor: 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800',
       icon: CircleDot,
       desc: 'Interactive continuous angle unit circle with live projections of sin θ, cos θ, tan θ, exact fraction angle snaps (π/6, π/4, π/3), and SSS triangle solver.',
       features: ['Live continuous angle slider with rad/deg sync', 'Visual color-coded orthogonal projections', 'SSS Triangle law of cosines solver'],
@@ -84,10 +79,8 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
       id: 'calculus' as LabTab,
       num: '03',
       title: 'Calculus & Riemann Sandbox',
-      badge: 'Integration & Series',
+      domain: 'Integration & Series',
       category: 'analysis',
-      accentColor: 'border-l-purple-500 text-purple-600 dark:text-purple-400',
-      tagColor: 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800',
       icon: Layers,
       desc: 'Partition convergence visualizer supporting Left-endpoint, Right-endpoint, Midpoint, and Trapezoidal approximation rules, alongside live Taylor series expansions.',
       features: ['Adjust partition count N from 2 to 100', 'Exact definite integral vs approximation delta', 'Taylor polynomial series up to degree 11'],
@@ -97,10 +90,8 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
       id: 'linear-algebra' as LabTab,
       num: '04',
       title: 'Linear Algebra Grid Studio',
-      badge: 'Matrix Transformations',
+      domain: 'Matrix Transformations',
       category: 'geometry',
-      accentColor: 'border-l-blue-600 text-blue-600 dark:text-blue-400',
-      tagColor: 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800',
       icon: Grid,
       desc: 'Real-time coordinate space deformation under arbitrary 2x2 matrices. Witness basis vector rotation, determinant signed area scaling, and eigenvalue axes.',
       features: ['Interactive basis vectors i-hat and j-hat', 'Signed parallelogram area for det(A)', 'Presets for Shear, Reflection, and Rotation'],
@@ -110,10 +101,8 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
       id: 'probability' as LabTab,
       num: '05',
       title: 'Statistics & Probability Lab',
-      badge: 'Distributions & Monte Carlo',
+      domain: 'Distributions & Monte Carlo',
       category: 'discrete',
-      accentColor: 'border-l-emerald-500 text-emerald-600 dark:text-emerald-400',
-      tagColor: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
       icon: Compass,
       desc: 'Interactive Gaussian normal distribution with empirical rule 68-95-99.7% intervals, Binomial PMF charts, and Buffon’s needle Monte Carlo estimation of π.',
       features: ['Dynamic mean μ and standard deviation σ', 'Binomial probability mass distribution', 'Buffon needle needle-drop π simulator'],
@@ -123,10 +112,8 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
       id: 'discrete' as LabTab,
       num: '06',
       title: 'Number Theory & Discrete Math',
-      badge: 'Primes & Modular Rings',
+      domain: 'Primes & Modular Rings',
       category: 'discrete',
-      accentColor: 'border-l-rose-500 text-rose-600 dark:text-rose-400',
-      tagColor: 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800',
       icon: Binary,
       desc: 'Interactive Sieve of Eratosthenes prime grid (1-100), step-by-step Euclidean algorithm GCD demonstrator, modular arithmetic dial clock, and Pascal’s triangle.',
       features: ['Animated composite number elimination sieve', 'Euclidean remainder step trace with quotients', 'Modular ring dial clock for Z/nZ'],
@@ -150,70 +137,98 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
 
   return (
     <div className="space-y-8 py-2">
-      {/* 1. Page Header Banner */}
-      <div className="bg-[#0d1527] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xl border border-slate-800">
-        {/* Subtle geometric grid backdrop */}
-        <div 
-          aria-hidden="true" 
-          className="absolute inset-0 pointer-events-none opacity-[0.06] overflow-hidden"
-        >
-          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
-            <line x1="0" y1="200" x2="1000" y2="200" stroke="currentColor" strokeWidth="2" />
-            <line x1="500" y1="0" x2="500" y2="400" stroke="currentColor" strokeWidth="2" />
-            <circle cx="500" cy="200" r="80" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            <circle cx="500" cy="200" r="160" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          </svg>
-        </div>
+      {/* 1. Page Header & Featured Spotlight Banner */}
+      <div className="bg-[#0a1426] text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
+          
+          {/* Left: Text & Academic Mission */}
+          <div className="p-8 sm:p-12 lg:col-span-7 space-y-5">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-400 font-semibold">
+              <Activity className="w-3.5 h-3.5" />
+              <span>Academic Simulation Suite</span>
+              <span aria-hidden="true" className="text-slate-600">·</span>
+              <span>6 Interactive Studios</span>
+              <span aria-hidden="true" className="text-slate-600">·</span>
+              <span className="text-amber-400 font-bold tabular-nums">{completedCount}/6 Completed</span>
+            </div>
 
-        <div className="relative max-w-3xl space-y-4">
-          <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-400 font-semibold">
-            <Activity className="w-3.5 h-3.5" />
-            <span>Academic Simulation Suite</span>
-            <span aria-hidden="true">·</span>
-            <span>6 Interactive Laboratories</span>
-            <span aria-hidden="true">·</span>
-            <span className="text-amber-400 font-bold">{completedCount}/6 Completed</span>
+            <h1 className="font-serif-editorial text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+              The Mathematical Laboratory Suite
+            </h1>
+
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Every laboratory in Math Lab is an authentic, interactive investigation engine. Manipulate parameters, test boundary cases, visualize Riemann sums, and explore geometric invariants with live numerical feedback and high-resolution canvas export.
+            </p>
+
+            {/* Category Segmented Tabs */}
+            <div className="flex flex-wrap items-center gap-2 pt-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeCategory === cat.id
+                      ? 'bg-[#0077c8] text-white shadow-xs'
+                      : 'bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white border border-white/10'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <h1 className="font-serif-editorial text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-            The Mathematical Laboratory Suite
-          </h1>
-
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Every laboratory in Math Lab is an authentic, interactive investigation engine. Manipulate parameters, test boundary cases, visualize Riemann sums, and explore geometric invariants with live numerical feedback and instant canvas image export.
-          </p>
-
-          {/* Category Filter Tabs */}
-          <div className="flex flex-wrap items-center gap-2 pt-2">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeCategory === cat.id
-                    ? 'bg-[#0077c8] text-white shadow-xs'
-                    : 'bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white border border-white/10'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
+          {/* Right: Featured Lab Spotlight (Geometry & Unit Circle Studio) */}
+          <div className="lg:col-span-5 p-6 lg:p-8 border-t lg:border-t-0 lg:border-l border-slate-800/80 bg-slate-900/60">
+            <div className="relative rounded-2xl overflow-hidden border border-slate-700/60 shadow-lg group">
+              <img
+                src="/src/assets/images/unit_circle_trig_preview_1793523477946.jpg"
+                alt="Unit circle trigonometry invariant simulation"
+                className="w-full h-52 sm:h-56 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+              <div className="absolute bottom-0 inset-x-0 p-4 space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-mono text-amber-300">
+                  <span className="flex items-center gap-1 font-semibold uppercase tracking-wider">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    Featured Laboratory
+                  </span>
+                  <span className="text-slate-400">Studio 02</span>
+                </div>
+                <h3 className="font-serif-editorial text-lg font-bold text-white leading-snug">
+                  Unit Circle Trigonometry & Invariants
+                </h3>
+                <div className="flex items-center justify-between pt-1">
+                  <span className="text-xs text-slate-300 font-mono">
+                    sin θ · cos θ · tan θ projections
+                  </span>
+                  <button
+                    onClick={() => onSelectLab('geometry')}
+                    className="px-3 py-1.5 bg-[#0077c8] hover:bg-[#005fa3] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-xs"
+                  >
+                    <span>Launch</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
 
       {/* 2. Progress Strip */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950 text-[#0077c8] dark:text-sky-400 flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950 text-[#0077c8] dark:text-sky-400 flex items-center justify-center font-bold shrink-0">
             <Award className="w-5 h-5" />
           </div>
           <div>
             <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-              Studio Mastery: {completedCount} of 6 Completed
+              Studio Mastery: <span className="tabular-nums">{completedCount}</span> of 6 Completed
             </h4>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              {inProgressCount} in progress &bull; {6 - completedCount - inProgressCount} remaining to explore
+              <span className="tabular-nums">{inProgressCount}</span> in progress · <span className="tabular-nums">{6 - completedCount - inProgressCount}</span> remaining to explore
             </p>
           </div>
         </div>
@@ -255,6 +270,14 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
             <Clock className="w-3.5 h-3.5" />
             <span>In Progress ({inProgressCount})</span>
           </button>
+          {onOpenProgress && (
+            <button
+              onClick={onOpenProgress}
+              className="ml-auto md:ml-2 px-3 py-1 rounded-lg font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+            >
+              Full Research Portfolio ↗
+            </button>
+          )}
         </div>
       </div>
 
@@ -273,12 +296,12 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
               }`}
             >
               <div className="p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-semibold text-slate-400">
-                    Studio 0{lab.num}
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="font-semibold text-slate-400">
+                    Studio {lab.num}
                   </span>
-                  <span className="text-xs font-mono font-semibold text-[#0077c8] dark:text-sky-400">
-                    {lab.badge}
+                  <span className="font-semibold text-[#0077c8] dark:text-sky-400">
+                    {lab.domain}
                   </span>
                 </div>
 

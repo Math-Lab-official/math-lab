@@ -3,15 +3,8 @@ import {
   Compass, 
   Layers, 
   ArrowRight, 
-  ChevronRight, 
   Calendar, 
-  Tag, 
-  CheckCircle2, 
-  Send, 
-  HelpCircle, 
   FileText, 
-  ExternalLink,
-  Filter,
   Sparkles,
   BookOpen,
   Eye,
@@ -20,16 +13,16 @@ import {
   ShieldCheck,
   ChevronDown,
   Award,
-  Edit3,
-  Bookmark
+  Bookmark,
+  Send,
+  HelpCircle
 } from 'lucide-react';
-import { NATIONAL_INVESTIGATIONS, FIVE_LEVELS_OVERVIEW } from '../../data/investigationsData';
-import { NationalInvestigation, LabTab } from '../../types';
+import { NATIONAL_INVESTIGATIONS } from '../../data/investigationsData';
+import { LabTab } from '../../types';
 import { LatticeColoringWorkbench } from './LatticeColoringWorkbench';
 import { 
   getStudentProgress, 
   setInvestigationLevelStatus, 
-  saveNewConjecture,
   StudentProgressState,
   LevelStatus 
 } from '../../utils/studentProgress';
@@ -141,57 +134,89 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
 
   return (
     <div className="space-y-8 py-2">
-      {/* Page Header */}
-      <div className="bg-[#0d1527] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xl border border-slate-800">
-        <div 
-          aria-hidden="true" 
-          className="absolute inset-0 pointer-events-none opacity-[0.06] overflow-hidden"
-        >
-          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
-            <line x1="0" y1="200" x2="1000" y2="200" stroke="currentColor" strokeWidth="2" />
-            <line x1="500" y1="0" x2="500" y2="400" stroke="currentColor" strokeWidth="2" />
-            <circle cx="500" cy="200" r="120" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            <circle cx="500" cy="200" r="240" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          </svg>
-        </div>
+      {/* 1. Page Header with Visual Blueprint Showcase */}
+      <div className="bg-[#0a1426] text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
+          
+          {/* Left: Text & Editorial Header */}
+          <div className="p-8 sm:p-12 lg:col-span-7 space-y-5">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-400 font-semibold">
+              <Compass className="w-3.5 h-3.5" />
+              <span>Monthly Flagship Program</span>
+              <span aria-hidden="true" className="text-slate-600">·</span>
+              <span>5 Depth Levels</span>
+              <span aria-hidden="true" className="text-slate-600">·</span>
+              <span>Open Access Inquiry</span>
+            </div>
 
-        <div className="relative max-w-3xl space-y-4">
-          <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-400 font-semibold">
-            <Compass className="w-3.5 h-3.5" />
-            <span>Monthly Flagship Program</span>
-            <span aria-hidden="true">·</span>
-            <span>5 Depth Levels</span>
-            <span aria-hidden="true">·</span>
-            <span>Open Access Inquiry</span>
-          </div>
+            <h1 className="font-serif-editorial text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+              National Mathematical Investigations
+            </h1>
 
-          <h1 className="font-serif-editorial text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-            National Mathematical Investigations
-          </h1>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Every month, Math Lab publishes an authentic mathematical problem designed for collaborative discovery across five progressive levels of depth. Rather than routine calculation drills, these investigations challenge students to notice patterns, formulate invariants, construct proofs, and explore open questions.
+            </p>
 
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Every month, Math Lab releases a rich mathematical inquiry designed for collaborative discovery across five progressive levels of depth. Rather than routine calculation drills, these investigations challenge students to notice patterns, formulate invariants, construct proofs, and explore open questions.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            <button
-              onClick={downloadProblemPack}
-              className="px-4 py-2 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs rounded-xl shadow-xs transition flex items-center gap-2"
-            >
-              <FileText className="w-4 h-4" />
-              <span>Download Problem Pack (.md)</span>
-            </button>
-
-            {onOpenProgress && (
+            <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
-                onClick={onOpenProgress}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs rounded-xl transition flex items-center gap-2"
+                onClick={downloadProblemPack}
+                className="px-4 py-2 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs rounded-xl shadow-xs transition flex items-center gap-2"
               >
-                <Award className="w-4 h-4 text-amber-400" />
-                <span>My Research Portfolio</span>
+                <FileText className="w-4 h-4" />
+                <span>Download Problem Pack (.md)</span>
               </button>
-            )}
+
+              {onOpenProgress && (
+                <button
+                  onClick={onOpenProgress}
+                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs rounded-xl transition flex items-center gap-2"
+                >
+                  <Award className="w-4 h-4 text-amber-400" />
+                  <span>My Research Portfolio</span>
+                </button>
+              )}
+            </div>
           </div>
+
+          {/* Right: Featured Inquiry Blueprint Asset */}
+          <div className="lg:col-span-5 p-6 lg:p-8 border-t lg:border-t-0 lg:border-l border-slate-800/80 bg-slate-900/60">
+            <div className="relative rounded-2xl overflow-hidden border border-slate-700/60 shadow-lg group">
+              <img
+                src="/src/assets/images/investigation_lattice_preview_1793523477483.jpg"
+                alt="Integer lattice monochromatic rectangle coloring proof blueprint"
+                className="w-full h-52 sm:h-56 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+              <div className="absolute bottom-0 inset-x-0 p-4 space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-mono text-sky-300">
+                  <span className="flex items-center gap-1 font-semibold uppercase tracking-wider">
+                    <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+                    Current National Focus
+                  </span>
+                  <span className="text-slate-400">October 2026</span>
+                </div>
+                <h3 className="font-serif-editorial text-lg font-bold text-white leading-snug">
+                  Monochromatic Rectangles on Integer Lattices
+                </h3>
+                <div className="flex items-center justify-between pt-1">
+                  <span className="text-xs text-slate-300 font-mono">
+                    Pigeonhole principle on ℤ²
+                  </span>
+                  <button
+                    onClick={() => {
+                      setActiveInvestigationId('lattice-coloring');
+                      setActiveViewMode('workbench');
+                    }}
+                    className="px-3 py-1.5 bg-[#0077c8] hover:bg-[#005fa3] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-xs"
+                  >
+                    <span>Launch Simulator</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -205,24 +230,24 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                 <Calendar className="w-5 h-5 text-[#0077c8] dark:text-sky-400" />
                 <span>Monthly Archive</span>
               </h2>
-              <span className="text-xs font-mono font-semibold text-slate-400">
+              <span className="text-xs font-mono font-semibold text-slate-400 tabular-nums">
                 {NATIONAL_INVESTIGATIONS.length} Available
               </span>
             </div>
 
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Select an investigation to read the core questions, examine the 5 levels of depth, and access problem worksheets.
+              Select an inquiry to explore core questions, work through the 5 depth levels, and test conjectures.
             </p>
 
-            {/* Category Filter Pills */}
+            {/* Category Filter - Segmented controls */}
             <div className="flex flex-wrap gap-1.5 pt-1">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`text-[11px] font-bold px-2.5 py-1 rounded-full transition-colors ${
+                  className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-colors ${
                     selectedCategory === cat
-                      ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
+                      ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-2xs'
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                   }`}
                 >
@@ -253,8 +278,8 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                         {inv.month} {inv.year}
                       </span>
                       {inv.status === 'current' ? (
-                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 uppercase tracking-wide">
-                          Current Focus
+                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 font-mono">
+                          · Current Focus
                         </span>
                       ) : (
                         <span className="text-[10px] font-medium text-slate-400">
@@ -283,11 +308,11 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
               <span>Share Student Solutions</span>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              Have you discovered an invariant or new counterexample? Submit your work to our Solutions Review & Student Scholarship committee.
+              Discovered an invariant, proof, or counterexample? Submit your research to our Solutions Review & Student Scholarship board.
             </p>
             <button
               onClick={() => onNavigate('share-work')}
-              className="w-full py-2.5 px-4 bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 px-4 bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 shadow-xs"
             >
               <span>Submit Findings & Conjectures</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -298,26 +323,27 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
         {/* Right Column: Active Investigation Deep Dive */}
         <div className="lg:col-span-8 space-y-6">
           <article className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-9 shadow-xs space-y-8 transition-colors">
-            {/* Header Metadata */}
+            
+            {/* Header Metadata (Zero-Pill Discipline) */}
             <div className="space-y-3 border-b border-slate-100 dark:border-slate-800 pb-6">
-              <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-[#0077c8] dark:text-sky-400 bg-sky-50 dark:bg-sky-950/60 px-2.5 py-1 rounded-md">
-                    {activeInvestigation.month} {activeInvestigation.year} National Investigation
+                  <span className="font-mono font-bold text-[#0077c8] dark:text-sky-400">
+                    {activeInvestigation.month} {activeInvestigation.year} National Inquiry
                   </span>
-                  <span className="text-xs text-slate-400">•</span>
-                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  <span className="text-slate-400">·</span>
+                  <span className="font-semibold text-slate-500 dark:text-slate-400">
                     {activeInvestigation.category}
                   </span>
                 </div>
                 {activeInvestigation.submissionDeadline && (
                   <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                    Suggested Deadline: <strong className="text-slate-800 dark:text-slate-200">{activeInvestigation.submissionDeadline}</strong>
+                    Target Submission: <strong className="text-slate-800 dark:text-slate-200">{activeInvestigation.submissionDeadline}</strong>
                   </span>
                 )}
               </div>
 
-              <h2 className="font-display-bold text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+              <h2 className="font-serif-editorial text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
                 {activeInvestigation.title}
               </h2>
 
@@ -364,7 +390,7 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                   }`}
                 >
                   <Sparkles className="w-4 h-4 text-amber-500" />
-                  <span>Interactive Lattice Simulator (Actual Math)</span>
+                  <span>Interactive Lattice Simulator</span>
                 </button>
               </div>
             )}
@@ -374,21 +400,23 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
               <div className="space-y-6 pt-2 animate-in fade-in">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
                   <div>
-                    <h3 className="font-display-bold text-xl font-bold text-slate-900 dark:text-white">
+                    <h3 className="font-serif-editorial text-xl font-bold text-slate-900 dark:text-white">
                       Five Levels of Mathematical Depth
                     </h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Students can participate at any level that challenges them, from tactile patterns to open questions.
+                      Engage at any level that challenges you, from hands-on observation to generalized proof.
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-slate-400">Level {activeLevelTab} of 5</span>
-                    <button
-                      onClick={() => setActiveViewMode('workbench')}
-                      className="px-2.5 py-1 bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 text-xs font-bold rounded-lg hover:bg-amber-200 transition"
-                    >
-                      Open Simulator ↗
-                    </button>
+                    {activeInvestigation.id === 'lattice-coloring' && (
+                      <button
+                        onClick={() => setActiveViewMode('workbench')}
+                        className="px-2.5 py-1 bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 text-xs font-bold rounded-lg hover:bg-amber-200 transition"
+                      >
+                        Open Simulator ↗
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -403,7 +431,7 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                       <button
                         key={lvl.level}
                         onClick={() => setActiveLevelTab(lvl.level)}
-                        className={`p-2 sm:p-3 rounded-xl border text-center transition-all relative ${
+                        className={`p-2.5 sm:p-3 rounded-xl border text-center transition-all relative ${
                           isActive
                             ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white shadow-md'
                             : 'bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100'
@@ -446,7 +474,7 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                               Level {currentLvl.level} Focus
                             </span>
                           </div>
-                          <h4 className="font-display-bold text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                          <h4 className="font-serif-editorial text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
                             {currentLvl.title}
                           </h4>
                           <p className="text-xs text-slate-500 dark:text-slate-400 italic">
@@ -483,7 +511,7 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                         <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                           Investigation Prompt
                         </div>
-                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200 leading-relaxed font-serif text-[15px]">
+                        <p className="font-serif text-[15px] font-medium text-slate-800 dark:text-slate-200 leading-relaxed">
                           {currentLvl.prompt}
                         </p>
                       </div>
@@ -496,7 +524,7 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                         <ul className="space-y-2">
                           {currentLvl.guidingQuestions.map((q, idx) => (
                             <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-                              <span className="w-5 h-5 rounded-full bg-sky-100 dark:bg-sky-950 text-[#0077c8] dark:text-sky-400 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                              <span className="w-5 h-5 rounded-lg bg-sky-100 dark:bg-sky-950 text-[#0077c8] dark:text-sky-400 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                                 {idx + 1}
                               </span>
                               <span className="leading-relaxed">{q}</span>
@@ -559,13 +587,15 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                         </button>
 
                         <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => setActiveViewMode('workbench')}
-                            className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5"
-                          >
-                            <Sparkles className="w-3.5 h-3.5" />
-                            <span>Test in Lattice Simulator</span>
-                          </button>
+                          {activeInvestigation.id === 'lattice-coloring' && (
+                            <button
+                              onClick={() => setActiveViewMode('workbench')}
+                              className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5"
+                            >
+                              <Sparkles className="w-3.5 h-3.5" />
+                              <span>Test in Lattice Simulator</span>
+                            </button>
+                          )}
 
                           <button
                             onClick={() => onNavigate('share-work')}

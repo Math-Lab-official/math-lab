@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LabTab } from '../../types';
 import { 
   ArrowRight, 
@@ -21,7 +21,11 @@ import {
   Shield,
   Activity,
   Binary,
-  Grid
+  Grid,
+  Download,
+  Mail,
+  Award,
+  Play
 } from 'lucide-react';
 import { NATIONAL_INVESTIGATIONS, FIVE_LEVELS_OVERVIEW } from '../../data/investigationsData';
 import { STAFF_APPLICATION_URL } from '../../data/teamData';
@@ -32,298 +36,222 @@ interface HomePageProps {
 
 export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
   const latestInvestigation = NATIONAL_INVESTIGATIONS[0];
+  const [previewLevel, setPreviewLevel] = useState<number>(1);
 
   const getLevelIcon = (lvl: number) => {
     switch (lvl) {
-      case 1: return <Eye className="w-5 h-5 text-amber-500" />;
-      case 2: return <Target className="w-5 h-5 text-sky-500" />;
-      case 3: return <Cpu className="w-5 h-5 text-purple-500" />;
-      case 4: return <ShieldCheck className="w-5 h-5 text-emerald-500" />;
-      case 5: return <Compass className="w-5 h-5 text-rose-500" />;
-      default: return <Sparkles className="w-5 h-5 text-[#0077c8]" />;
+      case 1: return <Eye className="w-4 h-4 text-amber-500" />;
+      case 2: return <Target className="w-4 h-4 text-sky-500" />;
+      case 3: return <Cpu className="w-4 h-4 text-purple-500" />;
+      case 4: return <ShieldCheck className="w-4 h-4 text-emerald-500" />;
+      case 5: return <Compass className="w-4 h-4 text-rose-500" />;
+      default: return <Sparkles className="w-4 h-4 text-[#0077c8]" />;
     }
   };
 
+  const selectedLevelData = latestInvestigation.levels.find(l => l.level === previewLevel) || latestInvestigation.levels[0];
+
+  const labPreviews = [
+    {
+      id: 'graphing' as LabTab,
+      num: '01',
+      title: 'Function & Graphing Studio',
+      subtitle: 'Continuous Analysis',
+      desc: 'High-precision Cartesian plotter with instantaneous numerical derivatives f\'(x), tangent lines, and live Riemann integrals.',
+      formula: "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}",
+      badge: 'Calculus',
+      icon: Activity,
+    },
+    {
+      id: 'geometry' as LabTab,
+      num: '02',
+      title: 'Unit Circle & Trigonometry',
+      subtitle: 'Orthogonal Projections',
+      desc: 'Interactive continuous angle unit circle with synchronized radians, exact fractions (π/6, π/4, π/3), and SSS triangle solver.',
+      formula: '\\cos^2\\theta + \\sin^2\\theta = 1',
+      badge: 'Geometry',
+      icon: Compass,
+    },
+    {
+      id: 'calculus' as LabTab,
+      num: '03',
+      title: 'Calculus & Riemann Sandbox',
+      subtitle: 'Partitions & Taylor Series',
+      desc: 'Compare Left, Right, Midpoint, and Trapezoidal sums alongside dynamic 11th-order Taylor polynomial series expansions.',
+      formula: '\\int_a^b f(x)\\,dx \\approx \\sum_{i=1}^n f(x_i^*)\\Delta x',
+      badge: 'Analysis',
+      icon: Layers,
+    },
+    {
+      id: 'linear-algebra' as LabTab,
+      num: '04',
+      title: 'Linear Algebra Grid Studio',
+      subtitle: 'Matrix Transformations',
+      desc: 'Live 2×2 linear matrix transformation sandbox deforming Cartesian basis vectors î and ĵ with real-time determinant area readout.',
+      formula: '\\det(A) = ad - bc',
+      badge: 'Algebra',
+      icon: Grid,
+    },
+    {
+      id: 'probability' as LabTab,
+      num: '05',
+      title: 'Statistics & Probability Lab',
+      subtitle: 'Monte Carlo & Distributions',
+      desc: 'Simulate Buffon\'s Needle for empirical π estimation, alongside binomial, Poisson, and normal Gaussian distributions.',
+      formula: 'P = \\frac{2L}{\\pi t} \\implies \\pi \\approx \\frac{2L\\cdot N}{t\\cdot C}',
+      badge: 'Probability',
+      icon: Sparkles,
+    },
+    {
+      id: 'discrete' as LabTab,
+      num: '06',
+      title: 'Number Theory & Discrete Math',
+      subtitle: 'Primes & Modular Rings',
+      desc: 'Sieve of Eratosthenes prime explorer, modular arithmetic clock arithmetic, and Collatz 3n+1 conjecture trajectory analyzer.',
+      formula: 'a \\equiv b \\pmod{m}',
+      badge: 'Discrete',
+      icon: Binary,
+    },
+  ];
+
   return (
-    <div className="space-y-16 pb-12 transition-colors">
-      {/* 1. Hero Section: Clear Introduction to Math Lab & Mission */}
-      {/* 1. Hero Section: Authentic Scholarly Mathematical Design */}
-      <section className="relative overflow-hidden bg-[#0d1527] text-white pt-16 pb-20 sm:pt-20 sm:pb-24 rounded-3xl border border-slate-800 shadow-xl">
-        {/* Subtle SVG Mathematical Blueprint / Polar Coordinates */}
+    <div className="space-y-20 pb-16 transition-colors">
+      
+      {/* 1. Split Hero Section: Authentic Scholarly Academic Design */}
+      <section className="relative overflow-hidden bg-[#0a1120] text-white rounded-3xl border border-slate-800 shadow-2xl">
+        {/* Subtle SVG Grid Background */}
         <div 
           aria-hidden="true" 
-          className="absolute inset-0 pointer-events-none opacity-[0.07] overflow-hidden"
+          className="absolute inset-0 pointer-events-none opacity-[0.05] overflow-hidden"
         >
-          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
             <defs>
-              <pattern id="math-grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" />
+              <pattern id="hero-math-pattern" width="48" height="48" patternUnits="userSpaceOnUse">
+                <path d="M 48 0 L 0 0 0 48" fill="none" stroke="currentColor" strokeWidth="1" />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#math-grid-pattern)" />
-            {/* Concentric polar coordinate rings */}
-            <circle cx="500" cy="300" r="100" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            <circle cx="500" cy="300" r="180" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            <circle cx="500" cy="300" r="260" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            <line x1="500" y1="0" x2="500" y2="600" stroke="currentColor" strokeWidth="2" />
-            <line x1="0" y1="300" x2="1000" y2="300" stroke="currentColor" strokeWidth="2" />
-            {/* Spiral curve preview */}
-            <path d="M 500 300 Q 560 300 560 360 T 420 360 T 420 220 T 600 220" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 4" />
+            <rect width="100%" height="100%" fill="url(#hero-math-pattern)" />
+            <circle cx="950" cy="300" r="180" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="950" cy="300" r="280" fill="none" stroke="currentColor" strokeWidth="1.5" />
           </svg>
         </div>
 
-        <div className="relative max-w-4xl mx-auto px-6 sm:px-10 text-center space-y-6">
-          {/* Quiet Unboxed Kicker */}
-          <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-sky-400 font-semibold">
-            <span>National Student Initiative</span>
-            <span aria-hidden="true">·</span>
-            <span>Open Access Inquiry</span>
-            <span aria-hidden="true">·</span>
-            <span>Five Levels of Rigor</span>
-          </div>
-
-          <h1 className="font-serif-editorial text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.12]">
-            Explore mathematics. Investigate questions. Learn together.
-          </h1>
-
-          <p className="font-serif italic text-lg sm:text-xl text-amber-200/90 max-w-2xl mx-auto">
-            "One Investigation → Multiple Levels → Shared Discovery."
-          </p>
-
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl mx-auto font-normal">
-            Math Lab is built around a fundamental conviction: mathematics is more than an exercise in memorization — it is a living discipline to investigate, question, and discover collaboratively. Through structured nationwide monthly inquiries, interactive simulation studios, and community Local Labs, we nurture mathematical intuition and genuine student research.
-          </p>
-
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
-            <button
-              onClick={() => onSelectTab('investigations')}
-              className="px-6 py-3 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs tracking-wider uppercase rounded-xl shadow-md transition-all flex items-center gap-2"
-            >
-              <span>Explore National Investigations</span>
-              <ArrowRight className="w-4 h-4 text-sky-200" />
-            </button>
-
-            <button
-              onClick={() => onSelectTab('laboratories')}
-              className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold text-xs tracking-wider uppercase rounded-xl border border-slate-700 shadow-md transition-all flex items-center gap-2"
-            >
-              <Activity className="w-4 h-4 text-sky-400" />
-              <span>Interactive Studios</span>
-            </button>
-
-            <button
-              onClick={() => onSelectTab('local-labs')}
-              className="px-6 py-3 bg-slate-800/80 hover:bg-slate-700 text-slate-100 font-semibold text-xs tracking-wider uppercase rounded-xl border border-slate-700 transition-all flex items-center gap-2"
-            >
-              <Building2 className="w-4 h-4 text-emerald-400" />
-              <span>Start a Local Lab</span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. Interactive Studios Callout */}
-      <section className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xs transition-colors">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#0077c8] dark:text-sky-400 font-semibold">
-              <Activity className="w-3.5 h-3.5" />
-              <span>Interactive Simulation Studios Live</span>
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-8 sm:p-12 lg:p-16">
+          
+          {/* Left Column: Scholarly Thesis & Call to Inquiry */}
+          <div className="lg:col-span-7 space-y-6 text-left">
+            <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-sky-400 font-semibold">
+              <span className="w-2 h-2 rounded-full bg-sky-400" />
+              <span>National Student Initiative</span>
               <span aria-hidden="true">·</span>
-              <span>Canvas Export Enabled</span>
-            </div>
-            <h3 className="font-serif-editorial text-2xl font-bold text-slate-900 dark:text-white">
-              6 Dedicated Hands-On Mathematical Laboratories
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Deform coordinate grids in real-time, compute dynamic Taylor series polynomials, simulate Buffon's Needle for Monte Carlo approximations of π, and download high-resolution canvas plots for papers and research notes.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <button
-              onClick={() => onSelectTab('laboratories')}
-              className="px-5 py-2.5 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs tracking-wider uppercase rounded-xl shadow-xs transition flex items-center gap-2"
-            >
-              <Activity className="w-4 h-4 text-sky-200" />
-              <span>Launch Studio Suite</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => onSelectTab('investigations')}
-              className="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs rounded-xl transition border border-slate-200 dark:border-slate-700 flex items-center gap-2"
-            >
-              <Grid className="w-4 h-4 text-amber-500" />
-              <span>Integer Lattice Coloring</span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. What We Do: The Two Main Pillars */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#0077c8] dark:text-sky-400">
-            Program Architecture
-          </span>
-          <h2 className="font-display-bold text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
-            How Math Lab Works
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-            Math Lab connects nationwide inquiry with community-rooted learning through two complementary pillars.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-          {/* Pillar 1: Monthly National Investigations */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-7 sm:p-9 shadow-xs space-y-5 flex flex-col justify-between hover:shadow-md transition">
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-sky-100 dark:bg-sky-950 text-[#0077c8] dark:text-sky-400 flex items-center justify-center">
-                <Calendar className="w-6 h-6" />
-              </div>
-              <div className="space-y-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#0077c8] dark:text-sky-400">Pillar 1</span>
-                <h3 className="font-display-bold text-2xl font-bold text-slate-900 dark:text-white">
-                  Monthly National Investigations
-                </h3>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                A shared mathematical inquiry published every month. Rather than focusing on routine worksheets, each investigation encourages students to recognize patterns, test conjectures, construct proofs, and understand why things work across five levels of depth.
-              </p>
-              <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#0077c8] dark:text-sky-400 shrink-0 mt-0.5" />
-                  <span>Accessible starting point for elementary, middle, and high school learners</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#0077c8] dark:text-sky-400 shrink-0 mt-0.5" />
-                  <span>Submissions reviewed monthly by our student scholarship committee</span>
-                </li>
-              </ul>
-            </div>
-
-            <button
-              onClick={() => onSelectTab('investigations')}
-              className="w-full py-3 px-4 bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-[#0077c8] dark:text-sky-300 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5"
-            >
-              <span>Browse Current & Past Inquiries</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Pillar 2: Local Math Labs */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-7 sm:p-9 shadow-xs space-y-5 flex flex-col justify-between hover:shadow-md transition">
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 flex items-center justify-center">
-                <Building2 className="w-6 h-6" />
-              </div>
-              <div className="space-y-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Pillar 2</span>
-                <h3 className="font-display-bold text-2xl font-bold text-slate-900 dark:text-white">
-                  Community-Based Local Labs
-                </h3>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Local Labs are student- or educator-led groups operating in public libraries, schools, and community centers. Facilitators have full pedagogical freedom to explore any mathematical topic they wish, while dedicating sessions to the shared monthly investigation.
-              </p>
-              <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Free Facilitator Handbook, outreach letters, and session agendas</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Chapters connected to a supportive nationwide network</span>
-                </li>
-              </ul>
-            </div>
-
-            <button
-              onClick={() => onSelectTab('local-labs')}
-              className="w-full py-3 px-4 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5"
-            >
-              <span>Learn How to Start a Chapter</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. The Five Levels of Mathematical Depth */}
-      <section className="bg-slate-100/60 dark:bg-slate-900/60 border-y border-slate-200/80 dark:border-slate-800 py-16 px-4 sm:px-6 lg:px-8 transition-colors">
-        <div className="max-w-7xl mx-auto space-y-10">
-          <div className="max-w-3xl space-y-2">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#0077c8] dark:text-sky-400 font-semibold">
-              <Layers className="w-3.5 h-3.5" />
-              <span>Pedagogical Architecture</span>
+              <span>100% Free & Open Access</span>
               <span aria-hidden="true">·</span>
-              <span>5 Depth Levels</span>
+              <span>Five Levels of Rigor</span>
             </div>
-            <h2 className="font-serif-editorial text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
-              The Five Levels of Mathematical Depth
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Every Math Lab inquiry is calibrated across five tiers of depth. <strong>Crucially, levels represent the depth of mathematical thinking, not fixed grade levels.</strong> This structure allows students of diverse backgrounds to investigate the exact same question simultaneously.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {FIVE_LEVELS_OVERVIEW.map((lvl) => (
-              <div 
-                key={lvl.level}
-                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-3 shadow-2xs hover:border-[#0077c8] dark:hover:border-sky-500 hover:shadow-xs transition flex flex-col justify-between"
+            <h1 className="font-serif-editorial text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.08] text-balance">
+              Explore mathematics. Investigate questions. Learn together.
+            </h1>
+
+            <p className="font-serif italic text-lg sm:text-xl text-amber-200/90 leading-relaxed">
+              “One Investigation → Multiple Levels → Shared Discovery.”
+            </p>
+
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-xl font-normal">
+              Math Lab is built around a fundamental conviction: mathematics is more than an exercise in memorization — it is a living discipline to investigate, question, and discover collaboratively. Through structured nationwide monthly inquiries, interactive simulation studios, and community Local Labs, we nurture mathematical intuition and genuine student research.
+            </p>
+
+            {/* Action CTAs */}
+            <div className="flex flex-wrap items-center gap-3 pt-3">
+              <button
+                onClick={() => onSelectTab('investigations')}
+                className="px-6 py-3.5 bg-[#0077c8] hover:bg-[#005fa3] text-white font-extrabold text-xs tracking-wider uppercase rounded-xl shadow-lg hover:shadow-xl transition-all duration-150 transform hover:-translate-y-0.5 flex items-center gap-2.5 whitespace-nowrap"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-slate-500 dark:text-slate-400">
-                      Level 0{lvl.level}
-                    </span>
-                    {getLevelIcon(lvl.level)}
-                  </div>
+                <span>Explore Inquiries</span>
+                <ArrowRight className="w-4 h-4 text-sky-200" />
+              </button>
 
-                  <h3 className="font-display-bold text-base font-bold text-slate-900 dark:text-white leading-snug">
-                    {lvl.title}
-                  </h3>
+              <button
+                onClick={() => onSelectTab('laboratories')}
+                className="px-5 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs tracking-wider uppercase rounded-xl border border-white/20 backdrop-blur-xs transition flex items-center gap-2 whitespace-nowrap"
+              >
+                <Activity className="w-4 h-4 text-sky-400" />
+                <span>6 Interactive Studios</span>
+              </button>
 
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                    {lvl.description}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 italic">
-                  Key Focus: {lvl.subtitle}
-                </div>
-              </div>
-            ))}
+              <button
+                onClick={() => onSelectTab('local-labs')}
+                className="px-5 py-3.5 bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-200 font-bold text-xs tracking-wider uppercase rounded-xl border border-emerald-700/60 transition flex items-center gap-2 whitespace-nowrap"
+              >
+                <Building2 className="w-4 h-4 text-emerald-400" />
+                <span>Start a Local Lab</span>
+              </button>
+            </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-400">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-slate-800 dark:text-slate-200">Shared Inquiry Principle:</span>
-              <span>One inquiry question → progressive levels of exploration → shared collaborative discovery.</span>
+          {/* Right Column: High-Fidelity Visual Anchor */}
+          <div className="lg:col-span-5 relative">
+            <div className="relative rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900 group">
+              <img
+                src="/src/assets/images/hero_mathematical_inquiry_1793523476009.jpg"
+                alt="Mathematical research on blackboard with golden spiral and geometric proofs"
+                className="w-full h-80 sm:h-96 object-cover object-center group-hover:scale-[1.02] transition-transform duration-500"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+              
+              {/* Floating Blueprint Stamp */}
+              <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-700/80 space-y-1.5 text-xs text-slate-300">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[11px] text-amber-300 font-bold uppercase tracking-wider">
+                    Featured October 2026 Investigation
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-400">Level 1–5 Open</span>
+                </div>
+                <div className="font-serif-editorial text-sm font-bold text-white truncate">
+                  The Chromatic Invariants of Integer Lattices
+                </div>
+                <p className="text-[11px] text-slate-400 line-clamp-1">
+                  Grid colorings, monochromatic rectangles, and Ramsey theory bounds in ℤ².
+                </p>
+              </div>
             </div>
-            <button
-              onClick={() => onSelectTab('investigations')}
-              className="text-[#0077c8] dark:text-sky-400 font-semibold hover:underline shrink-0"
-            >
-              See Level Scaffolding in Action →
-            </button>
+          </div>
+
+        </div>
+
+        {/* 4-Metric Academic KPI Bar */}
+        <div className="border-t border-slate-800 bg-slate-950/80 px-6 sm:px-12 py-5 grid grid-cols-2 md:grid-cols-4 gap-6 text-xs text-slate-300">
+          <div>
+            <div className="font-serif-editorial text-2xl font-bold text-white">5 Levels</div>
+            <div className="text-[11px] text-slate-400 mt-0.5">Concrete exploration to open research</div>
+          </div>
+          <div>
+            <div className="font-serif-editorial text-2xl font-bold text-sky-400">6 Studios</div>
+            <div className="text-[11px] text-slate-400 mt-0.5">Continuous analysis, geometry & discrete</div>
+          </div>
+          <div>
+            <div className="font-serif-editorial text-2xl font-bold text-emerald-400">100% Free</div>
+            <div className="text-[11px] text-slate-400 mt-0.5">Open source student educational suite</div>
+          </div>
+          <div>
+            <div className="font-serif-editorial text-2xl font-bold text-amber-300">Gmail Hub</div>
+            <div className="text-[11px] text-slate-400 mt-0.5">Real email dispatch & proof confirmations</div>
           </div>
         </div>
       </section>
 
-      {/* 5. Featured Latest Investigation */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div className="space-y-1">
+      {/* 2. Featured National Investigation: Deep Dive with Interactive Level Preview */}
+      <section className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-7 sm:p-10 shadow-xs transition-colors space-y-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div className="space-y-1.5 max-w-2xl">
             <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-600 dark:text-amber-400 font-semibold">
               <Calendar className="w-3.5 h-3.5" />
-              <span>Featured National Investigation</span>
+              <span>Current National Investigation</span>
               <span aria-hidden="true">·</span>
               <span>{latestInvestigation.month} {latestInvestigation.year}</span>
             </div>
-            <h2 className="font-serif-editorial text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+            <h2 className="font-serif-editorial text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
               {latestInvestigation.title}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
@@ -333,192 +261,353 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
 
           <button
             onClick={() => onSelectTab('investigations')}
-            className="text-xs font-semibold text-[#0077c8] dark:text-sky-400 hover:underline flex items-center gap-1 self-start sm:self-auto"
+            className="px-4 py-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-2 self-start md:self-auto shrink-0"
           >
-            <span>View All Investigations Archive</span>
+            <span>Full Investigation Suite</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <div className="bg-[#0d1627] rounded-3xl p-6 sm:p-10 text-white border border-slate-800 shadow-xl space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8 space-y-4">
-              <div className="space-y-2">
-                <span className="text-[11px] font-mono uppercase tracking-wider text-amber-400 font-bold">
-                  The Core Mathematical Question:
-                </span>
-                <p className="font-serif italic text-lg sm:text-xl text-slate-100 leading-snug">
-                  "{latestInvestigation.theCoreQuestion}"
-                </p>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Left Column: Blueprint Illustration & Core Question */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm relative group bg-slate-950">
+              <img
+                src="/src/assets/images/investigation_lattice_preview_1793523477483.jpg"
+                alt="Integer lattice chromatic coloring schematic blueprint"
+                className="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-mono border border-white/20">
+                ℤ² Lattice Grid
               </div>
+            </div>
 
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                {latestInvestigation.overview}
+            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 space-y-2 text-xs">
+              <span className="font-mono uppercase font-bold text-amber-600 dark:text-amber-400 block text-[11px]">
+                The Core Inquiry Question
+              </span>
+              <p className="font-serif italic text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
+                "{latestInvestigation.theCoreQuestion}"
               </p>
+              <div className="pt-2 text-[11px] text-slate-500 dark:text-slate-400">
+                Topics: {latestInvestigation.mathematicalFocus.join(' · ')}
+              </div>
+            </div>
+          </div>
 
-              <div className="flex flex-wrap items-center gap-2 pt-2">
-                {latestInvestigation.mathematicalFocus.map((f, i) => (
-                  <span
-                    key={i}
-                    className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-white/10 text-slate-200 border border-white/10"
+          {/* Right Column: Interactive Level Scaffolding */}
+          <div className="lg:col-span-7 space-y-5">
+            <div>
+              <div className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
+                Preview Level Scaffolding (1 to 5):
+              </div>
+              
+              {/* Level Selector Tabs */}
+              <div className="grid grid-cols-5 gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
+                {latestInvestigation.levels.map((l) => (
+                  <button
+                    key={l.level}
+                    onClick={() => setPreviewLevel(l.level)}
+                    className={`py-2 px-1 text-center text-xs font-bold rounded-lg transition-all ${
+                      previewLevel === l.level
+                        ? 'bg-white dark:bg-slate-900 text-[#0077c8] dark:text-sky-400 shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
                   >
-                    {f}
-                  </span>
+                    Level {l.level}
+                  </button>
                 ))}
               </div>
             </div>
 
-            <div className="lg:col-span-4 bg-white/10 backdrop-blur-xs rounded-2xl p-5 border border-white/20 space-y-4">
-              <div className="text-xs font-bold uppercase tracking-wider text-sky-300">
-                Five Levels Included:
-              </div>
-              <ul className="space-y-2 text-xs text-slate-200">
-                {latestInvestigation.levels.map((lvl) => (
-                  <li key={lvl.level} className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center font-mono font-bold text-[10px] text-white">
-                      {lvl.level}
+            {/* Selected Level Card */}
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-sky-100 dark:bg-sky-950 text-[#0077c8] dark:text-sky-400 flex items-center justify-center font-bold text-xs">
+                    0{selectedLevelData.level}
+                  </div>
+                  <div>
+                    <h4 className="font-display-bold text-base font-bold text-slate-900 dark:text-white">
+                      {selectedLevelData.title}
+                    </h4>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                      Focus: {selectedLevelData.subtitle}
                     </span>
-                    <span className="truncate">{lvl.title}</span>
-                  </li>
-                ))}
-              </ul>
+                  </div>
+                </div>
 
-              <div className="pt-2 space-y-2">
+                {getLevelIcon(selectedLevelData.level)}
+              </div>
+
+              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-serif text-sm">
+                "{selectedLevelData.prompt}"
+              </p>
+
+              {selectedLevelData.guidingQuestions && (
+                <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-700/60">
+                  <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    Key Questions for this Level:
+                  </span>
+                  <ul className="space-y-1 text-xs text-slate-600 dark:text-slate-400">
+                    {selectedLevelData.guidingQuestions.slice(0, 2).map((q, idx) => (
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <span className="text-[#0077c8] font-bold">·</span>
+                        <span>{q}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
                 <button
                   onClick={() => onSelectTab('investigations')}
-                  className="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs tracking-wider uppercase rounded-xl transition shadow-md flex items-center justify-center gap-2"
+                  className="px-4 py-2 bg-[#0077c8] hover:bg-[#005fa3] text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5"
                 >
-                  <span>Explore All 5 Levels</span>
+                  <span>Work on Level {selectedLevelData.level} in Full Lab</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
+
                 <button
                   onClick={() => onSelectTab('share-work')}
-                  className="w-full py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5"
+                  className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1"
                 >
-                  <Send className="w-3.5 h-3.5 text-amber-300" />
-                  <span>Submit Solution or Findings</span>
+                  <Send className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Submit Proof / Findings</span>
                 </button>
               </div>
             </div>
+
           </div>
+
         </div>
       </section>
 
-      {/* 6. How to Participate */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
-            Get Involved
-          </span>
-          <h2 className="font-display-bold text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
-            How You Can Participate
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-            Math Lab welcomes participants across every role and community environment.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-          {/* Card 1: Students */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 space-y-4 shadow-xs flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950 text-[#0077c8] dark:text-sky-400 flex items-center justify-center">
-                <BookOpen className="w-5 h-5" />
-              </div>
-              <h3 className="font-display-bold text-lg font-bold text-slate-900 dark:text-white">
-                For Students
-              </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Dive into monthly investigations, test hypotheses, explore interactive simulations, and submit your partial or complete proofs. Receive feedback from our student scholarship committee!
-              </p>
+      {/* 3. Interactive Studios Showcase: 6 Laboratories */}
+      <section className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#0077c8] dark:text-sky-400 font-semibold">
+              <Activity className="w-3.5 h-3.5" />
+              <span>Interactive Simulation Studios</span>
+              <span aria-hidden="true">·</span>
+              <span>In-Browser Visualizers</span>
             </div>
-            <button
-              onClick={() => onSelectTab('share-work')}
-              className="w-full py-2.5 px-4 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5"
-            >
-              <span>Submit Work</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Card 2: Educators & Community Members */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 space-y-4 shadow-xs flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 flex items-center justify-center">
-                <Building2 className="w-5 h-5" />
-              </div>
-              <h3 className="font-display-bold text-lg font-bold text-slate-900 dark:text-white">
-                For Facilitators & Hosts
-              </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Start a Local Lab in your school, town library, or community center. Use our free Facilitator Handbook, host outreach templates, and session agendas.
-              </p>
-            </div>
-            <button
-              onClick={() => onSelectTab('local-labs')}
-              className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5"
-            >
-              <span>Facilitator Guide & Toolkit</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Card 3: Student Leaders & Committees */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 space-y-4 shadow-xs flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 flex items-center justify-center">
-                <Users className="w-5 h-5" />
-              </div>
-              <h3 className="font-display-bold text-lg font-bold text-slate-900 dark:text-white">
-                Join Our Staff Team
-              </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Apply to join one of our 5 national committees: Curriculum, Solutions Review, Outreach, Research, or Technology. Open to secondary and college students.
-              </p>
-            </div>
-            <button
-              onClick={() => onSelectTab('team')}
-              className="w-full py-2.5 px-4 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5"
-            >
-              <span>Meet the Team & Apply</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Future Roadmaps */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-slate-100/90 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 transition-colors">
-          <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold uppercase tracking-wider">
-              <Clock className="w-3.5 h-3.5" />
-              <span>National Events Roadmap</span>
-            </div>
-            <h3 className="font-display-bold text-xl font-bold text-slate-900 dark:text-white">
-              Nationwide Virtual Colloquia & Synchronous Inquiries
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              We only display features that are active and supported. Live virtual math colloquia, guest mathematician panels, and synchronous cross-chapter problem-solving sessions will debut in upcoming quarters.
+            <h2 className="font-serif-editorial text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+              Hands-On Mathematical Laboratories
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              Interactive geometry sandboxes, continuous Riemann partition visualizers, and linear algebra coordinate grids.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <button
-              onClick={() => onSelectTab('events')}
-              className="px-4 py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition"
-            >
-              National Events (Coming Soon)
-            </button>
-            <button
-              onClick={() => onSelectTab('laboratories')}
-              className="px-4 py-2.5 bg-[#0077c8] hover:bg-[#005fa3] text-white font-bold text-xs rounded-xl transition"
-            >
-              Try Interactive Studios
-            </button>
-          </div>
+          <button
+            onClick={() => onSelectTab('laboratories')}
+            className="text-xs font-semibold text-[#0077c8] dark:text-sky-400 hover:underline flex items-center gap-1 self-start sm:self-auto"
+          >
+            <span>Open All 6 Laboratories</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* 6 Studio Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {labPreviews.map((lab) => {
+            const Icon = lab.icon;
+            return (
+              <div
+                key={lab.id}
+                onClick={() => onSelectTab(lab.id)}
+                className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-[#0077c8] dark:hover:border-sky-500 hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between group text-xs space-y-4"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs font-bold text-slate-400 dark:text-slate-500">
+                      {lab.num}
+                    </span>
+                    <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                      {lab.badge}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-sky-50 dark:bg-sky-950 text-[#0077c8] dark:text-sky-400 flex items-center justify-center shrink-0">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <h3 className="font-display-bold text-base font-bold text-slate-900 dark:text-white group-hover:text-[#0077c8] dark:group-hover:text-sky-400 transition-colors">
+                      {lab.title}
+                    </h3>
+                  </div>
+
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    {lab.desc}
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-slate-700 dark:text-slate-300 font-semibold">
+                  <span className="font-mono text-[11px] text-[#0077c8] dark:text-sky-400">
+                    Launch Sandbox
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0077c8] dark:group-hover:text-sky-400 group-hover:translate-x-1 transition-all" />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
+
+      {/* 4. The Two Main Pillars of Math Lab */}
+      <section className="space-y-8">
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <span className="text-xs font-mono uppercase tracking-widest text-[#0077c8] dark:text-sky-400 font-semibold">
+            Institutional Architecture
+          </span>
+          <h2 className="font-serif-editorial text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+            How Math Lab Operates
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+            A cohesive bridge between shared monthly inquiries and local student-led chapter meetings.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          {/* Pillar 1 */}
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-xs flex flex-col justify-between space-y-6 hover:shadow-md transition">
+            <div className="space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-sky-100 dark:bg-sky-950 text-[#0077c8] dark:text-sky-400 flex items-center justify-center">
+                <Calendar className="w-6 h-6" />
+              </div>
+
+              <div>
+                <span className="text-xs font-mono font-bold uppercase text-[#0077c8] dark:text-sky-400">Pillar 1</span>
+                <h3 className="font-serif-editorial text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
+                  Monthly National Investigations
+                </h3>
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                A shared mathematical inquiry published every month. Rather than focusing on repetitive competition drills, each investigation challenges students to identify patterns, form conjectures, write formal proofs, and understand underlying invariants across 5 levels of depth.
+              </p>
+
+              <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span>Calibrated across 5 depths (Level 1 observation to Level 5 open questions)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span>Student scholarship committee reviews submissions monthly</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => onSelectTab('investigations')}
+              className="w-full py-3 bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-[#0077c8] dark:text-sky-300 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2"
+            >
+              <span>Explore National Inquiries</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Pillar 2 */}
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-xs flex flex-col justify-between space-y-6 hover:shadow-md transition">
+            <div className="space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 flex items-center justify-center">
+                <Building2 className="w-6 h-6" />
+              </div>
+
+              <div>
+                <span className="text-xs font-mono font-bold uppercase text-emerald-700 dark:text-emerald-400">Pillar 2</span>
+                <h3 className="font-serif-editorial text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
+                  Community-Rooted Local Labs
+                </h3>
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                Student- or educator-led chapters operating in public libraries, schools, and community centers. Facilitators are empowered with a comprehensive 10-chapter handbook, session agendas, and host venue outreach letters with real Gmail integration.
+              </p>
+
+              <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span>10-chapter Facilitator Handbook & starter kit included</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span>Searchable national directory & community chapter map</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => onSelectTab('local-labs')}
+              className="w-full py-3 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2"
+            >
+              <span>Start a Local Math Lab</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. Community & Collaborative Learning Spotlight */}
+      <section className="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 border border-slate-800 shadow-xl overflow-hidden relative">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <div className="lg:col-span-6 space-y-5">
+            <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-emerald-400 font-semibold">
+              <Users className="w-3.5 h-3.5" />
+              <span>Collaborative Mathematical Research</span>
+            </div>
+
+            <h2 className="font-serif-editorial text-3xl sm:text-4xl font-bold leading-tight">
+              A Living Community of Math Scholars & Facilitators
+            </h2>
+
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Mathematics flourishes when diverse minds gather around a whiteboard to debate invariants, test counterexamples, and construct proofs. Math Lab connects learners of all ages without paywalls, fees, or barriers.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <button
+                onClick={() => onSelectTab('local-labs')}
+                className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-sm"
+              >
+                Join or Start a Chapter
+              </button>
+
+              <a
+                href={STAFF_APPLICATION_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 border border-white/20"
+              >
+                <span>National Staff Application</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6">
+            <div className="rounded-2xl overflow-hidden border border-slate-700 shadow-xl">
+              <img
+                src="/src/assets/images/collaborative_math_lab_1793523478407.jpg"
+                alt="Students collaborating on mathematics whiteboard and polyhedra models"
+                className="w-full h-72 sm:h-80 object-cover"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+
+        </div>
+      </section>
+
     </div>
   );
 };
