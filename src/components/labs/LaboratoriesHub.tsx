@@ -153,11 +153,11 @@ export const LaboratoriesHub: React.FC<LaboratoriesHubProps> = ({
             </div>
 
             <h1 className="font-serif-editorial text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-              The Mathematical Laboratory Suite
+              The Digital Math Lab
             </h1>
 
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Every laboratory in Math Lab is an authentic, interactive investigation engine. Manipulate parameters, test boundary cases, visualize Riemann sums, and explore geometric invariants with live numerical feedback and high-resolution canvas export.
+              Check out Math Lab’s digital simulations. These online labs give students a chance to play around with different math concepts and see what happens. You can change numbers, try different approaches, spot patterns, and watch how things change in real time. From Riemann sums to geometry, there's plenty to explore!
             </p>
 
             {/* Category Segmented Tabs */}

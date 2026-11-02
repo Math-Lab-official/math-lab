@@ -154,7 +154,7 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
             </h1>
 
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Every month, Math Lab publishes an authentic mathematical problem designed for collaborative discovery across five progressive levels of depth. Rather than routine calculation drills, these investigations challenge students to notice patterns, formulate invariants, construct proofs, and explore open questions.
+              Each month, Math Lab releases a new mathematical investigation that students can explore at five different levels of depth. Students go beyond routine calculations to look for patterns, test their ideas, build arguments, and work toward their own discoveries. Each investigation offers a different way to approach the same question, leaving room for students to think, explore, and share what they find.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -178,41 +178,26 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* Right: Featured Inquiry Blueprint Asset */}
+          {/* Right: Next Inquiry Status Callout */}
           <div className="lg:col-span-5 p-6 lg:p-8 border-t lg:border-t-0 lg:border-l border-slate-800/80 bg-slate-900/60">
-            <div className="relative rounded-2xl overflow-hidden border border-slate-700/60 shadow-lg group">
-              <img
-                src="/assets/images/investigation_lattice_preview_1793523477483.jpg"
-                alt="Integer lattice monochromatic rectangle coloring proof blueprint"
-                className="w-full h-52 sm:h-56 object-cover object-center group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 p-4 space-y-2">
-                <div className="flex items-center justify-between text-[11px] font-mono text-sky-300">
-                  <span className="flex items-center gap-1 font-semibold uppercase tracking-wider">
-                    <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-                    Current National Focus
-                  </span>
-                  <span className="text-slate-400">November 2026</span>
-                </div>
-                <h3 className="font-serif-editorial text-lg font-bold text-white leading-snug">
-                  Monochromatic Rectangles on Integer Lattices
-                </h3>
-                <div className="flex items-center justify-between pt-1">
-                  <span className="text-xs text-slate-300 font-mono">
-                    Pigeonhole principle on ℤ²
-                  </span>
-                  <button
-                    onClick={() => {
-                      setActiveInvestigationId('lattice-coloring');
-                      setActiveViewMode('workbench');
-                    }}
-                    className="px-3 py-1.5 bg-[#0077c8] hover:bg-[#005fa3] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-xs"
-                  >
-                    <span>Launch Simulator</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+            <div className="rounded-2xl border border-slate-700/80 bg-slate-950/80 p-6 space-y-3 shadow-lg">
+              <div className="flex items-center justify-between text-[11px] font-mono text-amber-300 font-bold uppercase tracking-wider">
+                <span className="flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  Next Investigation
+                </span>
+                <span className="text-slate-400">December 2026</span>
+              </div>
+              <h3 className="font-serif-editorial text-xl font-bold text-white leading-snug">
+                December Investigation — Coming Soon!
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                We don’t have a current November investigation, but our December flagship problem is on the way! In the meantime, explore all previous inquiries in the Monthly Archive below.
+              </p>
+              <div className="pt-1">
+                <span className="text-[11px] font-mono text-sky-400">
+                  Select an inquiry below to explore all 5 depth levels
+                </span>
               </div>
             </div>
           </div>

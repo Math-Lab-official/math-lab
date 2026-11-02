@@ -8,7 +8,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
     title: 'The Chromatic Invariants of Integer Lattices & Orthogonal Graphs',
     subtitle: 'From grid paths and forbidden monochromatic rectangles to algebraic area invariants',
     category: 'Discrete & Combinatorics',
-    status: 'current',
+    status: 'archive',
     overview: 'In an m × n integer lattice grid, points are assigned colors according to specific local constraints. This investigation studies what structural configurations are inevitable regardless of color choices, leading into Ramsey theory on lattices and bivariate polynomial invariants.',
     theCoreQuestion: 'What is the minimum grid size (m × n) that guarantees the existence of a monochromatic rectangle whose sides are parallel to the grid axes, when each grid point is colored with one of c colors?',
     mathematicalFocus: [
