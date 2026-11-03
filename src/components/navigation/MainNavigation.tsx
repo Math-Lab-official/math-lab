@@ -88,9 +88,6 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
               <span className="font-display-bold text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white group-hover:text-[#0077c8] dark:group-hover:text-sky-400 transition-colors leading-none">
                 MATH LAB
               </span>
-              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-wider uppercase mt-1">
-                Collaborative Mathematical Inquiry
-              </span>
             </div>
           </button>
 
