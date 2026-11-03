@@ -36,14 +36,11 @@ export const SearchAndUtilityModals: React.FC<SearchAndUtilityModalsProps> = ({
     { title: 'Chord Invariants of the Unit Circle', category: 'Investigation', tab: 'investigations', desc: 'Archived September 2026 investigation on intersecting secants and angle sums' },
     { title: 'Schur Partitions & Additive Triples', category: 'Investigation', tab: 'investigations', desc: 'Archived August 2026 investigation on sum-free partitions and Ramsey bounds' },
     { title: 'Share Your Work', category: 'Submissions', tab: 'share-work', desc: 'Submit investigation solutions, alternative approaches, conjectures & proofs' },
-    { title: 'Start a Local Math Lab', category: 'Community', tab: 'local-labs', desc: 'Practical guide to hosting in schools/libraries, facilitator toolkits & registration' },
-    { title: 'Local Chapter Directory & Map', category: 'Community', tab: 'local-labs', desc: 'Searchable directory of student-led Math Lab chapters and community partners' },
-    { title: 'Facilitator Handbook (10 Chapters)', category: 'Resources', tab: 'local-labs', desc: 'Full practical guide, copyable host outreach email, and launch checklist' },
-    { title: 'Meet the Team & 5 Staff Committees', category: 'Team', tab: 'team', desc: 'Executive leadership and 5 staff committees with staff application form' },
+    { title: 'Start a Local Math Lab', category: 'Community', tab: 'local-labs', desc: 'Student-led local math circles in schools, libraries, and community spaces' },
+    { title: 'Meet the Team', category: 'Team', tab: 'team', desc: 'Executive leadership and staff committees' },
     { title: 'Staff Member Application', category: 'Opportunities', tab: 'team', desc: 'Official Google Form application for student committee staff roles' },
-    { title: 'About Math Lab (Non-Profit)', category: 'About', tab: 'about', desc: 'Why Math Lab exists, the two pillars, our seven principles, and non-profit mission' },
-    { title: 'National Programming & Events', category: 'Events', tab: 'events', desc: 'Online national events, colloquia, and showcases (Coming soon in ~3 months)' },
-    { title: 'Digital Inquiry Labs', category: 'Labs', tab: 'laboratories', desc: 'Interactive browser-based visualization tools (Coming soon under Technology committee)' },
+    { title: 'About Math Lab', category: 'About', tab: 'about', desc: 'Why Math Lab exists, the two pillars, and collaborative mathematical inquiry' },
+    { title: 'The Digital Math Lab', category: 'Labs', tab: 'laboratories', desc: 'Interactive browser-based visualization tools and simulation studios' },
   ];
 
   const filtered = searchableItems.filter(

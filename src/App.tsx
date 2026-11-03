@@ -12,7 +12,6 @@ import { ShareYourWorkPage } from './components/submission/ShareYourWorkPage';
 import { StartLocalLabPage } from './components/locallabs/StartLocalLabPage';
 import { MeetTheTeamPage } from './components/team/MeetTheTeamPage';
 import { AboutMathLabPage } from './components/about/AboutMathLabPage';
-import { UpcomingEventsPage } from './components/events/UpcomingEventsPage';
 import { LaboratoriesHub } from './components/labs/LaboratoriesHub';
 import { LabContainer } from './components/labs/LabContainer';
 import { GraphingLab } from './components/labs/GraphingLab';
@@ -74,9 +73,6 @@ export const AppContent: React.FC = () => {
         )}
         {currentTab === 'about' && (
           <AboutMathLabPage onNavigate={(tab) => setCurrentTab(tab)} />
-        )}
-        {currentTab === 'events' && (
-          <UpcomingEventsPage onNavigate={(tab) => setCurrentTab(tab)} />
         )}
 
         {/* Interactive Mathematics Laboratories Suite */}

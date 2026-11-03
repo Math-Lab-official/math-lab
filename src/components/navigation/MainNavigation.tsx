@@ -49,15 +49,21 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const navItems = [
+  interface NavItem {
+    id: LabTab;
+    label: string;
+    icon?: React.ComponentType<{ className?: string }>;
+    badge?: string;
+  }
+
+  const navItems: NavItem[] = [
     { id: 'overview' as LabTab, label: 'Home' },
     { id: 'investigations' as LabTab, label: 'National Investigations', icon: Calendar },
-    { id: 'laboratories' as LabTab, label: 'Interactive Labs', icon: Activity },
+    { id: 'laboratories' as LabTab, label: 'Digital Math Lab', icon: Activity },
     { id: 'share-work' as LabTab, label: 'Share Your Work', icon: Send },
     { id: 'local-labs' as LabTab, label: 'Local Labs', icon: Building2 },
     { id: 'team' as LabTab, label: 'Meet the Team', icon: Users },
     { id: 'about' as LabTab, label: 'About', icon: BookOpen },
-    { id: 'events' as LabTab, label: 'Events', badge: 'Soon' },
   ];
 
   return (
@@ -89,7 +95,7 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
           </button>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden xl:flex items-center gap-1 text-[13px] font-semibold text-slate-700 dark:text-slate-300">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 text-xs xl:text-[13px] font-semibold text-slate-700 dark:text-slate-300">
             {navItems.map((item) => {
               const isActive = currentTab === item.id || (item.id === 'laboratories' && ['graphing', 'geometry', 'calculus', 'linear-algebra', 'probability', 'discrete'].includes(currentTab));
               const Icon = item.icon;
@@ -97,7 +103,7 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                  className={`px-2 xl:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap ${
                     isActive
                       ? 'text-[#0077c8] dark:text-sky-400 bg-sky-50 dark:bg-sky-950/50 font-bold'
                       : 'hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-slate-800/60'
