@@ -71,7 +71,7 @@ export const StaffApplicationModal: React.FC<StaffApplicationModalProps> = ({
               Join the Math Lab Staff Team
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Help us expand collaborative mathematical inquiry across communities nationwide. We invite passionate middle school, high school, and undergraduate students to join our five committees.
+              Help us expand student mathematical exploration across communities nationwide. We invite passionate middle school, high school, and undergraduate students to join our five committees.
             </p>
           </div>
         </div>

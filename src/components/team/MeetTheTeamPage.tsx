@@ -29,7 +29,7 @@ export const MeetTheTeamPage: React.FC = () => {
           </h1>
 
           <p className="text-slate-300 text-sm leading-relaxed">
-            Math Lab is organized by passionate students bringing collaborative mathematical inquiry into communities around the world.
+            Math Lab is organized by passionate students bringing mathematics into communities around the world.
           </p>
         </div>
       </div>

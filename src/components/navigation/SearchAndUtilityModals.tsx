@@ -39,7 +39,7 @@ export const SearchAndUtilityModals: React.FC<SearchAndUtilityModalsProps> = ({
     { title: 'Start a Local Math Lab', category: 'Community', tab: 'local-labs', desc: 'Student-led local math circles in schools, libraries, and community spaces' },
     { title: 'Meet the Team', category: 'Team', tab: 'team', desc: 'Executive leadership and staff committees' },
     { title: 'Staff Member Application', category: 'Opportunities', tab: 'team', desc: 'Official Google Form application for student committee staff roles' },
-    { title: 'About Math Lab', category: 'About', tab: 'about', desc: 'Why Math Lab exists, the two pillars, and collaborative mathematical inquiry' },
+    { title: 'About Math Lab', category: 'About', tab: 'about', desc: 'Why Math Lab exists, our two pillars, and educational mission' },
     { title: 'The Digital Math Lab', category: 'Labs', tab: 'laboratories', desc: 'Interactive browser-based visualization tools and simulation studios' },
   ];
 
