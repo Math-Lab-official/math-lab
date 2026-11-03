@@ -122,16 +122,16 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
           </nav>
 
           {/* Right Action Buttons */}
-          <div className="hidden lg:flex items-center gap-2.5">
+          <div className="hidden lg:flex items-center gap-2 shrink-0">
             {/* Progress Button */}
             {onOpenProgress && (
               <button
                 onClick={onOpenProgress}
-                className="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs flex items-center gap-2 transition shadow-2xs"
+                className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs flex items-center gap-1.5 transition shadow-2xs shrink-0"
                 title="Open Student Research Portfolio & Progress"
               >
                 <Award className="w-4 h-4 text-[#0077c8] dark:text-sky-400" />
-                <span className="hidden xl:inline">Portfolio</span>
+                <span>Portfolio</span>
                 <span className="font-mono text-xs text-[#0077c8] dark:text-sky-400 font-bold">
                   {stats.overallPercentage}%
                 </span>
@@ -141,7 +141,7 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition shadow-2xs"
+              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition shadow-2xs shrink-0"
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               aria-label="Toggle Dark Mode"
             >
@@ -150,15 +150,6 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
               ) : (
                 <Moon className="w-4 h-4 text-slate-600" />
               )}
-            </button>
-
-            {/* Explore Button */}
-            <button
-              onClick={() => handleNavClick('investigations')}
-              className="px-4 py-2 bg-[#0077c8] hover:bg-[#005fa3] text-white font-extrabold text-xs tracking-wider uppercase rounded-xl shadow-md hover:shadow-lg transition-all duration-150 transform hover:-translate-y-0.5 flex items-center gap-2"
-            >
-              <span>Explore Inquiries</span>
-              <ArrowRight className="w-3.5 h-3.5 text-sky-200" />
             </button>
           </div>
 

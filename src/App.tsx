@@ -35,7 +35,7 @@ export const AppContent: React.FC = () => {
   const [isGmailCenterOpen, setIsGmailCenterOpen] = useState<boolean>(false);
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans selection:bg-[#0077c8]/20 selection:text-slate-900 dark:selection:text-white transition-colors">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#faf7f2] dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans selection:bg-[#0077c8]/20 selection:text-slate-900 dark:selection:text-white transition-colors">
       {/* 1. Top Utility Bar with Real Links, Dark Mode Toggle, and Progress Tracker */}
       <TopUtilityBar
         onOpenSearch={() => setUtilityModal('search')}
