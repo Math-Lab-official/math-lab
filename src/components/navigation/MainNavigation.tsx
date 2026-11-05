@@ -24,12 +24,14 @@ interface MainNavigationProps {
   currentTab: LabTab;
   onSelectTab: (tab: LabTab) => void;
   onOpenProgress?: () => void;
+  onOpenLogin?: () => void;
 }
 
 export const MainNavigation: React.FC<MainNavigationProps> = ({
   currentTab,
   onSelectTab,
   onOpenProgress,
+  onOpenLogin,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
@@ -226,6 +228,18 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
                 <span className="font-mono text-xs text-[#0077c8] dark:text-sky-400 font-bold">
                   {stats.overallPercentage}%
                 </span>
+              </button>
+            )}
+
+            {onOpenLogin && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenLogin();
+                }}
+                className="w-full py-2.5 px-4 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-2 transition"
+              >
+                <span>Math Lab Scholar Sign In</span>
               </button>
             )}
 

@@ -1,31 +1,16 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { 
-  User, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
+import {
+  User,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendPasswordResetEmail,
   signOut as firebaseSignOut,
-  onAuthStateChanged 
+  onAuthStateChanged
 } from 'firebase/auth';
 import { auth } from '../services/firebase';
-import { 
-  setInMemoryToken, 
-  getInMemoryToken, 
-  sendGmailMessage, 
-  createGmailDraft, 
-  SendEmailOptions, 
-  getGmailProfile, 
-  GmailProfile 
-} from '../services/gmailService';
-
-// All Gmail scopes authorized in the project
-export const GMAIL_SCOPES = [
-  'https://mail.google.com/',
-  'https://www.googleapis.com/auth/gmail.send',
-  'https://www.googleapis.com/auth/gmail.compose',
-  'https://www.googleapis.com/auth/gmail.modify',
-  'https://www.googleapis.com/auth/gmail.readonly',
-  'https://www.googleapis.com/auth/gmail.labels',
-];
 
 export interface GoogleAuthUser {
   uid: string;
@@ -34,58 +19,91 @@ export interface GoogleAuthUser {
   photoURL: string | null;
 }
 
+export interface DemoUser {
+  name: string;
+  email: string;
+  role: string;
+}
+
 interface AuthContextType {
   currentUser: User | null;
   googleUser: GoogleAuthUser | null;
-  isGmailConnected: boolean;
-  gmailProfile: GmailProfile | null;
+  demoUser: DemoUser | null;
+  effectiveUser: {
+    uid?: string;
+    email: string | null;
+    displayName: string | null;
+    photoURL?: string | null;
+    role: string;
+    isDemo: boolean;
+  } | null;
+  isAuthenticated: boolean;
   isConnecting: boolean;
   authError: string | null;
   signInWithGoogle: () => Promise<boolean>;
-  disconnectGoogle: () => Promise<void>;
-  sendEmail: (options: SendEmailOptions) => Promise<{ id: string; threadId: string }>;
-  saveDraft: (options: SendEmailOptions) => Promise<{ id: string }>;
+  signInWithEmail: (email: string, pass: string) => Promise<boolean>;
+  signUpWithEmail: (email: string, pass: string, name: string) => Promise<boolean>;
+  sendPasswordReset: (email: string) => Promise<boolean>;
+  setDemoLogin: (name: string, email: string, role: string) => void;
+  signOut: () => Promise<void>;
   clearAuthError: () => void;
-  refreshGmailProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const formatAuthErrorMessage = (error: any): string => {
+  const code = error?.code || '';
+  switch (code) {
+    case 'auth/user-not-found':
+      return 'No registered account found with this email.';
+    case 'auth/wrong-password':
+    case 'auth/invalid-credential':
+      return 'Incorrect email or password. Please verify and try again.';
+    case 'auth/email-already-in-use':
+      return 'An account with this email already exists. Try signing in instead.';
+    case 'auth/weak-password':
+      return 'Password should be at least 6 characters.';
+    case 'auth/invalid-email':
+      return 'Please enter a valid email address.';
+    case 'auth/popup-closed-by-user':
+      return 'Sign-in popup was closed before completing.';
+    case 'auth/network-request-failed':
+      return 'Network connection failed. Please check your internet connection.';
+    default:
+      return error?.message || 'Authentication error occurred.';
+  }
+};
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [googleUser, setGoogleUser] = useState<GoogleAuthUser | null>(null);
-  const [isGmailConnected, setIsGmailConnected] = useState<boolean>(false);
-  const [gmailProfile, setGmailProfile] = useState<GmailProfile | null>(null);
+  const [demoUser, setDemoUser] = useState<DemoUser | null>(() => {
+    try {
+      const saved = localStorage.getItem('math_lab_demo_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Listen to Firebase auth state changes
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    // Listen to real Firebase auth state changes
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       if (user) {
         setGoogleUser({
           uid: user.uid,
           email: user.email,
-          displayName: user.displayName,
+          displayName: user.displayName || user.email?.split('@')[0] || 'Math Scholar',
           photoURL: user.photoURL,
         });
-        // Check if token exists in memory
-        const token = getInMemoryToken();
-        if (token) {
-          setIsGmailConnected(true);
-          try {
-            const profile = await getGmailProfile(token);
-            setGmailProfile(profile);
-          } catch {
-            // Profile fetch optional
-          }
-        }
+        // Clear demo user if real user is logged in
+        setDemoUser(null);
+        localStorage.removeItem('math_lab_demo_user');
       } else {
         setGoogleUser(null);
-        setIsGmailConnected(false);
-        setGmailProfile(null);
-        setInMemoryToken(null, null);
       }
     });
 
@@ -97,104 +115,152 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setAuthError(null);
     try {
       const provider = new GoogleAuthProvider();
-      GMAIL_SCOPES.forEach((scope) => provider.addScope(scope));
-      // Force prompt so users are aware of the requested permissions
+      // Standard sign in without any third-party Gmail scopes
       provider.setCustomParameters({
-        prompt: 'consent',
-        access_type: 'online',
+        prompt: 'select_account'
       });
 
       const result = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const accessToken = credential?.accessToken;
-
-      if (!accessToken) {
-        throw new Error('Google sign-in succeeded, but no access token was returned for Gmail.');
-      }
-
-      // STRICT REQUIREMENT: OAuth access tokens stored strictly in memory
-      setInMemoryToken(accessToken, result.user.email);
-
       setGoogleUser({
         uid: result.user.uid,
         email: result.user.email,
-        displayName: result.user.displayName,
+        displayName: result.user.displayName || result.user.email?.split('@')[0] || 'Math Scholar',
         photoURL: result.user.photoURL,
       });
-      setIsGmailConnected(true);
-
-      // Fetch user profile info from Gmail API
-      try {
-        const profile = await getGmailProfile(accessToken);
-        setGmailProfile(profile);
-      } catch (err: any) {
-        console.warn('Could not retrieve Gmail profile immediately:', err);
-      }
-
+      setDemoUser(null);
+      localStorage.removeItem('math_lab_demo_user');
       return true;
     } catch (err: any) {
-      console.error('Google Sign-In Error:', err);
-      setAuthError(err?.message || 'Failed to authenticate with Google.');
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        console.error('Google Sign-In Error:', err);
+      }
+      setAuthError(formatAuthErrorMessage(err));
       return false;
     } finally {
       setIsConnecting(false);
     }
   };
 
-  const disconnectGoogle = async () => {
+  const signInWithEmail = async (email: string, pass: string): Promise<boolean> => {
+    setIsConnecting(true);
+    setAuthError(null);
     try {
-      setInMemoryToken(null, null);
-      setIsGmailConnected(false);
-      setGmailProfile(null);
+      const result = await signInWithEmailAndPassword(auth, email.trim(), pass);
+      setGoogleUser({
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: result.user.displayName || result.user.email?.split('@')[0] || 'Math Scholar',
+        photoURL: result.user.photoURL,
+      });
+      setDemoUser(null);
+      localStorage.removeItem('math_lab_demo_user');
+      return true;
+    } catch (err: any) {
+      console.error('Email Sign-In Error:', err);
+      setAuthError(formatAuthErrorMessage(err));
+      return false;
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const signUpWithEmail = async (email: string, pass: string, name: string): Promise<boolean> => {
+    setIsConnecting(true);
+    setAuthError(null);
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email.trim(), pass);
+      const cleanName = name.trim() || email.split('@')[0] || 'Math Scholar';
+      await updateProfile(result.user, {
+        displayName: cleanName,
+      });
+      setGoogleUser({
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: cleanName,
+        photoURL: result.user.photoURL,
+      });
+      setDemoUser(null);
+      localStorage.removeItem('math_lab_demo_user');
+      return true;
+    } catch (err: any) {
+      console.error('Email Sign-Up Error:', err);
+      setAuthError(formatAuthErrorMessage(err));
+      return false;
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const sendPasswordReset = async (email: string): Promise<boolean> => {
+    setIsConnecting(true);
+    setAuthError(null);
+    try {
+      await sendPasswordResetEmail(auth, email.trim());
+      return true;
+    } catch (err: any) {
+      console.error('Password Reset Error:', err);
+      setAuthError(formatAuthErrorMessage(err));
+      return false;
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const setDemoLogin = (name: string, email: string, role: string) => {
+    const demo = { name, email, role };
+    setDemoUser(demo);
+    try {
+      localStorage.setItem('math_lab_demo_user', JSON.stringify(demo));
+    } catch {
+      // ignore
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      setDemoUser(null);
+      localStorage.removeItem('math_lab_demo_user');
       await firebaseSignOut(auth);
     } catch (err: any) {
       console.error('Sign-out error:', err);
     }
   };
 
-  const refreshGmailProfile = async () => {
-    const token = getInMemoryToken();
-    if (!token) return;
-    try {
-      const profile = await getGmailProfile(token);
-      setGmailProfile(profile);
-    } catch (err) {
-      console.error('Failed to refresh Gmail profile:', err);
-    }
-  };
-
-  const sendEmail = async (options: SendEmailOptions) => {
-    const token = getInMemoryToken();
-    if (!token) {
-      throw new Error('Please sign in with Google to use Gmail features.');
-    }
-    return await sendGmailMessage(options, token);
-  };
-
-  const saveDraft = async (options: SendEmailOptions) => {
-    const token = getInMemoryToken();
-    if (!token) {
-      throw new Error('Please sign in with Google to create Gmail drafts.');
-    }
-    const res = await createGmailDraft(options, token);
-    return { id: res.id };
-  };
+  const effectiveUser = currentUser
+    ? {
+        uid: currentUser.uid,
+        email: currentUser.email,
+        displayName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Math Scholar',
+        photoURL: currentUser.photoURL,
+        role: 'Verified Scholar',
+        isDemo: false,
+      }
+    : demoUser
+    ? {
+        email: demoUser.email,
+        displayName: demoUser.name,
+        role: demoUser.role,
+        isDemo: true,
+      }
+    : null;
 
   return (
     <AuthContext.Provider
       value={{
         currentUser,
         googleUser,
-        isGmailConnected,
-        gmailProfile,
+        demoUser,
+        effectiveUser,
+        isAuthenticated: !!currentUser || !!demoUser,
         isConnecting,
         authError,
         signInWithGoogle,
-        disconnectGoogle,
-        sendEmail,
-        saveDraft,
+        signInWithEmail,
+        signUpWithEmail,
+        sendPasswordReset,
+        setDemoLogin,
+        signOut,
         clearAuthError: () => setAuthError(null),
-        refreshGmailProfile,
       }}
     >
       {children}

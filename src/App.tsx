@@ -5,7 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { TopUtilityBar } from './components/navigation/TopUtilityBar';
 import { MainNavigation } from './components/navigation/MainNavigation';
 import { SearchAndUtilityModals } from './components/navigation/SearchAndUtilityModals';
-import { GmailCenterModal } from './components/common/GmailCenterModal';
+import { LoginModal } from './components/auth/LoginModal';
 import { HomePage } from './components/landing/HomePage';
 import { NationalInvestigationsPage } from './components/investigations/NationalInvestigationsPage';
 import { ShareYourWorkPage } from './components/submission/ShareYourWorkPage';
@@ -20,7 +20,6 @@ import { CalculusLab } from './components/labs/CalculusLab';
 import { LinearAlgebraLab } from './components/labs/LinearAlgebraLab';
 import { ProbabilityLab } from './components/labs/ProbabilityLab';
 import { DiscreteMathLab } from './components/labs/DiscreteMathLab';
-import { DigitalLabsComingSoonPage } from './components/labs/DigitalLabsComingSoonPage';
 import { StudentProgressModal } from './components/progress/StudentProgressModal';
 import { StudentLearningHub } from './components/education/StudentLearningHub';
 import { FormulaReference } from './components/FormulaReference';
@@ -32,7 +31,7 @@ export const AppContent: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<LabTab>('overview');
   const [utilityModal, setUtilityModal] = useState<'search' | 'support' | 'newsletter' | null>(null);
   const [isProgressModalOpen, setIsProgressModalOpen] = useState<boolean>(false);
-  const [isGmailCenterOpen, setIsGmailCenterOpen] = useState<boolean>(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#faf7f2] dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans selection:bg-[#0077c8]/20 selection:text-slate-900 dark:selection:text-white transition-colors">
@@ -41,7 +40,7 @@ export const AppContent: React.FC = () => {
         onOpenSearch={() => setUtilityModal('search')}
         onOpenContact={() => setUtilityModal('support')}
         onOpenProgress={() => setIsProgressModalOpen(true)}
-        onOpenGmailCenter={() => setIsGmailCenterOpen(true)}
+        onOpenLogin={() => setIsLoginModalOpen(true)}
       />
 
       {/* 2. Main Navigation Header */}
@@ -49,6 +48,7 @@ export const AppContent: React.FC = () => {
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
         onOpenProgress={() => setIsProgressModalOpen(true)}
+        onOpenLogin={() => setIsLoginModalOpen(true)}
       />
 
       {/* 3. Main Content Router */}
@@ -184,10 +184,10 @@ export const AppContent: React.FC = () => {
         }}
       />
 
-      {/* 7. Dedicated Gmail Communications Center Modal */}
-      <GmailCenterModal
-        isOpen={isGmailCenterOpen}
-        onClose={() => setIsGmailCenterOpen(false)}
+      {/* 7. Real Scholar Login & Account Modal */}
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
       />
     </div>
   );
