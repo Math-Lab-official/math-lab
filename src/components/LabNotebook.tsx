@@ -4,7 +4,7 @@ import { evaluateMathFunction } from '../utils/mathUtils';
 import { NotebookEntry, FormulaItem } from '../types';
 import { FORMULA_DATABASE } from '../data/formulas';
 import { useAuth } from '../context/AuthContext';
-import { BlockMath, InlineMath } from './common/MathView';
+import { BlockMath } from './common/MathView';
 import {
   Plus,
   Trash2,
@@ -15,11 +15,6 @@ import {
   BookOpen,
   Check,
   Copy,
-  ChevronDown,
-  ChevronUp,
-  ArrowRight,
-  ExternalLink,
-  Sparkles,
   FileCode,
   FileSpreadsheet
 } from 'lucide-react';
@@ -44,6 +39,35 @@ const STARTER_NOTES: NotebookEntry[] = [
     timestamp: Date.now() - 7200000,
   },
 ];
+
+// Replaces unicode mathematical glyphs with safe, readable ASCII representations for standard PDF fonts
+const sanitizeMathForPdf = (str: string): string => {
+  if (!str) return '';
+  return str
+    .replace(/²/g, '^2')
+    .replace(/³/g, '^3')
+    .replace(/⁴/g, '^4')
+    .replace(/ⁿ/g, '^n')
+    .replace(/π/g, 'pi')
+    .replace(/θ/g, 'theta')
+    .replace(/λ/g, 'lambda')
+    .replace(/Δ/g, 'Delta')
+    .replace(/σ/g, 'sigma')
+    .replace(/μ/g, 'mu')
+    .replace(/√/g, 'sqrt')
+    .replace(/±/g, '+/-')
+    .replace(/≠/g, '!=')
+    .replace(/≤/g, '<=')
+    .replace(/≥/g, '>=')
+    .replace(/→/g, '->')
+    .replace(/≈/g, '~=')
+    .replace(/·/g, '*')
+    .replace(/×/g, '*')
+    .replace(/÷/g, '/')
+    .replace(/∑/g, 'sum')
+    .replace(/∫/g, 'integral')
+    .replace(/∞/g, 'inf');
+};
 
 export const LabNotebook: React.FC = () => {
   const { effectiveUser } = useAuth();
@@ -149,7 +173,6 @@ export const LabNotebook: React.FC = () => {
 
   // Insert formula expression into the live scratchpad
   const handleInsertIntoScratchpad = (formula: FormulaItem) => {
-    // Convert popular formulas to expression-friendly scratchpad strings
     let scratchExpr = '';
     if (formula.id === 'quad-formula') scratchExpr = '(-4 + sqrt(4^2 - 4 * 1 * (-5))) / (2 * 1)';
     else if (formula.id === 'pythagoras') scratchExpr = 'sqrt(3^2 + 4^2)';
@@ -170,8 +193,8 @@ export const LabNotebook: React.FC = () => {
     setTimeout(() => setCopiedFormulaId(null), 2000);
   };
 
-  // EXPORT AS PDF
-  const exportNotesAsPdf = () => {
+  // CORE PDF SERIALIZATION ENGINE
+  const serializeNotesToPdf = (notesToExport: NotebookEntry[], filename: string) => {
     setIsExportingPdf(true);
     try {
       const doc = new jsPDF({
@@ -185,11 +208,11 @@ export const LabNotebook: React.FC = () => {
       const margin = 40;
       const contentWidth = pageWidth - margin * 2; // 532 pt
 
-      // Header Banner Background
-      doc.setFillColor(15, 23, 42); // deep slate/navy #0f172a
+      // Top Banner Header
+      doc.setFillColor(15, 23, 42); // #0f172a deep navy
       doc.rect(margin, 35, contentWidth, 68, 'F');
 
-      // Header Logo & Title
+      // Title & Logo
       doc.setTextColor(255, 255, 255);
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(16);
@@ -200,14 +223,14 @@ export const LabNotebook: React.FC = () => {
       doc.setTextColor(186, 230, 253); // sky-200
       doc.text('Student Research Notebook & Mathematical Derivations', margin + 15, 80);
 
-      // Meta info banner under title
+      // Metadata line
       let currentY = 120;
-      doc.setTextColor(71, 85, 105); // slate-600
+      doc.setTextColor(71, 85, 105);
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
 
       const scholarName = effectiveUser?.displayName || 'Student Scholar';
-      const scholarEmail = effectiveUser?.email || 'Scholar Research Session';
+      const scholarEmail = effectiveUser?.email || 'Math Lab Researcher';
       const exportDate = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
@@ -215,77 +238,74 @@ export const LabNotebook: React.FC = () => {
         day: 'numeric',
       });
 
-      doc.text(`Scholar: ${scholarName} (${scholarEmail})`, margin, currentY);
-      doc.text(`Exported: ${exportDate}  •  Total Records: ${entries.length}`, margin, currentY + 14);
+      doc.text(`Scholar: ${sanitizeMathForPdf(scholarName)} (${sanitizeMathForPdf(scholarEmail)})`, margin, currentY);
+      doc.text(`Exported: ${exportDate}  •  Total Records: ${notesToExport.length}`, margin, currentY + 14);
 
       currentY += 30;
 
-      // Divider
-      doc.setDrawColor(203, 213, 225); // slate-300
+      // Divider Line
+      doc.setDrawColor(203, 213, 225);
       doc.setLineWidth(1);
       doc.line(margin, currentY, pageWidth - margin, currentY);
       currentY += 20;
 
-      if (entries.length === 0) {
+      if (notesToExport.length === 0) {
         doc.setFontSize(11);
         doc.setTextColor(148, 163, 184);
         doc.text('No investigation records logged yet.', margin, currentY + 20);
       }
 
-      // Iterate through entries
-      entries.forEach((note, index) => {
-        // Calculate needed height for entry
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(12);
-
-        const contentLines = doc.splitTextToSize(note.content || '(No derivation notes recorded)', contentWidth - 24);
+      // Iterate through entries and serialize each card
+      notesToExport.forEach((note) => {
+        const cleanContent = sanitizeMathForPdf(note.content || '(No derivation notes recorded)');
+        const contentLines = doc.splitTextToSize(cleanContent, contentWidth - 28);
         const hasExpr = !!note.expression;
         const exprHeight = hasExpr ? 42 : 0;
-        const entryHeight = 50 + contentLines.length * 13 + exprHeight + 20;
+        const entryHeight = 52 + contentLines.length * 13 + exprHeight + 16;
 
-        // Check if page break is needed
-        if (currentY + entryHeight > pageHeight - 60) {
+        // Check if page break is needed before starting entry
+        if (currentY + entryHeight > pageHeight - 50) {
           doc.addPage();
           currentY = 45;
         }
 
         const boxStartY = currentY;
 
-        // Background box for note entry
+        // Card container
         doc.setFillColor(255, 255, 255);
-        doc.setDrawColor(226, 232, 240); // slate-200
-        doc.roundedRect(margin, boxStartY, contentWidth, entryHeight - 10, 6, 6, 'FD');
+        doc.setDrawColor(226, 232, 240);
+        doc.roundedRect(margin, boxStartY, contentWidth, entryHeight - 8, 6, 6, 'FD');
 
-        // Left accent indicator strip
+        // Left accent strip
         doc.setFillColor(0, 119, 200); // #0077c8
-        doc.roundedRect(margin, boxStartY, 4, entryHeight - 10, 2, 2, 'F');
+        doc.roundedRect(margin, boxStartY, 4, entryHeight - 8, 2, 2, 'F');
 
         // Category Tag
-        doc.setFillColor(240, 249, 255); // sky-50
-        doc.setDrawColor(186, 230, 253); // sky-200
-        doc.roundedRect(margin + 16, boxStartY + 10, 95, 16, 3, 3, 'FD');
+        doc.setFillColor(240, 249, 255);
+        doc.setDrawColor(186, 230, 253);
+        doc.roundedRect(margin + 16, boxStartY + 10, 100, 16, 3, 3, 'FD');
 
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(8);
         doc.setTextColor(0, 119, 200);
-        doc.text(note.category.toUpperCase(), margin + 22, boxStartY + 21);
+        doc.text(sanitizeMathForPdf(note.category.toUpperCase()), margin + 22, boxStartY + 21);
 
         // Date
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(8);
-        doc.setTextColor(148, 163, 184); // slate-400
-        doc.text(new Date(note.timestamp).toLocaleDateString(), margin + 120, boxStartY + 21);
+        doc.setTextColor(148, 163, 184);
+        doc.text(new Date(note.timestamp).toLocaleDateString(), margin + 126, boxStartY + 21);
 
         // Note Title
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(12);
-        doc.setTextColor(15, 23, 42); // slate-900
-        doc.text(note.title, margin + 16, boxStartY + 42);
+        doc.setTextColor(15, 23, 42);
+        doc.text(sanitizeMathForPdf(note.title), margin + 16, boxStartY + 42);
 
-        // Content / Derivations
+        // Derivations & Content
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(9.5);
-        doc.setTextColor(51, 65, 85); // slate-700
+        doc.setTextColor(51, 65, 85);
         let textY = boxStartY + 58;
         contentLines.forEach((line: string) => {
           doc.text(line, margin + 16, textY);
@@ -295,19 +315,19 @@ export const LabNotebook: React.FC = () => {
         // Expression Scratchpad Block (if present)
         if (hasExpr) {
           const exprBoxY = textY + 5;
-          doc.setFillColor(248, 250, 252); // slate-50
+          doc.setFillColor(248, 250, 252);
           doc.setDrawColor(226, 232, 240);
           doc.roundedRect(margin + 16, exprBoxY, contentWidth - 32, 32, 4, 4, 'FD');
 
           doc.setFont('courier', 'bold');
           doc.setFontSize(9);
           doc.setTextColor(0, 119, 200);
-          doc.text(`Expression: ${note.expression}`, margin + 24, exprBoxY + 14);
+          doc.text(`Derivation Expression: ${sanitizeMathForPdf(note.expression || '')}`, margin + 24, exprBoxY + 14);
 
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(9);
           doc.setTextColor(5, 150, 105); // emerald-600
-          doc.text(`= ${note.evaluatedResult || ''}`, margin + 24, exprBoxY + 26);
+          doc.text(`= ${sanitizeMathForPdf(note.evaluatedResult || '')}`, margin + 24, exprBoxY + 26);
         }
 
         currentY = boxStartY + entryHeight + 8;
@@ -328,13 +348,41 @@ export const LabNotebook: React.FC = () => {
         doc.text(`Page ${i} of ${totalPages}`, pageWidth - margin, pageHeight - 25, { align: 'right' });
       }
 
-      const fileDate = new Date().toISOString().slice(0, 10);
-      doc.save(`math-lab-notebook-${fileDate}.pdf`);
+      doc.save(filename);
     } catch (err) {
       console.error('Failed to export PDF:', err);
     } finally {
       setIsExportingPdf(false);
     }
+  };
+
+  // Download all notes serialized as PDF
+  const handleDownloadAllAsPdf = () => {
+    const fileDate = new Date().toISOString().slice(0, 10);
+    serializeNotesToPdf(entries, `math-lab-notebook-${fileDate}.pdf`);
+  };
+
+  // Download a single note serialized as PDF
+  const handleDownloadSingleNoteAsPdf = (note: NotebookEntry) => {
+    const slug = note.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 24);
+    const fileDate = new Date().toISOString().slice(0, 10);
+    serializeNotesToPdf([note], `math-lab-derivation-${slug}-${fileDate}.pdf`);
+  };
+
+  // Download current unsaved form draft as PDF
+  const handleDownloadDraftAsPdf = () => {
+    if (!title.trim() && !content.trim() && !expression.trim()) return;
+    const draftNote: NotebookEntry = {
+      id: `draft-${Date.now()}`,
+      title: title.trim() || 'Untitled Mathematical Derivation',
+      content: content.trim() || 'Mathematical scratchpad observation.',
+      category,
+      expression: expression.trim() || undefined,
+      evaluatedResult: liveResult || undefined,
+      timestamp: Date.now(),
+    };
+    const fileDate = new Date().toISOString().slice(0, 10);
+    serializeNotesToPdf([draftNote], `math-lab-current-draft-${fileDate}.pdf`);
   };
 
   const exportNotesAsMarkdown = () => {
@@ -359,7 +407,7 @@ export const LabNotebook: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
-  const exportNotes = () => {
+  const exportNotesAsJson = () => {
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(entries, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
@@ -381,11 +429,11 @@ export const LabNotebook: React.FC = () => {
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
-            Capture mathematical hypotheses, calculate derivations, search standard formulas, and export clean PDF reports.
+            Capture mathematical hypotheses, calculate derivations, search standard formulas, and download serialized PDF reports.
           </p>
         </div>
 
-        {/* Action Buttons: Formula Search Toggle + PDF / Markdown / JSON Exports */}
+        {/* Action Buttons: Formula Search Toggle + Download as PDF / Markdown / JSON Exports */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Formula Search Button */}
           <button
@@ -404,15 +452,15 @@ export const LabNotebook: React.FC = () => {
             </span>
           </button>
 
-          {/* Export PDF Button */}
+          {/* Download as PDF Button */}
           <button
-            onClick={exportNotesAsPdf}
+            onClick={handleDownloadAllAsPdf}
             disabled={isExportingPdf}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold bg-[#ea4335] hover:bg-[#d93025] text-white rounded-xl shadow-xs transition disabled:opacity-50"
-            title="Export all notes and derivations as a styled PDF document"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-[#ea4335] hover:bg-[#d93025] text-white rounded-xl shadow-xs transition disabled:opacity-50"
+            title="Download notes and derivations as a serialized PDF file"
           >
             <Download className="w-4 h-4" />
-            <span>{isExportingPdf ? 'Generating PDF...' : 'Export PDF (.pdf)'}</span>
+            <span>{isExportingPdf ? 'Serializing PDF...' : 'Download as PDF'}</span>
           </button>
 
           {/* Export Markdown */}
@@ -427,7 +475,7 @@ export const LabNotebook: React.FC = () => {
 
           {/* Export JSON */}
           <button
-            onClick={exportNotes}
+            onClick={exportNotesAsJson}
             className="flex items-center gap-1 px-3 py-2 text-xs font-semibold bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-700 transition shadow-2xs"
             title="Export raw JSON backup"
           >
@@ -659,12 +707,27 @@ export const LabNotebook: React.FC = () => {
               )}
             </div>
 
-            <button
-              type="submit"
-              className="w-full py-2.5 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs rounded-xl shadow-xs transition"
-            >
-              Save Entry
-            </button>
+            <div className="flex items-center gap-2 pt-1">
+              <button
+                type="submit"
+                className="flex-1 py-2.5 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs rounded-xl shadow-xs transition"
+              >
+                Save Entry
+              </button>
+
+              {(title.trim() || content.trim() || expression.trim()) && (
+                <button
+                  type="button"
+                  onClick={handleDownloadDraftAsPdf}
+                  disabled={isExportingPdf}
+                  className="px-3.5 py-2.5 bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
+                  title="Download current unsaved draft as PDF"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>PDF Draft</span>
+                </button>
+              )}
+            </div>
           </form>
         </div>
 
@@ -676,11 +739,12 @@ export const LabNotebook: React.FC = () => {
             </div>
             {entries.length > 0 && (
               <button
-                onClick={exportNotesAsPdf}
+                onClick={handleDownloadAllAsPdf}
+                disabled={isExportingPdf}
                 className="text-[11px] font-bold text-[#ea4335] hover:underline flex items-center gap-1"
               >
-                <Download className="w-3 h-3" />
-                <span>Export as PDF</span>
+                <Download className="w-3.5 h-3.5" />
+                <span>Download as PDF</span>
               </button>
             )}
           </div>
@@ -706,13 +770,24 @@ export const LabNotebook: React.FC = () => {
                     </span>
                   </div>
 
-                  <button
-                    onClick={() => handleDelete(note.id)}
-                    className="p-1 text-slate-400 hover:text-rose-600 rounded transition opacity-0 group-hover:opacity-100"
-                    title="Delete Note"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleDownloadSingleNoteAsPdf(note)}
+                      className="p-1 text-slate-400 hover:text-[#ea4335] rounded transition opacity-80 group-hover:opacity-100 flex items-center gap-1 text-[11px] font-semibold"
+                      title="Download this note as PDF"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span className="text-[10px] hidden sm:inline">PDF</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(note.id)}
+                      className="p-1 text-slate-400 hover:text-rose-600 rounded transition opacity-60 group-hover:opacity-100"
+                      title="Delete Note"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
                 <h4 className="font-serif-editorial text-xl font-bold text-slate-900 dark:text-white">

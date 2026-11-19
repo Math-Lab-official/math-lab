@@ -29,7 +29,8 @@ export const SearchAndUtilityModals: React.FC<SearchAndUtilityModalsProps> = ({
 
   const baseItems: { title: string; category: string; tab: LabTab; desc: string }[] = [
     { title: 'National Investigations', category: 'Inquiry', tab: 'investigations', desc: 'Monthly mathematical investigations across five levels of depth' },
-    { title: 'Chromatic Invariants of Integer Lattices', category: 'Investigation', tab: 'investigations', desc: 'Featured November 2026 investigation on grid colorings and monochromatic rectangles' },
+    { title: "Pascal's Triangle, Hidden Patterns & Binomial Invariants", category: 'Investigation', tab: 'investigations', desc: "Featured November 2026 investigation: from coloring odd and even numbers to Lucas' theorem and the Sierpiński fractal" },
+    { title: 'Chromatic Invariants of Integer Lattices', category: 'Investigation', tab: 'investigations', desc: 'Archived November 2026 investigation on grid colorings and monochromatic rectangles' },
     { title: 'Chord Invariants of the Unit Circle', category: 'Investigation', tab: 'investigations', desc: 'Archived September 2026 investigation on intersecting secants and angle sums' },
     { title: 'Schur Partitions & Additive Triples', category: 'Investigation', tab: 'investigations', desc: 'Archived August 2026 investigation on sum-free partitions and Ramsey bounds' },
     { title: 'Formula Reference Handbook', category: 'Theorems', tab: 'formulas', desc: 'Curated repository of formulas, identities, KaTeX equations, and derivations' },

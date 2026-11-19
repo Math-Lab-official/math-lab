@@ -2,6 +2,93 @@ import { NationalInvestigation } from '../types';
 
 export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
   {
+    id: 'pascals-triangle',
+    month: 'November',
+    year: 2026,
+    title: "Pascal's Triangle, Hidden Patterns & Binomial Invariants",
+    subtitle: "From coloring odd and even numbers to Lucas' theorem and the Sierpiński fractal",
+    category: 'Discrete & Combinatorics',
+    status: 'current',
+    overview: "Pascal's triangle is built from one rule: each number is the sum of the two above it. It also counts subsets (C(n,k)), lattice paths, and the coefficients in (1+x)ⁿ. The same few numbers hold arithmetic, counting, and algebra, and also a fractal. This investigation starts with coloring odd and even entries and ends with a proof of why the triangle behaves differently under every prime modulus.",
+    theCoreQuestion: "Why do the odd entries of Pascal's triangle form a fractal pattern, and how can counting arguments and polynomial algebra predict exactly how many odd entries each row has?",
+    mathematicalFocus: [
+      'Binomial Coefficients & Subset Counting',
+      'Binary Expansion & Odd-Entry Invariants (2^s)',
+      'Polynomial Algebra over Finite Moduli',
+      "Lucas' Theorem, Kummer's Theorem & Sierpiński Fractals"
+    ],
+    submissionDeadline: 'November 30, 2026',
+    facilitatorTips: [
+      'Start by having students construct rows 0–8 by hand and shade every odd entry with a highlighter to see the emerging triangles.',
+      'Encourage students to write row numbers in binary alongside their odd-entry counts to discover the 2^s pattern.',
+      'For advanced groups, connect the mod 2 polynomial expansion (1+x)^(2^i) ≡ 1 + x^(2^i) to Lucas’ theorem for general primes p.'
+    ],
+    levels: [
+      {
+        level: 1,
+        title: 'Level 1: Concrete Observation & Pattern Discovery',
+        subtitle: 'Building the triangle and spotting patterns',
+        prompt: "Build Pascal's triangle for rows 0 to 8. Add the two numbers above to get each new one, with 1s on the edges. Then shade every odd number. What do you see?",
+        guidingQuestions: [
+          'What is the sum of each row? Do you see a pattern as the rows go down?',
+          'Look at the diagonals. Which one gives the counting numbers? Which gives 1, 3, 6, 10, ...?',
+          'Is the triangle symmetric? Explain why in your own words.'
+        ],
+        hintOrExtension: "Row sums are 1, 2, 4, 8, ... Each row doubles the previous one's total."
+      },
+      {
+        level: 2,
+        title: 'Level 2: Formulation of Conjectures & Invariants',
+        subtitle: 'Counting odd entries and the hockey stick',
+        prompt: 'For rows 0 to 15, count how many odd numbers appear in each row. Record your data and make a conjecture. Then test it on rows 16 to 20.',
+        guidingQuestions: [
+          'For rows 0 to 7 you should find 1, 2, 2, 4, 2, 4, 4, 8. What kind of numbers are these?',
+          'Which rows are completely odd? Which have only two odd entries?',
+          'Hockey stick: add the numbers along a diagonal starting from the edge, then look at the number just below and to the side of the last one. What do you find?'
+        ],
+        hintOrExtension: 'Write each row number in binary and compare it with the count of odd entries.'
+      },
+      {
+        level: 3,
+        title: 'Level 3: Systematic Generalization & Algebraic Formulation',
+        subtitle: 'Why the triangle works: counting and polynomials',
+        prompt: 'Show that C(n,k) = C(n−1,k−1) + C(n−1,k) using a subsets argument. Then use (1+x)ⁿ to prove that each row sums to 2ⁿ and that the alternating sum is 0 for n ≥ 1.',
+        guidingQuestions: [
+          'Take a set with a special element. How many k-subsets contain it? How many do not?',
+          'Substitute x = 1 and x = −1 into (1+x)ⁿ. What do you get?',
+          'Show that C(n,k) counts the lattice paths from (0,0) to (n−k, k) using right and up steps. Why does the Pascal rule hold for paths?'
+        ],
+        hintOrExtension: 'Over arithmetic mod 2, (1+x)² = 1 + 2x + x² ≡ 1 + x². What does (1+x)⁴ become?'
+      },
+      {
+        level: 4,
+        title: 'Level 4: Rigorous Construction of Proofs & Boundary Cases',
+        subtitle: 'Proving the odd-entry count',
+        prompt: 'Prove that the number of odd entries in row n is 2^s, where s is the number of 1s in the binary expansion of n.',
+        guidingQuestions: [
+          'Show that (1+x)^(2ⁱ) ≡ 1 + x^(2ⁱ) (mod 2) by induction.',
+          'Write n = 2^(a₁) + 2^(a₂) + ... + 2^(aₛ) and expand the product ∏(1 + x^(2^(aᵢ))). Why do no two terms ever combine?',
+          'Prove that row n is entirely odd exactly when n = 2ᵃ − 1.',
+          'Show that the first 2ᵃ rows contain exactly 3ᵃ odd entries.'
+        ],
+        hintOrExtension: 'Distinct binary digits mean distinct exponents, so no cancellation occurs when you multiply out.'
+      },
+      {
+        level: 5,
+        title: 'Level 5: Open Extensions & Generalization',
+        subtitle: "Lucas' theorem, Kummer's theorem, and fractals",
+        prompt: "Generalize from 2 to any prime p. Prove Lucas' theorem: if n = Σnᵢpⁱ and k = Σkᵢpⁱ in base p, then C(n,k) ≡ ∏C(nᵢ,kᵢ) (mod p).",
+        guidingQuestions: [
+          "Prove that (1+x)^p ≡ 1 + x^p (mod p) and use it to derive Lucas' theorem.",
+          'Deduce that the number of entries in row n not divisible by p is ∏(nᵢ+1). For which rows is every interior entry divisible by p?',
+          "Kummer's theorem says the highest power of p dividing C(n,k) equals the number of carries when adding k and n−k in base p. Check it on examples, then prove it using Legendre's formula for the p-adic valuation of n!.",
+          'The shaded odd entries approach the Sierpiński triangle. Using the 3ᵃ count from Level 4, compute its fractal dimension log 3 / log 2. What do the shaded patterns for p = 3 and p = 5 look like?'
+        ],
+        hintOrExtension: 'Compare coefficients of x^k on both sides of (1+x)ⁿ = (1+x)^(n₀) · ((1+x)^p)^(n₁) · ... mod p.'
+      }
+    ]
+  },
+  {
     id: 'lattice-coloring',
     month: 'November',
     year: 2026,
