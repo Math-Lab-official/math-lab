@@ -21,6 +21,7 @@ import {
 import { NATIONAL_INVESTIGATIONS } from '../../data/investigationsData';
 import { LabTab } from '../../types';
 import { LatticeColoringWorkbench } from './LatticeColoringWorkbench';
+import winterSierpinskiImg from '../../assets/images/winter_sierpinski_fractal_1795108888358.jpg';
 import { 
   getStudentProgress, 
   setInvestigationLevelStatus, 
@@ -180,19 +181,14 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
           </div>
 
           {/* Right: December 2026 Winter Thematic Callout */}
-          <div className="relative overflow-hidden lg:col-span-5 p-6 lg:p-8 border-t lg:border-t-0 lg:border-l border-cyan-400/20 bg-gradient-to-br from-[#0c1f36] via-[#132c4c] to-[#0f2440]">
-            {/* Subtle Winter Crystalline Geometric Background */}
-            <div className="pointer-events-none absolute inset-0 opacity-[0.08]" aria-hidden="true">
-              <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <pattern id="winter-inv-grid" width="48" height="42" patternUnits="userSpaceOnUse">
-                    <path d="M24 0 L48 14 L48 28 L24 42 L0 28 L0 14 Z" fill="none" stroke="#7dd3fc" strokeWidth="1" />
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#winter-inv-grid)" />
-              </svg>
-            </div>
-            <div className="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-cyan-400/15 blur-2xl" aria-hidden="true" />
+          <div className="relative overflow-hidden lg:col-span-5 p-6 lg:p-8 border-t lg:border-t-0 lg:border-l border-cyan-400/20 bg-[#0c1f36]">
+            <img
+              src={winterSierpinskiImg}
+              alt="Crystalline winter Sierpiński fractal"
+              referrerPolicy="no-referrer"
+              className="absolute inset-0 w-full h-full object-cover opacity-35"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/95 via-[#0f2542]/75 to-[#0a192f]/50" />
 
             <div className="relative rounded-2xl border border-cyan-300/25 bg-white/[0.06] backdrop-blur-xs p-6 space-y-3 shadow-lg">
               <div className="flex items-center justify-between text-[11px] font-mono text-cyan-300 font-bold uppercase tracking-wider">

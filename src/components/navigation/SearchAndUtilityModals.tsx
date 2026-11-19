@@ -3,7 +3,6 @@ import { Search, X, ArrowRight, CheckCircle2, Mail, BookOpen, Send, Sparkles } f
 import { LabTab } from '../../types';
 import { OFFICIAL_EMAIL, INSTAGRAM_HANDLE, INSTAGRAM_URL } from '../../data/teamData';
 import { FORMULA_DATABASE } from '../../data/formulas';
-import { useAuth } from '../../context/AuthContext';
 
 interface SearchAndUtilityModalsProps {
   activeModal: 'search' | 'support' | 'newsletter' | null;
@@ -22,8 +21,6 @@ export const SearchAndUtilityModals: React.FC<SearchAndUtilityModalsProps> = ({
   const [contactSubject, setContactSubject] = useState('Inquiry regarding Math Lab National Initiative');
   const [contactMsg, setContactMsg] = useState('');
   const [contactDone, setContactDone] = useState(false);
-
-  const { effectiveUser } = useAuth();
 
   if (!activeModal) return null;
 
@@ -65,7 +62,7 @@ export const SearchAndUtilityModals: React.FC<SearchAndUtilityModalsProps> = ({
     e.preventDefault();
     if (!contactName.trim() || !contactMsg.trim()) return;
 
-    const senderEmail = contactEmail.trim() || effectiveUser?.email || 'scholar@example.com';
+    const senderEmail = contactEmail.trim() || 'scholar@example.com';
     const mailtoUrl = `mailto:${OFFICIAL_EMAIL}?subject=${encodeURIComponent(
       `[Math Lab] ${contactSubject}`
     )}&body=${encodeURIComponent(
@@ -198,7 +195,7 @@ export const SearchAndUtilityModals: React.FC<SearchAndUtilityModalsProps> = ({
                       required
                       value={contactName}
                       onChange={(e) => setContactName(e.target.value)}
-                      placeholder={effectiveUser?.displayName || "Ada Lovelace"}
+                      placeholder="Ada Lovelace"
                       className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#0077c8]"
                     />
                   </div>
@@ -208,7 +205,7 @@ export const SearchAndUtilityModals: React.FC<SearchAndUtilityModalsProps> = ({
                       type="email"
                       value={contactEmail}
                       onChange={(e) => setContactEmail(e.target.value)}
-                      placeholder={effectiveUser?.email || "scholar@example.com"}
+                      placeholder="scholar@example.com"
                       className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#0077c8]"
                     />
                   </div>

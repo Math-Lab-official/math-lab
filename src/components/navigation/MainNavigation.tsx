@@ -1,49 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { LabTab } from '../../types';
-import { 
-  Menu, 
-  X, 
-  Sparkles, 
-  Calendar, 
-  Send, 
-  Building2, 
-  Users, 
-  Clock, 
-  BookOpen, 
-  ArrowRight,
-  Sun,
-  Moon,
-  Award,
-  Activity
-} from 'lucide-react';
-import { STAFF_APPLICATION_URL } from '../../data/teamData';
+import { Menu, X, Sun, Moon, Search } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-import { getStudentProgress, getOverallProgressStats } from '../../utils/studentProgress';
 
 interface MainNavigationProps {
   currentTab: LabTab;
   onSelectTab: (tab: LabTab) => void;
-  onOpenProgress?: () => void;
-  onOpenLogin?: () => void;
+  onOpenSearch: () => void;
 }
 
 export const MainNavigation: React.FC<MainNavigationProps> = ({
   currentTab,
   onSelectTab,
-  onOpenProgress,
-  onOpenLogin,
+  onOpenSearch,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const [stats, setStats] = useState(() => getOverallProgressStats(getStudentProgress()));
-
-  useEffect(() => {
-    const handleUpdate = () => {
-      setStats(getOverallProgressStats(getStudentProgress()));
-    };
-    window.addEventListener('math_lab_progress_updated', handleUpdate);
-    return () => window.removeEventListener('math_lab_progress_updated', handleUpdate);
-  }, []);
 
   const handleNavClick = (tab: LabTab) => {
     onSelectTab(tab);
@@ -51,207 +23,131 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  interface NavItem {
-    id: LabTab;
-    label: string;
-    icon?: React.ComponentType<{ className?: string }>;
-    badge?: string;
-  }
-
-  const navItems: NavItem[] = [
-    { id: 'overview' as LabTab, label: 'Home' },
-    { id: 'investigations' as LabTab, label: 'National Investigations', icon: Calendar },
-    { id: 'laboratories' as LabTab, label: 'Digital Math Lab', icon: Activity },
-    { id: 'share-work' as LabTab, label: 'Share Your Work', icon: Send },
-    { id: 'local-labs' as LabTab, label: 'Local Labs', icon: Building2 },
-    { id: 'team' as LabTab, label: 'Meet the Team', icon: Users },
-    { id: 'about' as LabTab, label: 'About', icon: BookOpen },
+  const navItems: { id: LabTab; label: string }[] = [
+    { id: 'overview', label: 'Home' },
+    { id: 'investigations', label: 'Investigations' },
+    { id: 'laboratories', label: 'Digital Lab' },
+    { id: 'share-work', label: 'Submit' },
+    { id: 'local-labs', label: 'Local Labs' },
+    { id: 'team', label: 'Team' },
+    { id: 'about', label: 'About' },
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800 shadow-2xs transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          
-          {/* Logo & Brand Identity */}
+    <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between gap-6 h-16">
+          {/* Zone 1: Clean Brand Wordmark */}
           <button
             onClick={() => handleNavClick('overview')}
-            className="flex items-center gap-3 text-left group transition-transform duration-150 transform hover:scale-[1.01]"
+            className="flex items-center gap-2.5 text-left group whitespace-nowrap shrink-0"
           >
-            <div className="relative w-11 h-11 rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-700 bg-[#0a192f] shrink-0">
+            <div className="w-8 h-8 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-[#0a192f] shrink-0">
               <img
                 src="/assets/aistudio/unnamed_7f1902d3.jpg"
                 alt="Math Lab Logo"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 ring-1 ring-inset ring-amber-400/30 rounded-2xl pointer-events-none" />
             </div>
-            <div className="flex flex-col">
-              <span className="font-display-bold text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white group-hover:text-[#0077c8] dark:group-hover:text-sky-400 transition-colors leading-none">
-                MATH LAB
-              </span>
-            </div>
+            <span className="font-display-bold text-lg font-extrabold tracking-tight text-slate-900 dark:text-white group-hover:text-[#0077c8] dark:group-hover:text-sky-400 transition-colors">
+              MATH LAB
+            </span>
           </button>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 text-xs xl:text-[13px] font-semibold text-slate-700 dark:text-slate-300">
+          {/* Zone 2: Clean Single-Line Nav Links */}
+          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-400">
             {navItems.map((item) => {
-              const isActive = currentTab === item.id || (item.id === 'laboratories' && ['graphing', 'geometry', 'calculus', 'linear-algebra', 'probability', 'discrete'].includes(currentTab));
-              const Icon = item.icon;
+              const isActive =
+                currentTab === item.id ||
+                (item.id === 'laboratories' &&
+                  ['graphing', 'geometry', 'calculus', 'linear-algebra', 'probability', 'discrete'].includes(currentTab));
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`px-2 xl:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                  className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap shrink-0 ${
                     isActive
-                      ? 'text-[#0077c8] dark:text-sky-400 bg-sky-50 dark:bg-sky-950/50 font-bold'
-                      : 'hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-slate-800/60'
+                      ? 'text-[#0077c8] dark:text-sky-400 font-semibold bg-sky-50/80 dark:bg-sky-950/50'
+                      : 'hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  {Icon && <Icon className="w-3.5 h-3.5 opacity-70" />}
-                  <span>{item.label}</span>
-                  {item.badge && (
-                    <span className="text-[10px] text-amber-700 dark:text-amber-400 font-medium">
-                      · {item.badge}
-                    </span>
-                  )}
+                  {item.label}
                 </button>
               );
             })}
           </nav>
 
-          {/* Right Action Buttons */}
-          <div className="hidden lg:flex items-center gap-2 shrink-0">
-            {/* Progress Button */}
-            {onOpenProgress && (
-              <button
-                onClick={onOpenProgress}
-                className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs flex items-center gap-1.5 transition shadow-2xs shrink-0"
-                title="Open Student Research Portfolio & Progress"
-              >
-                <Award className="w-4 h-4 text-[#0077c8] dark:text-sky-400" />
-                <span>Portfolio</span>
-                <span className="font-mono text-xs text-[#0077c8] dark:text-sky-400 font-bold">
-                  {stats.overallPercentage}%
-                </span>
-              </button>
-            )}
+          {/* Zone 3: Minimal Utility Controls (Search + Theme) */}
+          <div className="hidden md:flex items-center gap-2 shrink-0">
+            <button
+              onClick={onOpenSearch}
+              className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              title="Search"
+              aria-label="Search"
+            >
+              <Search className="w-4 h-4" />
+            </button>
 
-            {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition shadow-2xs shrink-0"
+              className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               aria-label="Toggle Dark Mode"
             >
               {theme === 'dark' ? (
                 <Sun className="w-4 h-4 text-amber-400" />
               ) : (
-                <Moon className="w-4 h-4 text-slate-600" />
+                <Moon className="w-4 h-4" />
               )}
             </button>
           </div>
 
-          {/* Mobile Menu Toggle Button */}
-          <div className="flex items-center gap-2 lg:hidden">
-            {onOpenProgress && (
-              <button
-                onClick={onOpenProgress}
-                className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200"
-                title="Progress"
-              >
-                <Award className="w-4 h-4 text-[#0077c8] dark:text-sky-400" />
-              </button>
-            )}
-
+          {/* Mobile Controls */}
+          <div className="flex items-center gap-1 md:hidden">
+            <button
+              onClick={onOpenSearch}
+              className="p-2 rounded-lg text-slate-600 dark:text-slate-300"
+              aria-label="Search"
+            >
+              <Search className="w-4 h-4" />
+            </button>
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200"
-              title="Toggle Dark Mode"
+              className="p-2 rounded-lg text-slate-600 dark:text-slate-300"
+              aria-label="Toggle Dark Mode"
             >
-              {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+              {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
             </button>
-
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-              aria-label="Toggle Navigation Menu"
+              className="p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+              aria-label="Toggle Menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-2 pb-6 space-y-1.5 shadow-xl animate-in slide-in-from-top duration-150">
+        <div className="md:hidden bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 px-4 py-3 space-y-1 shadow-lg">
           {navItems.map((item) => {
             const isActive = currentTab === item.id;
-            const Icon = item.icon;
             return (
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`w-full text-left px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between transition ${
+                className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition ${
                   isActive
-                    ? 'bg-sky-50 dark:bg-sky-950/60 text-[#0077c8] dark:text-sky-400 font-extrabold'
-                    : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                    ? 'bg-sky-50 dark:bg-sky-950/60 text-[#0077c8] dark:text-sky-400 font-semibold'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  {Icon && <Icon className="w-4 h-4 opacity-70" />}
-                  <span>{item.label}</span>
-                </div>
-                {item.badge && (
-                  <span className="text-[9px] font-bold uppercase bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-md">
-                    {item.badge}
-                  </span>
-                )}
+                {item.label}
               </button>
             );
           })}
-
-          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
-            {onOpenProgress && (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenProgress();
-                }}
-                className="w-full py-2.5 px-4 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl flex items-center justify-between"
-              >
-                <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-[#0077c8] dark:text-sky-400" />
-                  <span>Student Research Portfolio</span>
-                </div>
-                <span className="font-mono text-xs text-[#0077c8] dark:text-sky-400 font-bold">
-                  {stats.overallPercentage}%
-                </span>
-              </button>
-            )}
-
-            {onOpenLogin && (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenLogin();
-                }}
-                className="w-full py-2.5 px-4 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-2 transition"
-              >
-                <span>Math Lab Scholar Sign In</span>
-              </button>
-            )}
-
-            <a
-              href={STAFF_APPLICATION_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-2.5 px-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-xs rounded-xl flex items-center justify-center gap-2 transition"
-            >
-              <span>Apply for Staff Committees</span>
-            </a>
-          </div>
         </div>
       )}
     </header>

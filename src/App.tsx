@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { LabTab } from './types';
 import { ThemeProvider } from './context/ThemeContext';
-import { AuthProvider } from './context/AuthContext';
-import { TopUtilityBar } from './components/navigation/TopUtilityBar';
 import { MainNavigation } from './components/navigation/MainNavigation';
 import { SearchAndUtilityModals } from './components/navigation/SearchAndUtilityModals';
-import { LoginModal } from './components/auth/LoginModal';
 import { HomePage } from './components/landing/HomePage';
 import { NationalInvestigationsPage } from './components/investigations/NationalInvestigationsPage';
 import { ShareYourWorkPage } from './components/submission/ShareYourWorkPage';
@@ -20,7 +17,6 @@ import { CalculusLab } from './components/labs/CalculusLab';
 import { LinearAlgebraLab } from './components/labs/LinearAlgebraLab';
 import { ProbabilityLab } from './components/labs/ProbabilityLab';
 import { DiscreteMathLab } from './components/labs/DiscreteMathLab';
-import { StudentProgressModal } from './components/progress/StudentProgressModal';
 import { StudentLearningHub } from './components/education/StudentLearningHub';
 import { FormulaReference } from './components/FormulaReference';
 import { DailyChallenge } from './components/DailyChallenge';
@@ -30,36 +26,24 @@ import { Footer } from './components/Footer';
 export const AppContent: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<LabTab>('overview');
   const [utilityModal, setUtilityModal] = useState<'search' | 'support' | 'newsletter' | null>(null);
-  const [isProgressModalOpen, setIsProgressModalOpen] = useState<boolean>(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#faf7f2] dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans selection:bg-[#0077c8]/20 selection:text-slate-900 dark:selection:text-white transition-colors">
-      {/* 1. Top Utility Bar with Real Links, Dark Mode Toggle, and Progress Tracker */}
-      <TopUtilityBar
-        onOpenSearch={() => setUtilityModal('search')}
-        onOpenContact={() => setUtilityModal('support')}
-        onOpenProgress={() => setIsProgressModalOpen(true)}
-        onOpenLogin={() => setIsLoginModalOpen(true)}
-      />
-
-      {/* 2. Main Navigation Header */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#f8fafc] dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans selection:bg-[#0077c8]/20 selection:text-slate-900 dark:selection:text-white transition-colors">
+      {/* Unified Clean Navigation Header */}
       <MainNavigation
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
-        onOpenProgress={() => setIsProgressModalOpen(true)}
-        onOpenLogin={() => setIsLoginModalOpen(true)}
+        onOpenSearch={() => setUtilityModal('search')}
       />
 
-      {/* 3. Main Content Router */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content Router */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {currentTab === 'overview' && (
           <HomePage onSelectTab={setCurrentTab} />
         )}
         {currentTab === 'investigations' && (
           <NationalInvestigationsPage
             onNavigate={(tab) => setCurrentTab(tab)}
-            onOpenProgress={() => setIsProgressModalOpen(true)}
           />
         )}
         {currentTab === 'share-work' && (
@@ -77,10 +61,7 @@ export const AppContent: React.FC = () => {
 
         {/* Interactive Mathematics Laboratories Suite */}
         {currentTab === 'laboratories' && (
-          <LaboratoriesHub
-            onSelectLab={setCurrentTab}
-            onOpenProgress={() => setIsProgressModalOpen(true)}
-          />
+          <LaboratoriesHub onSelectLab={setCurrentTab} />
         )}
         {currentTab === 'graphing' && (
           <LabContainer
@@ -88,7 +69,6 @@ export const AppContent: React.FC = () => {
             title="Function & Graphing Studio"
             category="Continuous Analysis"
             onBack={() => setCurrentTab('laboratories')}
-            onOpenProgress={() => setIsProgressModalOpen(true)}
           >
             <GraphingLab />
           </LabContainer>
@@ -99,7 +79,6 @@ export const AppContent: React.FC = () => {
             title="Geometry & Unit Circle Studio"
             category="Trigonometry & Invariants"
             onBack={() => setCurrentTab('laboratories')}
-            onOpenProgress={() => setIsProgressModalOpen(true)}
           >
             <GeometryLab />
           </LabContainer>
@@ -110,7 +89,6 @@ export const AppContent: React.FC = () => {
             title="Calculus & Riemann Sandbox"
             category="Integration & Series"
             onBack={() => setCurrentTab('laboratories')}
-            onOpenProgress={() => setIsProgressModalOpen(true)}
           >
             <CalculusLab />
           </LabContainer>
@@ -121,7 +99,6 @@ export const AppContent: React.FC = () => {
             title="Linear Algebra Grid Studio"
             category="Matrix Transformations"
             onBack={() => setCurrentTab('laboratories')}
-            onOpenProgress={() => setIsProgressModalOpen(true)}
           >
             <LinearAlgebraLab />
           </LabContainer>
@@ -132,7 +109,6 @@ export const AppContent: React.FC = () => {
             title="Statistics & Probability Lab"
             category="Distributions & Monte Carlo"
             onBack={() => setCurrentTab('laboratories')}
-            onOpenProgress={() => setIsProgressModalOpen(true)}
           >
             <ProbabilityLab />
           </LabContainer>
@@ -143,7 +119,6 @@ export const AppContent: React.FC = () => {
             title="Number Theory & Discrete Math"
             category="Primes & Modular Rings"
             onBack={() => setCurrentTab('laboratories')}
-            onOpenProgress={() => setIsProgressModalOpen(true)}
           >
             <DiscreteMathLab />
           </LabContainer>
@@ -164,30 +139,14 @@ export const AppContent: React.FC = () => {
         )}
       </main>
 
-      {/* 4. Single Unified Footer */}
+      {/* Single Unified Footer */}
       <Footer onSelectTab={setCurrentTab} />
 
-      {/* 5. Utility Modals (Search, Contact) */}
+      {/* Utility Modals (Search, Contact) */}
       <SearchAndUtilityModals
         activeModal={utilityModal}
         onClose={() => setUtilityModal(null)}
         onSelectTab={setCurrentTab}
-      />
-
-      {/* 6. Student Research Portfolio & Progress Modal */}
-      <StudentProgressModal
-        isOpen={isProgressModalOpen}
-        onClose={() => setIsProgressModalOpen(false)}
-        onNavigateTab={(tab) => {
-          setCurrentTab(tab);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-      />
-
-      {/* 7. Real Scholar Login & Account Modal */}
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
       />
     </div>
   );
@@ -196,9 +155,7 @@ export const AppContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
+      <AppContent />
     </ThemeProvider>
   );
 };

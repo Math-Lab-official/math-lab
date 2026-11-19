@@ -3,7 +3,6 @@ import { jsPDF } from 'jspdf';
 import { evaluateMathFunction } from '../utils/mathUtils';
 import { NotebookEntry, FormulaItem } from '../types';
 import { FORMULA_DATABASE } from '../data/formulas';
-import { useAuth } from '../context/AuthContext';
 import { BlockMath } from './common/MathView';
 import {
   Plus,
@@ -70,8 +69,6 @@ const sanitizeMathForPdf = (str: string): string => {
 };
 
 export const LabNotebook: React.FC = () => {
-  const { effectiveUser } = useAuth();
-
   const [entries, setEntries] = useState<NotebookEntry[]>(() => {
     try {
       const saved = localStorage.getItem('math_lab_notes');
@@ -229,8 +226,6 @@ export const LabNotebook: React.FC = () => {
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
 
-      const scholarName = effectiveUser?.displayName || 'Student Scholar';
-      const scholarEmail = effectiveUser?.email || 'Math Lab Researcher';
       const exportDate = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
@@ -238,7 +233,7 @@ export const LabNotebook: React.FC = () => {
         day: 'numeric',
       });
 
-      doc.text(`Scholar: ${sanitizeMathForPdf(scholarName)} (${sanitizeMathForPdf(scholarEmail)})`, margin, currentY);
+      doc.text(`Math Lab Student Research Notebook`, margin, currentY);
       doc.text(`Exported: ${exportDate}  •  Total Records: ${notesToExport.length}`, margin, currentY + 14);
 
       currentY += 30;
