@@ -27,6 +27,16 @@ export const AppContent: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<LabTab>('overview');
   const [utilityModal, setUtilityModal] = useState<'search' | 'support' | 'newsletter' | null>(null);
 
+  const isFullBleedPage = [
+    'overview',
+    'investigations',
+    'laboratories',
+    'local-labs',
+    'team',
+    'about',
+    'share-work',
+  ].includes(currentTab);
+
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#f8fafc] dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans selection:bg-[#0077c8]/20 selection:text-slate-900 dark:selection:text-white transition-colors">
       {/* Unified Clean Navigation Header */}
@@ -34,35 +44,38 @@ export const AppContent: React.FC = () => {
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
         onOpenSearch={() => setUtilityModal('search')}
+        isTransparentHero={isFullBleedPage}
       />
 
       {/* Main Content Router */}
+      {isFullBleedPage ? (
+        <main className="flex-1 w-full">
+          {currentTab === 'overview' && (
+            <HomePage onSelectTab={setCurrentTab} />
+          )}
+          {currentTab === 'investigations' && (
+            <NationalInvestigationsPage
+              onNavigate={(tab) => setCurrentTab(tab)}
+            />
+          )}
+          {currentTab === 'share-work' && (
+            <ShareYourWorkPage onNavigateHome={() => setCurrentTab('overview')} />
+          )}
+          {currentTab === 'local-labs' && (
+            <StartLocalLabPage />
+          )}
+          {currentTab === 'team' && (
+            <MeetTheTeamPage />
+          )}
+          {currentTab === 'about' && (
+            <AboutMathLabPage onNavigate={(tab) => setCurrentTab(tab)} />
+          )}
+          {currentTab === 'laboratories' && (
+            <LaboratoriesHub onSelectLab={setCurrentTab} />
+          )}
+        </main>
+      ) : (
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {currentTab === 'overview' && (
-          <HomePage onSelectTab={setCurrentTab} />
-        )}
-        {currentTab === 'investigations' && (
-          <NationalInvestigationsPage
-            onNavigate={(tab) => setCurrentTab(tab)}
-          />
-        )}
-        {currentTab === 'share-work' && (
-          <ShareYourWorkPage onNavigateHome={() => setCurrentTab('overview')} />
-        )}
-        {currentTab === 'local-labs' && (
-          <StartLocalLabPage />
-        )}
-        {currentTab === 'team' && (
-          <MeetTheTeamPage />
-        )}
-        {currentTab === 'about' && (
-          <AboutMathLabPage onNavigate={(tab) => setCurrentTab(tab)} />
-        )}
-
-        {/* Interactive Mathematics Laboratories Suite */}
-        {currentTab === 'laboratories' && (
-          <LaboratoriesHub onSelectLab={setCurrentTab} />
-        )}
         {currentTab === 'graphing' && (
           <LabContainer
             labId="graphing"
@@ -138,6 +151,7 @@ export const AppContent: React.FC = () => {
           <LabNotebook />
         )}
       </main>
+      )}
 
       {/* Single Unified Footer */}
       <Footer onSelectTab={setCurrentTab} />

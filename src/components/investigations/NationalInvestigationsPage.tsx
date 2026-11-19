@@ -21,6 +21,7 @@ import {
 import { NATIONAL_INVESTIGATIONS } from '../../data/investigationsData';
 import { LabTab } from '../../types';
 import { LatticeColoringWorkbench } from './LatticeColoringWorkbench';
+import { PageHero } from '../common/PageHero';
 import winterSierpinskiImg from '../../assets/images/winter_sierpinski_fractal_1795108888358.jpg';
 import { 
   getStudentProgress, 
@@ -135,85 +136,25 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
   };
 
   return (
-    <div className="space-y-8 py-2">
-      {/* 1. Page Header with Visual Blueprint Showcase */}
-      <div className="bg-[#0a1426] text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl">
-        <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
-          
-          {/* Left: Text & Editorial Header */}
-          <div className="p-8 sm:p-12 lg:col-span-7 space-y-5">
-            <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-sky-400 font-semibold">
-              <Compass className="w-3.5 h-3.5" />
-              <span>Monthly Flagship Program</span>
-              <span aria-hidden="true" className="text-slate-600">·</span>
-              <span>5 Depth Levels</span>
-              <span aria-hidden="true" className="text-slate-600">·</span>
-              <span>Open Access Inquiry</span>
-            </div>
+    <div className="transition-colors">
+      <PageHero
+        title="National Mathematical Investigations."
+        subtitle="Monthly open-access inquiries across five levels of mathematical depth — featuring December 2026: Pascal's Triangle & the Sierpiński Fractal."
+        image={winterSierpinskiImg}
+        imageAlt="Crystalline winter Sierpiński fractal"
+        actions={
+          <button
+            onClick={downloadProblemPack}
+            className="px-6 py-3 bg-white hover:bg-slate-100 text-[#102c57] font-semibold text-xs sm:text-sm rounded-full shadow-xs transition flex items-center gap-2"
+          >
+            <FileText className="w-4 h-4" />
+            <span>Download Problem Pack (.md)</span>
+          </button>
+        }
+        footnote="December 2026 Investigation — Coming Soon! Preview all 5 depth levels below."
+      />
 
-            <h1 className="font-serif-editorial text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-              National Mathematical Investigations
-            </h1>
-
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Each month, Math Lab releases a new mathematical investigation that students can explore at five different levels of depth. Students go beyond routine calculations to look for patterns, test their ideas, build arguments, and work toward their own discoveries. Each investigation offers a different way to approach the same question, leaving room for students to think, explore, and share what they find.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <button
-                onClick={downloadProblemPack}
-                className="px-4 py-2 bg-[#0077c8] hover:bg-[#005fa3] text-white font-semibold text-xs rounded-xl shadow-xs transition flex items-center gap-2"
-              >
-                <FileText className="w-4 h-4" />
-                <span>Download Problem Pack (.md)</span>
-              </button>
-
-              {onOpenProgress && (
-                <button
-                  onClick={onOpenProgress}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs rounded-xl transition flex items-center gap-2"
-                >
-                  <Award className="w-4 h-4 text-amber-400" />
-                  <span>My Research Portfolio</span>
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Right: December 2026 Winter Thematic Callout */}
-          <div className="relative overflow-hidden lg:col-span-5 p-6 lg:p-8 border-t lg:border-t-0 lg:border-l border-cyan-400/20 bg-[#0c1f36]">
-            <img
-              src={winterSierpinskiImg}
-              alt="Crystalline winter Sierpiński fractal"
-              referrerPolicy="no-referrer"
-              className="absolute inset-0 w-full h-full object-cover opacity-35"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/95 via-[#0f2542]/75 to-[#0a192f]/50" />
-
-            <div className="relative rounded-2xl border border-cyan-300/25 bg-white/[0.06] backdrop-blur-xs p-6 space-y-3 shadow-lg">
-              <div className="flex items-center justify-between text-[11px] font-mono text-cyan-300 font-bold uppercase tracking-wider">
-                <span className="flex items-center gap-1.5">
-                  <Snowflake className="w-3.5 h-3.5 text-cyan-300" />
-                  National Investigation
-                </span>
-                <span className="text-sky-200/90">December 2026</span>
-              </div>
-              <h3 className="font-serif-editorial text-xl font-bold text-white leading-snug">
-                December Investigation — Coming Soon!
-              </h3>
-              <p className="text-xs text-slate-200 leading-relaxed">
-                Our winter flagship problem—<span className="font-semibold text-cyan-200">Pascal&apos;s Triangle, Hidden Patterns &amp; Binomial Invariants</span>—connects odd/even colorings to Lucas&apos; theorem and the Sierpiński fractal. Preview it or explore past inquiries below.
-              </p>
-              <div className="pt-1 flex items-center gap-2">
-                <span className="text-[11px] font-mono text-cyan-300">
-                  Select an inquiry below to explore all 5 depth levels
-                </span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
 
       {/* Main Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -660,6 +601,7 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
             </div>
           </article>
         </div>
+      </div>
       </div>
     </div>
   );
