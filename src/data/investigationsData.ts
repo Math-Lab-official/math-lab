@@ -3,7 +3,7 @@ import { NationalInvestigation } from '../types';
 export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
   {
     id: 'pascals-triangle',
-    month: 'November',
+    month: 'December',
     year: 2026,
     title: "Pascal's Triangle, Hidden Patterns & Binomial Invariants",
     subtitle: "From coloring odd and even numbers to Lucas' theorem and the Sierpiński fractal",
@@ -17,7 +17,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
       'Polynomial Algebra over Finite Moduli',
       "Lucas' Theorem, Kummer's Theorem & Sierpiński Fractals"
     ],
-    submissionDeadline: 'November 30, 2026',
+    submissionDeadline: 'December 31, 2026',
     facilitatorTips: [
       'Start by having students construct rows 0–8 by hand and shade every odd entry with a highlighter to see the emerging triangles.',
       'Encourage students to write row numbers in binary alongside their odd-entry counts to discover the 2^s pattern.',

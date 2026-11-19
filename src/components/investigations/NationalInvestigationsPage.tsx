@@ -15,7 +15,8 @@ import {
   Award,
   Bookmark,
   Send,
-  HelpCircle
+  HelpCircle,
+  Snowflake
 } from 'lucide-react';
 import { NATIONAL_INVESTIGATIONS } from '../../data/investigationsData';
 import { LabTab } from '../../types';
@@ -178,24 +179,37 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* Right: Next Inquiry Status Callout */}
-          <div className="lg:col-span-5 p-6 lg:p-8 border-t lg:border-t-0 lg:border-l border-slate-800/80 bg-slate-900/60">
-            <div className="rounded-2xl border border-slate-700/80 bg-slate-950/80 p-6 space-y-3 shadow-lg">
-              <div className="flex items-center justify-between text-[11px] font-mono text-amber-300 font-bold uppercase tracking-wider">
+          {/* Right: December 2026 Winter Thematic Callout */}
+          <div className="relative overflow-hidden lg:col-span-5 p-6 lg:p-8 border-t lg:border-t-0 lg:border-l border-cyan-400/20 bg-gradient-to-br from-[#0c1f36] via-[#132c4c] to-[#0f2440]">
+            {/* Subtle Winter Crystalline Geometric Background */}
+            <div className="pointer-events-none absolute inset-0 opacity-[0.08]" aria-hidden="true">
+              <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="winter-inv-grid" width="48" height="42" patternUnits="userSpaceOnUse">
+                    <path d="M24 0 L48 14 L48 28 L24 42 L0 28 L0 14 Z" fill="none" stroke="#7dd3fc" strokeWidth="1" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#winter-inv-grid)" />
+              </svg>
+            </div>
+            <div className="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-cyan-400/15 blur-2xl" aria-hidden="true" />
+
+            <div className="relative rounded-2xl border border-cyan-300/25 bg-white/[0.06] backdrop-blur-xs p-6 space-y-3 shadow-lg">
+              <div className="flex items-center justify-between text-[11px] font-mono text-cyan-300 font-bold uppercase tracking-wider">
                 <span className="flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  Next Investigation
+                  <Snowflake className="w-3.5 h-3.5 text-cyan-300" />
+                  National Investigation
                 </span>
-                <span className="text-slate-400">December 2026</span>
+                <span className="text-sky-200/90">December 2026</span>
               </div>
               <h3 className="font-serif-editorial text-xl font-bold text-white leading-snug">
                 December Investigation — Coming Soon!
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                We don’t have a current November investigation, but our December flagship problem is on the way! In the meantime, explore all previous inquiries in the Monthly Archive below.
+              <p className="text-xs text-slate-200 leading-relaxed">
+                Our winter flagship problem—<span className="font-semibold text-cyan-200">Pascal&apos;s Triangle, Hidden Patterns &amp; Binomial Invariants</span>—connects odd/even colorings to Lucas&apos; theorem and the Sierpiński fractal. Preview it or explore past inquiries below.
               </p>
-              <div className="pt-1">
-                <span className="text-[11px] font-mono text-sky-400">
+              <div className="pt-1 flex items-center gap-2">
+                <span className="text-[11px] font-mono text-cyan-300">
                   Select an inquiry below to explore all 5 depth levels
                 </span>
               </div>

@@ -10,7 +10,8 @@ import {
   Layers,
   CircleDot,
   Grid,
-  Binary
+  Binary,
+  Snowflake
 } from 'lucide-react';
 import { NATIONAL_INVESTIGATIONS } from '../../data/investigationsData';
 
@@ -150,47 +151,67 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
         </div>
       </section>
 
-      {/* 2. National Investigation Section — "Coming Soon" for December */}
-      <section className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xs transition-colors space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-600 dark:text-amber-400 font-semibold">
-              <Calendar className="w-3.5 h-3.5" />
+      {/* 2. National Investigation Section — December 2026 Winter Thematic Banner */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#0c1f36] via-[#132c4c] to-[#0f2440] text-white rounded-3xl border border-cyan-400/20 p-6 sm:p-8 shadow-lg space-y-6">
+        {/* Subtle Winter Crystalline & Fractal Geometric Background Pattern */}
+        <div className="pointer-events-none absolute inset-0 opacity-[0.07]" aria-hidden="true">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="winter-hex-grid" width="60" height="52" patternUnits="userSpaceOnUse">
+                <path d="M30 0 L60 17.3 L60 34.6 L30 52 L0 34.6 L0 17.3 Z" fill="none" stroke="#7dd3fc" strokeWidth="1" />
+                <circle cx="30" cy="26" r="2" fill="#bae6fd" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#winter-hex-grid)" />
+          </svg>
+        </div>
+        <div className="pointer-events-none absolute -top-16 -right-16 w-64 h-64 rounded-full bg-cyan-400/15 blur-3xl" aria-hidden="true" />
+        <div className="pointer-events-none absolute -bottom-20 -left-16 w-64 h-64 rounded-full bg-sky-500/10 blur-3xl" aria-hidden="true" />
+
+        <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-cyan-300/15">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-cyan-300 font-semibold">
+              <Snowflake className="w-3.5 h-3.5 text-cyan-300" />
               <span>National Investigation</span>
               <span aria-hidden="true">·</span>
               <span>December 2026</span>
             </div>
-            <h2 className="font-serif-editorial text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+            <h2 className="font-serif-editorial text-2xl sm:text-3xl font-bold text-white tracking-tight">
               December Investigation — Coming Soon!
             </h2>
           </div>
 
           <button
             onClick={() => onSelectTab('investigations')}
-            className="px-4 py-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 font-bold text-xs rounded-xl transition flex items-center gap-2 shrink-0 self-start sm:self-auto"
+            className="px-4 py-2.5 bg-cyan-400/15 hover:bg-cyan-400/25 text-cyan-100 border border-cyan-300/30 font-bold text-xs rounded-xl transition flex items-center gap-2 shrink-0 self-start sm:self-auto backdrop-blur-xs"
           >
             <span>View Monthly Archive</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* Coming Soon Callout Card (No heavy image) */}
-        <div className="bg-gradient-to-br from-slate-50 to-sky-50/50 dark:from-slate-800/60 dark:to-slate-800/30 border border-slate-200 dark:border-slate-700/80 rounded-2xl p-6 sm:p-8 space-y-4">
-          <div className="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-mono text-xs font-bold uppercase tracking-wider">
-            <Sparkles className="w-4 h-4" />
-            <span>Next Inquiry in Preparation</span>
+        {/* Winter Thematic Callout Card */}
+        <div className="relative bg-white/[0.06] backdrop-blur-xs border border-cyan-200/15 rounded-2xl p-6 sm:p-7 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-cyan-300 font-mono text-xs font-bold uppercase tracking-wider">
+              <Sparkles className="w-4 h-4 text-sky-300" />
+              <span>Winter Edition · Preview Now Open</span>
+            </div>
+            <span className="text-[11px] font-mono text-sky-200/80">
+              Pascal&apos;s Triangle, Hidden Patterns &amp; Binomial Invariants
+            </span>
           </div>
 
-          <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed max-w-2xl">
-            We don’t have an active investigation for November, but our December investigation is coming soon! In the meantime, you can explore and solve all past inquiries in our monthly archive.
+          <p className="text-sm sm:text-base text-slate-200 leading-relaxed max-w-2xl">
+            Our December winter investigation explores how a single addition rule gives rise to binomial invariants, Lucas&apos; theorem, and the crystalline geometry of the Sierpiński fractal. Preview the December problem pack or explore past inquiries in our monthly archive.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <button
               onClick={() => onSelectTab('investigations')}
-              className="px-4 py-2 bg-[#0077c8] hover:bg-[#005fa3] text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-xs"
+              className="px-4 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-extrabold rounded-xl transition flex items-center gap-1.5 shadow-sm"
             >
-              <span>Explore Archived Inquiries ({archivedInvestigations.length})</span>
+              <span>Explore December &amp; Archive ({archivedInvestigations.length})</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
