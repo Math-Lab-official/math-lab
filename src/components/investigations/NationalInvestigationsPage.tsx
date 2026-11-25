@@ -11,7 +11,6 @@ import {
   Target,
   Cpu,
   ShieldCheck,
-  ChevronDown,
   Award,
   Bookmark,
   Send,
@@ -46,9 +45,6 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
   );
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeLevelTab, setActiveLevelTab] = useState<number>(1);
-  const [showFacilitatorNotes, setShowFacilitatorNotes] = useState<boolean>(false);
-  const [showAnswerKey, setShowAnswerKey] = useState<boolean>(false);
-  const [showKeyConcepts, setShowKeyConcepts] = useState<boolean>(false);
   const [activeViewMode, setActiveViewMode] = useState<'levels' | 'workbench'>('levels');
   const [userNote, setUserNote] = useState<string>('');
   const [progressState, setProgressState] = useState<StudentProgressState>(getStudentProgress());
@@ -73,7 +69,6 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
 
   useEffect(() => {
     setUserNote(currentLevelProgress.notes || '');
-    setShowAnswerKey(false);
   }, [activeLevelTab, activeInvestigation.id]);
 
   const categories = ['All', 'Discrete & Combinatorics', 'Geometry & Invariants', 'Number Theory & Algebra'];
@@ -104,79 +99,12 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
     setProgressState(next);
   };
 
-  const hasAnswerKey = activeInvestigation.levels.some((l) => Boolean(l.workedSolution));
-
-  const downloadAnswerKey = () => {
-    let md = `# Math Lab — Official Answer Key & Worked Solutions\n`;
-    md += `## ${activeInvestigation.title}\n`;
-    md += `*Edition:* ${activeInvestigation.month} ${activeInvestigation.year}${activeInvestigation.editionNumber ? ` (${activeInvestigation.editionNumber})` : ''} | *Topic:* ${activeInvestigation.category}\n`;
-    if (activeInvestigation.answerKeyAuthor) {
-      md += `*Answer Key Author:* ${activeInvestigation.answerKeyAuthor}${activeInvestigation.datePrepared ? ` | *Date Prepared:* ${activeInvestigation.datePrepared}` : ''}\n`;
-    }
-    md += `*Intended for:* Math Lab National Team and Local Facilitators\n\n`;
-    md += `### Central Concept Summary\n> ${activeInvestigation.theCoreQuestion}\n\n`;
-
-    if (activeInvestigation.keyDefinitions?.length) {
-      md += `### Key Definitions\n`;
-      activeInvestigation.keyDefinitions.forEach((d) => {
-        md += `- **${d.term}:** ${d.definition}\n`;
-      });
-      md += `\n`;
-    }
-
-    if (activeInvestigation.keyFormulas?.length) {
-      md += `### Key Formulas & Results\n`;
-      activeInvestigation.keyFormulas.forEach((f) => {
-        md += `- ${f}\n`;
-      });
-      md += `\n`;
-    }
-
-    md += `### Problems and Solutions\n\n`;
-    activeInvestigation.levels.forEach((lvl) => {
-      const ws = lvl.workedSolution;
-      if (!ws) return;
-      md += `#### Problem ${lvl.level}: ${ws.tierLabel}\n`;
-      md += `**Focus:** ${ws.focus}\n\n`;
-      md += `**Problem:** ${ws.problemStatement}\n\n`;
-      md += `**Final Answer:** ${ws.finalAnswer}\n\n`;
-      md += `**Step-by-Step Solution:**\n`;
-      ws.steps.forEach((s, i) => {
-        md += `${i + 1}. ${s}\n`;
-      });
-      md += `\n**Mathematical Reasoning:** ${ws.reasoning}\n\n`;
-      if (ws.alternativeMethod) md += `**Alternative Method:** ${ws.alternativeMethod}\n\n`;
-      if (ws.extensions) md += `**Extensions:** ${ws.extensions}\n\n`;
-      if (ws.supportingCalculation) md += `**Supporting Calculations:** ${ws.supportingCalculation}\n\n`;
-      md += `---\n\n`;
-    });
-
-    md += `Website: https://mathlab-official.netlify.app · Email: mathlab.official12@gmail.com · Instagram: @mathlabofficial_\n`;
-
-    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `mathlab-answer-key-${activeInvestigation.id}.md`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  };
-
   const downloadProblemPack = () => {
     let md = `# Math Lab — National Investigation\n`;
     md += `## ${activeInvestigation.title}\n`;
-    md += `*Published:* ${activeInvestigation.month} ${activeInvestigation.year}${activeInvestigation.editionNumber ? ` (${activeInvestigation.editionNumber})` : ''} | *Category:* ${activeInvestigation.category}\n\n`;
+    md += `*Published:* ${activeInvestigation.month} ${activeInvestigation.year} | *Category:* ${activeInvestigation.category}\n\n`;
     md += `### The Core Question\n> ${activeInvestigation.theCoreQuestion}\n\n`;
     md += `### Overview\n${activeInvestigation.overview}\n\n`;
-    if (activeInvestigation.keyDefinitions?.length) {
-      md += `### Key Definitions\n`;
-      activeInvestigation.keyDefinitions.forEach((d) => {
-        md += `- **${d.term}:** ${d.definition}\n`;
-      });
-      md += `\n`;
-    }
     md += `### Five Levels of Mathematical Depth\n\n`;
     activeInvestigation.levels.forEach((lvl) => {
       md += `#### Level ${lvl.level}: ${lvl.title}\n`;
@@ -188,11 +116,7 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
       });
       md += `\n---\n\n`;
     });
-    md += `### Facilitator Notes for Local Math Labs\n`;
-    activeInvestigation.facilitatorTips.forEach((tip) => {
-      md += `- ${tip}\n`;
-    });
-    md += `\nMath Lab Initiative · https://mathlab-official.netlify.app\n`;
+    md += `\nMath Lab Initiative · mathlab.org\n`;
 
     const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -213,26 +137,15 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
         image={winterSierpinskiImg}
         imageAlt="Crystalline winter Sierpiński fractal"
         actions={
-          <>
-            <button
-              onClick={downloadProblemPack}
-              className="px-6 py-3 bg-white hover:bg-slate-100 text-[#102c57] font-semibold text-xs sm:text-sm rounded-full shadow-xs transition flex items-center gap-2"
-            >
-              <FileText className="w-4 h-4" />
-              <span>Download Problem Pack (.md)</span>
-            </button>
-            {hasAnswerKey && (
-              <button
-                onClick={downloadAnswerKey}
-                className="px-6 py-3 bg-transparent hover:bg-white/15 text-white border border-white/75 font-semibold text-xs sm:text-sm rounded-full transition flex items-center gap-2"
-              >
-                <BookOpen className="w-4 h-4" />
-                <span>Facilitator Answer Key (.md)</span>
-              </button>
-            )}
-          </>
+          <button
+            onClick={downloadProblemPack}
+            className="px-6 py-3 bg-white hover:bg-slate-100 text-[#102c57] font-semibold text-xs sm:text-sm rounded-full shadow-xs transition flex items-center gap-2"
+          >
+            <FileText className="w-4 h-4" />
+            <span>Download Problem Pack (.md)</span>
+          </button>
         }
-        footnote="December 2026 · Investigation No. 1 — Pascal's Triangle, Hidden Patterns & Binomial Invariants."
+        footnote="December 2026 Investigation — Coming Soon! Preview all 5 depth levels below."
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
@@ -344,23 +257,14 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
             {/* Header Metadata (Zero-Pill Discipline) */}
             <div className="space-y-3 border-b border-slate-100 dark:border-slate-800 pb-6">
               <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2">
                   <span className="font-mono font-bold text-[#0077c8] dark:text-sky-400">
-                    {activeInvestigation.month} {activeInvestigation.year}
-                    {activeInvestigation.editionNumber ? ` · ${activeInvestigation.editionNumber}` : ' National Inquiry'}
+                    {activeInvestigation.month} {activeInvestigation.year} National Inquiry
                   </span>
                   <span className="text-slate-400">·</span>
                   <span className="font-semibold text-slate-500 dark:text-slate-400">
                     {activeInvestigation.category}
                   </span>
-                  {activeInvestigation.answerKeyAuthor && (
-                    <>
-                      <span className="text-slate-400">·</span>
-                      <span className="text-slate-500 dark:text-slate-400">
-                        Answer Key by <strong className="text-slate-700 dark:text-slate-200">{activeInvestigation.answerKeyAuthor}</strong>
-                      </span>
-                    </>
-                  )}
                 </div>
                 {activeInvestigation.submissionDeadline && (
                   <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
@@ -392,59 +296,6 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                 {activeInvestigation.theCoreQuestion}
               </p>
             </div>
-
-            {/* Key Definitions & Formulas Reference (when available) */}
-            {(activeInvestigation.keyDefinitions?.length || activeInvestigation.keyFormulas?.length) && (
-              <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
-                <button
-                  onClick={() => setShowKeyConcepts(!showKeyConcepts)}
-                  className="w-full p-4 bg-slate-50 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between text-left transition"
-                >
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#0077c8] dark:text-sky-400" />
-                    <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">
-                      Key Definitions &amp; Binomial Formulas Reference
-                    </span>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showKeyConcepts ? 'rotate-180' : ''}`} />
-                </button>
-
-                {showKeyConcepts && (
-                  <div className="p-5 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 space-y-5 text-sm">
-                    {activeInvestigation.keyDefinitions && (
-                      <div className="space-y-2.5">
-                        <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                          Key Definitions
-                        </div>
-                        <dl className="grid grid-cols-1 gap-3">
-                          {activeInvestigation.keyDefinitions.map((def) => (
-                            <div key={def.term} className="rounded-xl bg-slate-50 dark:bg-slate-800/60 p-3.5 border border-slate-200/70 dark:border-slate-700/60">
-                              <dt className="font-semibold text-slate-900 dark:text-white text-sm">{def.term}</dt>
-                              <dd className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">{def.definition}</dd>
-                            </div>
-                          ))}
-                        </dl>
-                      </div>
-                    )}
-
-                    {activeInvestigation.keyFormulas && (
-                      <div className="space-y-2">
-                        <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                          Key Formulas &amp; Results
-                        </div>
-                        <ul className="space-y-1.5 font-mono text-xs text-slate-700 dark:text-slate-200">
-                          {activeInvestigation.keyFormulas.map((formula, idx) => (
-                            <li key={idx} className="bg-sky-50/70 dark:bg-sky-950/30 border border-sky-200/70 dark:border-sky-900/50 rounded-lg px-3 py-2">
-                              {formula}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* Mode Switcher: Levels vs. Interactive Workbench */}
             {activeInvestigation.id === 'lattice-coloring' && (
@@ -612,105 +463,6 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                         </ul>
                       </div>
 
-                      {/* Sample Data or Visual Hint */}
-                      {currentLvl.sampleVisualOrData && (
-                        <div className="bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 rounded-xl p-4 text-xs text-amber-900 dark:text-amber-200 space-y-1 font-mono">
-                          <div className="font-bold text-[11px] uppercase tracking-wider text-amber-800 dark:text-amber-300 font-sans">
-                            Observation Reference:
-                          </div>
-                          <div>{currentLvl.sampleVisualOrData}</div>
-                        </div>
-                      )}
-
-                      {/* Hint / Extension */}
-                      {currentLvl.hintOrExtension && (
-                        <div className="bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900/60 rounded-xl p-4 text-xs text-purple-900 dark:text-purple-200 space-y-1">
-                          <span className="font-bold text-purple-800 dark:text-purple-300 uppercase tracking-wider text-[11px] block">
-                            Clue & Analytical Invariant:
-                          </span>
-                          <p className="leading-relaxed">{currentLvl.hintOrExtension}</p>
-                        </div>
-                      )}
-
-                      {/* Worked Solution & Answer Key Accordion */}
-                      {currentLvl.workedSolution && (
-                        <div className="bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-900/60 rounded-xl overflow-hidden">
-                          <button
-                            onClick={() => setShowAnswerKey(!showAnswerKey)}
-                            className="w-full px-4 py-3 bg-emerald-50/70 dark:bg-emerald-950/40 hover:bg-emerald-100/70 dark:hover:bg-emerald-950/70 flex items-center justify-between text-left transition"
-                          >
-                            <div className="flex items-center gap-2">
-                              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                              <span className="text-xs sm:text-sm font-bold text-emerald-950 dark:text-emerald-200">
-                                Problem {currentLvl.level} ({currentLvl.workedSolution.tierLabel}) — Answer Key &amp; Step-by-Step Solution
-                              </span>
-                            </div>
-                            <ChevronDown className={`w-4 h-4 text-emerald-700 dark:text-emerald-300 transition-transform ${showAnswerKey ? 'rotate-180' : ''}`} />
-                          </button>
-
-                          {showAnswerKey && (
-                            <div className="p-5 space-y-4 text-xs sm:text-sm border-t border-emerald-200/70 dark:border-emerald-900/60">
-                              <div className="space-y-1">
-                                <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-                                  Focus: {currentLvl.workedSolution.focus}
-                                </div>
-                                <p className="font-medium text-slate-900 dark:text-white">
-                                  {currentLvl.workedSolution.problemStatement}
-                                </p>
-                              </div>
-
-                              <div className="rounded-lg bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 px-4 py-2.5">
-                                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 block">
-                                  Final Answer
-                                </span>
-                                <span className="font-mono font-semibold text-emerald-950 dark:text-emerald-100">
-                                  {currentLvl.workedSolution.finalAnswer}
-                                </span>
-                              </div>
-
-                              <div className="space-y-1.5">
-                                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                  Step-by-Step Solution
-                                </div>
-                                <ol className="space-y-1.5 list-decimal list-inside text-slate-700 dark:text-slate-300 leading-relaxed">
-                                  {currentLvl.workedSolution.steps.map((step, i) => (
-                                    <li key={i}>{step}</li>
-                                  ))}
-                                </ol>
-                              </div>
-
-                              <div className="space-y-1 text-slate-700 dark:text-slate-300 leading-relaxed">
-                                <span className="font-semibold text-slate-900 dark:text-white">Mathematical Reasoning: </span>
-                                {currentLvl.workedSolution.reasoning}
-                              </div>
-
-                              {currentLvl.workedSolution.alternativeMethod && (
-                                <div className="space-y-1 text-slate-600 dark:text-slate-400 leading-relaxed">
-                                  <span className="font-semibold text-slate-800 dark:text-slate-200">Alternative Method: </span>
-                                  {currentLvl.workedSolution.alternativeMethod}
-                                </div>
-                              )}
-
-                              {currentLvl.workedSolution.extensions && (
-                                <div className="space-y-1 text-slate-600 dark:text-slate-400 leading-relaxed">
-                                  <span className="font-semibold text-slate-800 dark:text-slate-200">Extensions: </span>
-                                  {currentLvl.workedSolution.extensions}
-                                </div>
-                              )}
-
-                              {currentLvl.workedSolution.supportingCalculation && (
-                                <div className="rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-3.5 py-2.5 font-mono text-xs text-slate-700 dark:text-slate-300">
-                                  <span className="font-sans font-semibold text-slate-900 dark:text-white block mb-0.5">
-                                    Supporting Calculations
-                                  </span>
-                                  {currentLvl.workedSolution.supportingCalculation}
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      )}
-
                       {/* Student Notebook & Conjecture Input Box */}
                       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
                         <div className="flex items-center justify-between">
@@ -784,43 +536,6 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
                 <LatticeColoringWorkbench />
               </div>
             )}
-
-            {/* Facilitator Notes Accordion */}
-            <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
-              <button
-                onClick={() => setShowFacilitatorNotes(!showFacilitatorNotes)}
-                className="w-full p-4 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between text-left transition"
-              >
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-[#0077c8] dark:text-sky-400" />
-                  <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">
-                    Facilitator Notes for Local Math Labs
-                  </span>
-                </div>
-                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showFacilitatorNotes ? 'rotate-180' : ''}`} />
-              </button>
-
-              {showFacilitatorNotes && (
-                <div className="p-5 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 space-y-3 text-xs text-slate-700 dark:text-slate-300">
-                  <p className="font-medium text-slate-600 dark:text-slate-400">
-                    Tips for organizing a 60–90 minute Local Lab meeting around this investigation:
-                  </p>
-                  <ul className="space-y-2 list-disc list-inside">
-                    {activeInvestigation.facilitatorTips.map((tip, idx) => (
-                      <li key={idx} className="leading-relaxed">{tip}</li>
-                    ))}
-                  </ul>
-                  <div className="pt-2">
-                    <button
-                      onClick={() => onNavigate('local-labs')}
-                      className="text-[#0077c8] dark:text-sky-400 hover:underline font-bold"
-                    >
-                      Request full facilitator guide packet & printable session kit →
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
           </article>
         </div>
       </div>

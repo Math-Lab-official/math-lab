@@ -10,7 +10,6 @@ import {
   Bookmark, 
   Info, 
   ChevronRight,
-  ShieldCheck,
   Grid
 } from 'lucide-react';
 import { recordLatticeExperiment, saveNewConjecture } from '../../utils/studentProgress';
@@ -147,54 +146,6 @@ export const LatticeColoringWorkbench: React.FC = () => {
     handleResize(presetRows, presetCols);
     setNotification(desc);
     setTimeout(() => setNotification(null), 4000);
-  };
-
-  // Backtracking solver to find a valid rectangle-free coloring
-  const handleAutoSolve = () => {
-    const targetColors: PointColor[] = colorCount === 2 ? ['red', 'blue'] : ['red', 'blue', 'green'];
-    const newGrid: PointColor[][] = Array.from({ length: rows }, () => Array(cols).fill('uncolored'));
-
-    const isValid = (r: number, c: number, color: PointColor): boolean => {
-      // Check if placing `color` at (r, c) creates a monochromatic rectangle with any previous row r0 < r and col c0 < c
-      for (let r0 = 0; r0 < r; r0++) {
-        if (newGrid[r0][c] === color) {
-          for (let c0 = 0; c0 < c; c0++) {
-            if (newGrid[r][c0] === color && newGrid[r0][c0] === color) {
-              return false; // Rectangle formed!
-            }
-          }
-        }
-      }
-      return true;
-    };
-
-    const solve = (pos: number): boolean => {
-      if (pos === rows * cols) return true;
-      const r = Math.floor(pos / cols);
-      const c = pos % cols;
-
-      // Randomize color order to find varied solutions
-      const shuffledColors = [...targetColors].sort(() => Math.random() - 0.5);
-
-      for (const color of shuffledColors) {
-        if (isValid(r, c, color)) {
-          newGrid[r][c] = color;
-          if (solve(pos + 1)) return true;
-          newGrid[r][c] = 'uncolored';
-        }
-      }
-      return false;
-    };
-
-    const success = solve(0);
-    if (success) {
-      setGrid(newGrid);
-      setNotification(`Found valid rectangle-free coloring for ${rows}×${cols} lattice!`);
-    } else {
-      setNotification(`Mathematically impossible: No rectangle-free coloring exists for ${rows}×${cols} with ${colorCount} colors (Pigeonhole Theorem verified).`);
-    }
-    setTimeout(() => setNotification(null), 5000);
-    recordLatticeExperiment();
   };
 
   // Random fill
@@ -376,18 +327,11 @@ export const LatticeColoringWorkbench: React.FC = () => {
         <div className="flex flex-col justify-center gap-2">
           <div className="flex items-center gap-2">
             <button
-              onClick={handleAutoSolve}
-              className="flex-1 py-2 px-3 bg-[#0077c8] hover:bg-[#005fa3] text-white rounded-xl text-xs font-bold transition shadow-xs flex items-center justify-center gap-1.5"
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Auto-Find Solution</span>
-            </button>
-            <button
               onClick={handleRandomFill}
-              className="py-2 px-3 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold transition"
+              className="flex-1 py-2 px-3 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold transition"
               title="Fill randomly with chosen colors"
             >
-              Random
+              Random Fill
             </button>
             <button
               onClick={handleClear}

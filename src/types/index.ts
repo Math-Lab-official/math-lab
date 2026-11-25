@@ -18,18 +18,6 @@ export type LabTab =
   | 'challenges'
   | 'notebook';
 
-export interface WorkedSolution {
-  tierLabel: string;
-  focus: string;
-  problemStatement: string;
-  finalAnswer: string;
-  steps: string[];
-  reasoning: string;
-  alternativeMethod?: string;
-  supportingCalculation?: string;
-  extensions?: string;
-}
-
 export interface InvestigationDepthLevel {
   level: 1 | 2 | 3 | 4 | 5;
   title: string;
@@ -38,16 +26,12 @@ export interface InvestigationDepthLevel {
   guidingQuestions: string[];
   sampleVisualOrData?: string;
   hintOrExtension?: string;
-  workedSolution?: WorkedSolution;
 }
 
 export interface NationalInvestigation {
   id: string;
   month: string;
   year: number;
-  editionNumber?: string;
-  answerKeyAuthor?: string;
-  datePrepared?: string;
   title: string;
   subtitle: string;
   category: 'Discrete & Combinatorics' | 'Geometry & Invariants' | 'Number Theory & Algebra' | 'Analysis & Calculus';
@@ -55,10 +39,8 @@ export interface NationalInvestigation {
   overview: string;
   theCoreQuestion: string;
   mathematicalFocus: string[];
-  keyDefinitions?: { term: string; definition: string }[];
-  keyFormulas?: string[];
   levels: InvestigationDepthLevel[];
-  facilitatorTips: string[];
+  facilitatorTips?: string[];
   submissionDeadline?: string;
 }
 

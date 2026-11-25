@@ -5,9 +5,6 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
     id: 'pascals-triangle',
     month: 'December',
     year: 2026,
-    editionNumber: 'Investigation No. 1',
-    answerKeyAuthor: 'Folarera Kassim',
-    datePrepared: 'November 25, 2026',
     title: "Pascal's Triangle, Hidden Patterns & Binomial Invariants",
     subtitle: "From coloring odd and even numbers to Lucas' theorem and the Sierpiński fractal",
     category: 'Discrete & Combinatorics',
@@ -20,31 +17,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
       'Polynomial Algebra over Finite Moduli',
       "Lucas' Theorem, Kummer's Theorem & Sierpiński Fractals"
     ],
-    keyDefinitions: [
-      {
-        term: "Pascal's Triangle",
-        definition: 'A triangular array of numbers where each row begins and ends with 1, and every interior number is the sum of the two numbers directly above it.'
-      },
-      {
-        term: 'Subsets — C(n, k)',
-        definition: 'Smaller groups selected from a larger set where order does not matter; C(n, k) ("n choose k") counts how many ways you can pick k items from n items, matching the entries of Pascal’s triangle.'
-      },
-      {
-        term: 'Sierpiński Triangle',
-        definition: 'A self-similar fractal structure formed by repeatedly removing central triangles; it emerges naturally in Pascal’s triangle when odd and even entries are shaded differently.'
-      }
-    ],
-    keyFormulas: [
-      "Pascal's Identity: C(n, k) = C(n − 1, k − 1) + C(n − 1, k)",
-      "Lucas' Theorem: C(n, k) ≡ ∏ C(nᵢ, kᵢ) (mod p)",
-      'Odd Entries in Row n: 2^(c(n)), where c(n) is the count of 1s in the binary representation of n'
-    ],
     submissionDeadline: 'December 31, 2026',
-    facilitatorTips: [
-      'Intended for Math Lab National Team and Local Facilitators — start by having students construct rows 0–8 by hand and shade every odd entry with a highlighter to see the emerging triangles.',
-      'Encourage students to write row numbers in binary alongside their odd-entry counts to discover the 2^c(n) pattern.',
-      'Use the built-in Worked Solutions & Answer Key per level to guide discussion after students formulate their own conjectures.'
-    ],
     levels: [
       {
         level: 1,
@@ -55,22 +28,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
           'What is the sum of each row? Do you see a pattern as the rows go down?',
           'Look at the diagonals. Which one gives the counting numbers? Which gives 1, 3, 6, 10, ...?',
           'Is the triangle symmetric? Explain why in your own words.'
-        ],
-        hintOrExtension: "Row sums are 1, 2, 4, 8, ... Each row doubles the previous one's total.",
-        workedSolution: {
-          tierLabel: 'Beginner',
-          focus: 'Row sums and fundamental binomial recurrence',
-          problemStatement: "Prove that the sum of the entries in the n-th row of Pascal's triangle is equal to 2ⁿ.",
-          finalAnswer: '∑_{k=0}^{n} C(n, k) = 2ⁿ',
-          steps: [
-            'Consider the Binomial Theorem expansion: (x + y)ⁿ = ∑_{k=0}^{n} C(n, k) x^{n−k} y^{k}.',
-            'Substitute x = 1 and y = 1 into the binomial expansion formula.',
-            'Simplify the left side to obtain (1 + 1)ⁿ = 2ⁿ, which yields ∑_{k=0}^{n} C(n, k) = 2ⁿ.'
-          ],
-          reasoning: 'Combinatorially, 2ⁿ represents the total number of subsets of a set with n elements. Each term C(n, k) counts the number of subsets of size k. Summing over all subset sizes k from 0 to n accounts for every subset exactly once.',
-          alternativeMethod: "Induction on n using Pascal's identity C(n, k) = C(n − 1, k − 1) + C(n − 1, k): each entry in row n − 1 contributes to two entries in row n, doubling the row sum.",
-          supportingCalculation: 'Row 0: 1 (sum = 1 = 2⁰); Row 1: 1 + 1 = 2 (2¹); Row 2: 1 + 2 + 1 = 4 (2²); Row 3: 1 + 3 + 3 + 1 = 8 (2³).'
-        }
+        ]
       },
       {
         level: 2,
@@ -81,22 +39,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
           'For rows 0 to 7 you should find 1, 2, 2, 4, 2, 4, 4, 8. What kind of numbers are these?',
           'Which rows are completely odd? Which have only two odd entries?',
           'Hockey stick: add the numbers along a diagonal starting from the edge, then look at the number just below and to the side of the last one. What do you find?'
-        ],
-        hintOrExtension: 'Write each row number in binary and compare it with the count of odd entries.',
-        workedSolution: {
-          tierLabel: 'Easy-Intermediate',
-          focus: 'Hockey-Stick Identity (Diagonal sums)',
-          problemStatement: 'Evaluate the sum S = ∑_{i=r}^{n} C(i, r) for given positive integers n and r with n ≥ r.',
-          finalAnswer: '∑_{i=r}^{n} C(i, r) = C(n + 1, r + 1)',
-          steps: [
-            'Rewrite the first term C(r, r) as C(r + 1, r + 1), since both equal 1.',
-            "Apply Pascal's identity C(r + 1, r + 1) + C(r + 1, r) = C(r + 2, r + 1) to combine the first two terms.",
-            "Repeatedly apply Pascal's identity telescopically through i = n to collapse the entire sum to C(n + 1, r + 1)."
-          ],
-          reasoning: 'Combinatorially, choosing r + 1 elements from {1, 2, ..., n + 1} can be partitioned by the largest element selected. If the largest element is i + 1, we must choose the remaining r elements from the first i elements, giving C(i, r) choices.',
-          alternativeMethod: 'Using generating functions: ∑_{n=r}^{∞} C(n, r) xⁿ = xʳ / (1 − x)^{r+1}.',
-          supportingCalculation: 'For r = 2, n = 4: C(2, 2) + C(3, 2) + C(4, 2) = 1 + 3 + 6 = 10 = C(5, 3).'
-        }
+        ]
       },
       {
         level: 3,
@@ -107,22 +50,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
           'Take a set with a special element. How many k-subsets contain it? How many do not?',
           'Substitute x = 1 and x = −1 into (1+x)ⁿ. What do you get?',
           'Show that C(n,k) counts the lattice paths from (0,0) to (n−k, k) using right and up steps. Why does the Pascal rule hold for paths?'
-        ],
-        hintOrExtension: 'Over arithmetic mod 2, (1+x)² = 1 + 2x + x² ≡ 1 + x². What does (1+x)⁴ become?',
-        workedSolution: {
-          tierLabel: 'Intermediate',
-          focus: 'Fibonacci sequence emergence along shallow diagonals',
-          problemStatement: 'Show that the shallow diagonal sum F(n) = ∑_{k=0}^{⌊n/2⌋} C(n − k, k) satisfies the Fibonacci recurrence F(n) = F(n − 1) + F(n − 2) with F(0) = 1, F(1) = 1.',
-          finalAnswer: 'F(n) = F_{n+1} (the (n + 1)-th Fibonacci number)',
-          steps: [
-            "Split the sum F(n) into k = 0 and k > 0 terms, applying Pascal's identity C(n − k, k) = C(n − k − 1, k) + C(n − k − 1, k − 1).",
-            'Group the first terms ∑ C(n − 1 − k, k) to obtain F(n − 1).',
-            'Re-index the second summation with j = k − 1 to obtain ∑ C(n − 2 − j, j) = F(n − 2), establishing F(n) = F(n − 1) + F(n − 2).'
-          ],
-          reasoning: 'The shallow diagonal sums count compositions of n into 1s and 2s (ordered sums totaling n), which is a fundamental combinatorial interpretation of Fibonacci numbers.',
-          alternativeMethod: 'Using the generating function of binomial coefficients along shallow diagonals to derive 1 / (1 − x − x²).',
-          supportingCalculation: 'F(0) = C(0,0) = 1; F(1) = C(1,0) = 1; F(2) = C(2,0) + C(1,1) = 2; F(3) = C(3,0) + C(2,1) = 3; F(4) = C(4,0) + C(3,1) + C(2,2) = 5.'
-        }
+        ]
       },
       {
         level: 4,
@@ -134,22 +62,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
           'Write n = 2^(a₁) + 2^(a₂) + ... + 2^(aₛ) and expand the product ∏(1 + x^(2^(aᵢ))). Why do no two terms ever combine?',
           'Prove that row n is entirely odd exactly when n = 2ᵃ − 1.',
           'Show that the first 2ᵃ rows contain exactly 3ᵃ odd entries.'
-        ],
-        hintOrExtension: 'Distinct binary digits mean distinct exponents, so no cancellation occurs when you multiply out.',
-        workedSolution: {
-          tierLabel: 'Upper-Intermediate',
-          focus: "Lucas' Theorem and parity distribution",
-          problemStatement: "Determine the exact number of odd entries in row n = 2026 of Pascal's triangle.",
-          finalAnswer: '256 odd entries (since c(2026) = 8 set bits → 2⁸ = 256)',
-          steps: [
-            "By Lucas' Theorem modulo 2, C(n, k) ≡ 1 (mod 2) if and only if the binary representation of k is a submask of n (every 1-bit of k is also a 1-bit of n).",
-            'Convert 2026 into binary: 2026 = 1024 + 512 + 256 + 128 + 64 + 32 + 8 + 2 = 11111101010₂.',
-            'Count the set bits (1s) in 11111101010₂: there are c(2026) = 8 ones (at bit positions 10, 9, 8, 7, 6, 5, 3, and 1), giving 2⁸ = 256 odd entries.'
-          ],
-          reasoning: 'Each bit set to 1 in n gives 2 independent choices (0 or 1) for the corresponding bit in k without causing a borrow/carry. Thus, if n has c(n) ones in binary, there are 2^{c(n)} values of k making C(n, k) odd.',
-          alternativeMethod: 'Polynomial reduction in 𝔽₂[x]: (1 + x)ⁿ ≡ ∏ (1 + x^{2ⁱ})^{nᵢ} (mod 2), which expands to 2^{c(n)} distinct nonzero monomials.',
-          supportingCalculation: 'Smaller check for n = 5 (101₂, 2 ones): row 5 is (1, 5, 10, 10, 5, 1), which has 2² = 4 odd entries (1, 5, 5, 1).'
-        }
+        ]
       },
       {
         level: 5,
@@ -161,23 +74,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
           'Deduce that the number of entries in row n not divisible by p is ∏(nᵢ+1). For which rows is every interior entry divisible by p?',
           "Kummer's theorem says the highest power of p dividing C(n,k) equals the number of carries when adding k and n−k in base p. Check it on examples, then prove it using Legendre's formula for the p-adic valuation of n!.",
           'The shaded odd entries approach the Sierpiński triangle. Using the 3ᵃ count from Level 4, compute its fractal dimension log 3 / log 2. What do the shaded patterns for p = 3 and p = 5 look like?'
-        ],
-        hintOrExtension: 'Compare coefficients of x^k on both sides of (1+x)ⁿ = (1+x)^(n₀) · ((1+x)^p)^(n₁) · ... mod p.',
-        workedSolution: {
-          tierLabel: 'Advanced',
-          focus: 'Sierpiński Fractal Dimension and Asymptotic Density',
-          problemStatement: "Calculate the total number of odd entries N(2ᵏ) in the first 2ᵏ rows of Pascal's triangle, and determine the Hausdorff dimension of the resulting fractal pattern.",
-          finalAnswer: 'N(2ᵏ) = 3ᵏ; Hausdorff Dimension d_H = log₂(3) ≈ 1.585',
-          steps: [
-            'Formulate the recurrence relation for total odd entries across the first 2ᵏ rows (rows 0 to 2ᵏ − 1): N(2ᵏ) = 3 · N(2^{k−1}).',
-            'Solve the recurrence with base case N(2⁰) = N(1) = 1 to obtain N(2ᵏ) = 3ᵏ.',
-            'Compute the scaling / box-counting dimension: d_H = lim_{k→∞} log(3ᵏ) / log(2ᵏ) = log₂(3) ≈ 1.585.'
-          ],
-          reasoning: 'When doubling the triangle height from 2^{k−1} to 2ᵏ, the parity pattern replicates into 3 self-similar sub-triangles (top, bottom-left, bottom-right), while the central inverted triangle consists entirely of even numbers.',
-          alternativeMethod: 'Summing 2^{c(n)} for n = 0 to 2ᵏ − 1 yields ∏_{i=0}^{k−1} (1 + 2) = 3ᵏ.',
-          extensions: 'Generalizing to prime moduli p shows that the Hausdorff dimension modulo p is log_p(p(p + 1)/2).',
-          supportingCalculation: 'k = 1: N(2) = 3; k = 2: N(4) = 9; k = 3: N(8) = 27; k = 4: N(16) = 81.'
-        }
+        ]
       }
     ]
   },
@@ -198,11 +95,6 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
       'Polynomial Invariants under Lattice Shear Transformations'
     ],
     submissionDeadline: 'November 30, 2026',
-    facilitatorTips: [
-      'Encourage students to begin with physical graph paper or 3×3 and 4×4 pegboards using 2 colors.',
-      'Have groups list all possible column colorings before trying to prove impossibility.',
-      'Highlight how counting column pairs connects directly to combinatorial combinations C(m, 2).'
-    ],
     levels: [
       {
         level: 1,
@@ -213,9 +105,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
           'Can you find a 2-coloring of a 3×3 grid without any monochromatic rectangle?',
           'What happens if you expand the grid to 3×7? Try drawing several configurations.',
           'In each column of 3 points with 2 colors, how many points must share the same color by the Pigeonhole Principle?'
-        ],
-        sampleVisualOrData: 'Column types for 3 rows with {R, B}: RRR, RRB, RBR, BRR, BBR, BRB, RBB, BBB (8 possible 3-tuples).',
-        hintOrExtension: 'Notice that with 3 rows and 2 colors, every single column has at least two points of the identical color.'
+        ]
       },
       {
         level: 2,
@@ -226,8 +116,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
           'For 3 rows, there are C(3, 2) = 3 possible pairs of rows: {1,2}, {1,3}, and {2,3}. How many color options exist for each pair?',
           'If a column has 2 Red points, it claims one of these row pairs for Red.',
           'How many columns can you populate before the Pigeonhole Principle forces a duplicate pair?'
-        ],
-        hintOrExtension: 'Consider that each column has at least one monochromatic pair. With 2 colors and 3 row pairs, there are 2 × 3 = 6 possible color-pair assignments.'
+        ]
       },
       {
         level: 3,
@@ -238,8 +127,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
           'By the Pigeonhole Principle, each column of r points with c colors contains at least ⌈r/c⌉ points of some color.',
           'How many monochromatic pairs are created within that column? (Use binomial coefficients C(k, 2)).',
           'Summing these pairs across n columns, at what value of n does the total number of monochromatic pairs exceed c · C(r, 2)?'
-        ],
-        hintOrExtension: 'Use Jensen’s inequality or convexity of C(x, 2) to establish the sharpest lower bound on pairs per column.'
+        ]
       },
       {
         level: 4,
@@ -250,8 +138,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
           'Construct a certified non-monochromatic 2-coloring matrix of size 3 × 6.',
           'Provide a combinatorial double-counting proof demonstrating that any 2-coloring of a 3 × 7 grid must contain at least one monochromatic rectangle.',
           'Investigate symmetry: Does a 5 × 5 grid colored with 2 colors always contain a monochromatic square?'
-        ],
-        hintOrExtension: 'Double count the set S = { ( {col1, col2}, {row1, row2} ) : both points share color k }.'
+        ]
       },
       {
         level: 5,
@@ -262,8 +149,7 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
           'What happens when grid points are replaced by continuous torus coordinates R²/Z²?',
           'Can you formulate an algorithmic SAT solver or integer linear program to find maximal monochromatic-free grids for c = 3 and c = 4?',
           'What are the open problems regarding monochromatic equilateral triangles in hexagonal grids?'
-        ],
-        hintOrExtension: 'Look into the Erdős–Graham problem on grid colorings and van der Waerden-type theorems in multidimensional integer arrays.'
+        ]
       }
     ]
   },
@@ -284,10 +170,6 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
       'Simson Lines and Miquel Point Concurrency'
     ],
     submissionDeadline: 'September 30, 2026',
-    facilitatorTips: [
-      'Provide compasses and straightedges or use our built-in Geometry & Unit Circle laboratory.',
-      'Ask students to measure products EA · EB and EC · ED with a ruler before revealing the theorem.'
-    ],
     levels: [
       {
         level: 1,
@@ -360,10 +242,6 @@ export const NATIONAL_INVESTIGATIONS: NationalInvestigation[] = [
       'Ramanujan’s Modulo 5, 7, and 11 Congruences'
     ],
     submissionDeadline: 'August 31, 2026',
-    facilitatorTips: [
-      'Have students use coins, glass beads, or square tiles to represent partitions of 4, 5, and 6.',
-      'Show how flipping a Ferrers diagram across the main diagonal proves a 1-to-1 bijection.'
-    ],
     levels: [
       {
         level: 1,
