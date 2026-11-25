@@ -1,8 +1,11 @@
 import React from 'react';
-import { Mail, FileText, Sparkles, Compass } from 'lucide-react';
+import { ExternalLink, Mail, FileText, Sparkles, Compass } from 'lucide-react';
 import { OFFICIAL_EMAIL } from '../../data/teamData';
 import { PageHero } from '../common/PageHero';
 import heroSubmitProofImg from '../../assets/images/hero_submit_proof_1795109646763.jpg';
+
+const SOLUTIONS_FORM_URL =
+  'https://docs.google.com/forms/d/e/1FAIpQLSevTw-EbwOl0Y4Kn2YfKcRYgXVV8XswHjoVQwurFnzsTcRlBA/viewform?usp=header';
 
 interface Props {
   onNavigateHome?: () => void;
@@ -22,20 +25,31 @@ export const ShareYourWorkPage: React.FC<Props> = () => {
         subtitle="Submit solutions, partial proofs, conjectures, or visual models from any investigation."
         image={heroSubmitProofImg}
         imageAlt="Abstract geometric prism and drafting grid illustration"
+        actions={
+          <a
+            href={SOLUTIONS_FORM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white hover:bg-slate-100 text-[#0a192f] text-xs sm:text-sm font-semibold transition shadow-sm"
+          >
+            <span>Submit Your Solutions</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        }
       />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        <section className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {formats.map((item) => {
             const Icon = item.icon;
             return (
               <div
                 key={item.title}
-                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-2"
+                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 space-y-2.5"
               >
-                <Icon className="w-4 h-4 text-[#0077c8] dark:text-sky-400" />
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{item.title}</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{item.desc}</p>
+                <Icon className="w-5 h-5 text-[#0077c8] dark:text-sky-400" />
+                <h3 className="text-base font-semibold text-slate-900 dark:text-white">{item.title}</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">{item.desc}</p>
               </div>
             );
           })}
@@ -44,20 +58,32 @@ export const ShareYourWorkPage: React.FC<Props> = () => {
         <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1 max-w-lg">
             <h2 className="font-serif-editorial text-xl font-bold text-slate-900 dark:text-white">
-              Submission Form — Coming Soon
+              Submit Your Solutions
             </h2>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Our online submission portal is in preparation. Until it launches, email your work directly to our team.
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Use our official submission form to share your investigation write-ups, PDFs, or conjectures with the national team.
             </p>
           </div>
 
-          <a
-            href={`mailto:${OFFICIAL_EMAIL}?subject=Student%20Investigation%20Work`}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0077c8] hover:bg-[#005fa3] text-white text-xs font-semibold transition shrink-0 self-start sm:self-center"
-          >
-            <Mail className="w-3.5 h-3.5" />
-            <span>Email {OFFICIAL_EMAIL}</span>
-          </a>
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <a
+              href={SOLUTIONS_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0077c8] hover:bg-[#005fa3] text-white text-sm font-semibold transition"
+            >
+              <span>Open Submission Form</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+
+            <a
+              href={`mailto:${OFFICIAL_EMAIL}?subject=Student%20Investigation%20Work`}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-semibold transition"
+            >
+              <Mail className="w-4 h-4 text-[#0077c8] dark:text-sky-400" />
+              <span>Questions?</span>
+            </a>
+          </div>
         </section>
       </div>
     </div>

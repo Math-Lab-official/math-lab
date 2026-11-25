@@ -14,13 +14,13 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
   };
 
   return (
-    <footer className="border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs transition-colors">
+    <footer className="border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-sm transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div className="space-y-1">
-          <div className="font-display-bold text-base font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <div className="font-display-bold text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
             MATH LAB
           </div>
-          <div className="flex flex-wrap items-center gap-2 text-[11px]">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
             <a href={`mailto:${OFFICIAL_EMAIL}`} className="hover:text-[#0077c8] dark:hover:text-sky-400 transition-colors">
               {OFFICIAL_EMAIL}
             </a>
@@ -31,7 +31,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
           </div>
         </div>
 
-        <nav className="flex flex-wrap items-center gap-5 text-xs font-medium">
+        <nav className="flex flex-wrap items-center gap-5 text-sm font-medium">
           <button onClick={() => go('investigations')} className="hover:text-slate-900 dark:hover:text-white transition-colors">
             Investigations
           </button>
