@@ -100,7 +100,6 @@ export const StartLocalLabPage: React.FC = () => {
             </a>
           </>
         }
-        footnote="Leader Application Deadline: November 25, 2026 @ 11:59 EDT"
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">

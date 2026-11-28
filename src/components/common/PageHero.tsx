@@ -6,7 +6,6 @@ interface PageHeroProps {
   image: string;
   imageAlt: string;
   actions?: React.ReactNode;
-  footnote?: string;
 }
 
 export const PageHero: React.FC<PageHeroProps> = ({
@@ -15,7 +14,6 @@ export const PageHero: React.FC<PageHeroProps> = ({
   image,
   imageAlt,
   actions,
-  footnote,
 }) => {
   return (
     <section className="relative w-full min-h-[42vh] flex items-end overflow-hidden bg-[#0a192f]">
@@ -40,12 +38,6 @@ export const PageHero: React.FC<PageHeroProps> = ({
           {actions && <div className="flex flex-wrap items-center gap-3 pt-2">{actions}</div>}
         </div>
       </div>
-
-      {footnote && (
-        <div className="hidden sm:block absolute bottom-5 right-8 z-10 max-w-xs text-right">
-          <p className="text-xs sm:text-sm text-white/75 leading-relaxed">{footnote}</p>
-        </div>
-      )}
     </section>
   );
 };

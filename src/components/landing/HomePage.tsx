@@ -43,34 +43,32 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectTab }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-tr from-[#071426]/92 via-[#0e274d]/65 to-[#102c57]/40" />
 
-        <div className="relative z-10 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-14">
-          <div className="max-w-2xl space-y-6">
+        <div className="relative z-10 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
+          <div className="max-w-2xl space-y-5">
             <h1 className="font-sans text-4xl sm:text-5xl lg:text-6xl font-medium text-white leading-[1.06] tracking-tight text-balance">
               Transforming mathematics through the power of curiosity.
             </h1>
 
-            <div className="flex flex-wrap items-center gap-3 pt-1">
+            <p className="text-base sm:text-lg text-white/85 leading-relaxed max-w-xl">
+              A national student-led mathematics initiative offering free investigations, interactive studios, and local chapters.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
                 onClick={() => onSelectTab('investigations')}
-                className="px-6 py-3 bg-white hover:bg-slate-100 text-[#0a192f] text-xs sm:text-sm font-semibold rounded-full transition shadow-sm"
+                className="px-6 py-3 bg-white hover:bg-slate-100 text-[#0a192f] text-sm font-semibold rounded-full transition shadow-sm"
               >
                 Explore Investigations
               </button>
 
               <button
                 onClick={() => onSelectTab('laboratories')}
-                className="px-6 py-3 bg-transparent hover:bg-white/15 text-white border border-white/80 text-xs sm:text-sm font-semibold rounded-full transition"
+                className="px-6 py-3 bg-transparent hover:bg-white/15 text-white border border-white/80 text-sm font-semibold rounded-full transition"
               >
                 Open Digital Lab
               </button>
             </div>
           </div>
-        </div>
-
-        <div className="hidden sm:block absolute bottom-5 right-8 z-10 max-w-xs text-right">
-          <p className="text-[11px] text-white/65 leading-relaxed">
-            National student-led mathematics initiative. Free investigations, interactive studios, and local chapters.
-          </p>
         </div>
       </section>
 

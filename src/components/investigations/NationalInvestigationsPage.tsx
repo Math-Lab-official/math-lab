@@ -145,7 +145,6 @@ export const NationalInvestigationsPage: React.FC<Props> = ({
             <span>Download Problem Pack (.md)</span>
           </button>
         }
-        footnote="December 2026 Investigation — Coming Soon! Preview all 5 depth levels below."
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
