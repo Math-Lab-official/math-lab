@@ -24,7 +24,7 @@ export const EXEC_MEMBERS: TeamMember[] = [
   { id: 'sahanaa-rao', name: 'Sahanaa Rao', role: 'Vice President' },
   { id: 'hemanth-parvathaneni', name: 'Hemanth Parvathaneni', role: 'Director of Programs' },
   { id: 'matthew-baek', name: 'Matthew Baek', role: 'Director of National Development' },
-  { id: 'shrouya-sharan', name: 'Shrouya Sharan', role: 'Tech Lead' },
+  { id: 'shourya-sharan', name: 'Shourya Sharan', role: 'Tech Lead' },
   { id: 'piyush-kolekar', name: 'Piyush Kolekar', role: 'Research & Evaluation Lead' },
   { id: 'hiba-naz', name: 'Hiba Naz', role: 'Director of Outreach & Communications' },
   { id: 'folarera-kassim', name: 'Folarera Kassim', role: 'Curriculum Manager & Webmaster' },
@@ -86,7 +86,7 @@ export const COMMITTEES: Committee[] = [
   {
     id: 'tech-digital',
     name: 'Technology & Web Infrastructure',
-    lead: 'Shrouya Sharan (Tech Lead)',
+    lead: 'Shourya Sharan (Tech Lead)',
     description: 'Builds and maintains Math Lab web platforms and interactive browser-based simulation studios.',
     responsibilities: [
       'Develop interactive mathematical visualizers and collaborative tools'

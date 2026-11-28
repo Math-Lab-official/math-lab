@@ -52,7 +52,7 @@ const ROLE_SCOPE: Record<string, string> = {
   'sahanaa-rao': 'Operations & Chapter Support',
   'hemanth-parvathaneni': 'National & Local Programming',
   'matthew-baek': 'Chapter Expansion & Partnerships',
-  'shrouya-sharan': 'Digital Lab & Web Engineering',
+  'shourya-sharan': 'Digital Lab & Web Engineering',
   'piyush-kolekar': 'Pedagogy & Impact Evaluation',
   'hiba-naz': 'Community Outreach & Media',
   'folarera-kassim': 'Investigations & Web Editorial',
